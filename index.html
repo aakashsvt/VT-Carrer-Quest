@@ -721,7 +721,339 @@ input[type=text]:focus {
 </head>
 <body>
 <div class="layer" id="hq"></div>
-<svg class="layer" id="game" style="display:none;width:100%;height:100%" viewBox="0 0 1200 900" role="img" aria-label="Studio floor plan with the CEO cabin in the centre"></svg>
+<!-- Cosmic Space Cyber-Grid & Multi-Colored Stars Background Layer -->
+<div id="bg-space" style="position:fixed;inset:0;z-index:0;pointer-events:none;background:#030611;overflow:hidden;">
+  <style>
+    @keyframes star-pulse-1 {
+      0%, 100% { opacity: 0.35; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.22); filter: drop-shadow(0 0 3px currentColor); }
+    }
+    @keyframes star-pulse-2 {
+      0%, 100% { opacity: 0.85; transform: scale(1.15); filter: drop-shadow(0 0 2.5px currentColor); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+    @keyframes star-pulse-3 {
+      0%, 100% { opacity: 0.45; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.3); filter: drop-shadow(0 0 3px currentColor); }
+    }
+    .star-pulse-1 { animation: star-pulse-1 ease-in-out infinite; }
+    .star-pulse-2 { animation: star-pulse-2 ease-in-out infinite; }
+    .star-pulse-3 { animation: star-pulse-3 ease-in-out infinite; }
+  </style>
+  <svg width="100%" height="100%" preserveAspectRatio="none" style="display:block;position:absolute;inset:0;">
+    <defs>
+      <radialGradient id="space-ambient" cx="50%" cy="50%" r="55%">
+        <stop offset="0%" stop-color="#0e172e" stop-opacity="0.85"/>
+        <stop offset="45%" stop-color="#080e1e" stop-opacity="0.92"/>
+        <stop offset="100%" stop-color="#030611" stop-opacity="1"/>
+      </radialGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#space-ambient)"/>
+    <line x1="0" y1="6%" x2="100%" y2="6%" stroke="#0284c7" stroke-width="1.2" opacity="0.25"/><line x1="0" y1="14%" x2="100%" y2="14%" stroke="#0284c7" stroke-width="1.2" opacity="0.25"/><line x1="0" y1="24%" x2="100%" y2="24%" stroke="#0284c7" stroke-width="1.2" opacity="0.25"/><line x1="0" y1="36%" x2="100%" y2="36%" stroke="#0284c7" stroke-width="1.2" opacity="0.25"/><line x1="0" y1="50%" x2="100%" y2="50%" stroke="#0284c7" stroke-width="1.2" opacity="0.25"/><line x1="0" y1="65%" x2="100%" y2="65%" stroke="#0284c7" stroke-width="1.2" opacity="0.25"/><line x1="0" y1="82%" x2="100%" y2="82%" stroke="#0284c7" stroke-width="1.2" opacity="0.25"/><line x1="0" y1="98%" x2="100%" y2="98%" stroke="#0284c7" stroke-width="1.2" opacity="0.25"/><line x1="0%" y1="0" x2="0%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="4%" y1="0" x2="4%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="8%" y1="0" x2="8%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="12%" y1="0" x2="12%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="16%" y1="0" x2="16%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="20%" y1="0" x2="20%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="24%" y1="0" x2="24%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="28%" y1="0" x2="28%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="32%" y1="0" x2="32%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="36%" y1="0" x2="36%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="40%" y1="0" x2="40%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="44%" y1="0" x2="44%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="48%" y1="0" x2="48%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="52%" y1="0" x2="52%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="56%" y1="0" x2="56%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="60%" y1="0" x2="60%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="64%" y1="0" x2="64%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="68%" y1="0" x2="68%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="72%" y1="0" x2="72%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="76%" y1="0" x2="76%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="80%" y1="0" x2="80%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="84%" y1="0" x2="84%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="88%" y1="0" x2="88%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="92%" y1="0" x2="92%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="96%" y1="0" x2="96%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="100%" y1="0" x2="100%" y2="100%" stroke="#1e40af" stroke-width="0.8" opacity="0.18"/><line x1="-40%" y1="0" x2="-5%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="-40%" y1="0" x2="-75%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="-28%" y1="0" x2="7%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="-28%" y1="0" x2="-63%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="-16%" y1="0" x2="19%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="-16%" y1="0" x2="-51%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="-4%" y1="0" x2="31%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="-4%" y1="0" x2="-39%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="8%" y1="0" x2="43%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="8%" y1="0" x2="-27%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="20%" y1="0" x2="55%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="20%" y1="0" x2="-15%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="32%" y1="0" x2="67%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="32%" y1="0" x2="-3%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="44%" y1="0" x2="79%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="44%" y1="0" x2="9%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="56%" y1="0" x2="91%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="56%" y1="0" x2="21%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="68%" y1="0" x2="103%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="68%" y1="0" x2="33%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="80%" y1="0" x2="115%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="80%" y1="0" x2="45%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="92%" y1="0" x2="127%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="92%" y1="0" x2="57%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="104%" y1="0" x2="139%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="104%" y1="0" x2="69%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="116%" y1="0" x2="151%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="116%" y1="0" x2="81%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="128%" y1="0" x2="163%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="128%" y1="0" x2="93%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="140%" y1="0" x2="175%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/><line x1="140%" y1="0" x2="105%" y2="100%" stroke="#0369a1" stroke-width="0.9" opacity="0.16"/>
+    <g class="star-pulse-1" style="transform-origin:3% 5%;animation-duration:3.2s;animation-delay:0.0s;">
+      <circle cx="3%" cy="5%" r="3.1" fill="#ffffff" opacity="0.28"/>
+      <circle cx="3%" cy="5%" r="1.3" fill="#ffffff" opacity="0.95"/>
+      <circle cx="3%" cy="5%" r="0.6" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:7% 18%;animation-duration:4.1s;animation-delay:-0.7s;">
+      <circle cx="7%" cy="18%" r="4.3" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="7%" cy="18%" r="1.8" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="7%" cy="18%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:12% 8%;animation-duration:5.0s;animation-delay:-1.4s;">
+      <circle cx="12%" cy="8%" r="2.6" fill="#c084fc" opacity="0.28"/>
+      <circle cx="12%" cy="8%" r="1.1" fill="#c084fc" opacity="0.95"/>
+      <circle cx="12%" cy="8%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:18% 24%;animation-duration:5.9s;animation-delay:-2.1s;">
+      <circle cx="18%" cy="24%" r="5.3" fill="#fde047" opacity="0.28"/>
+      <circle cx="18%" cy="24%" r="2.2" fill="#fde047" opacity="0.95"/>
+      <circle cx="18%" cy="24%" r="1.0" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:22% 11%;animation-duration:6.8s;animation-delay:-2.8s;">
+      <circle cx="22%" cy="11%" r="2.2" fill="#ffffff" opacity="0.28"/>
+      <circle cx="22%" cy="11%" r="0.9" fill="#ffffff" opacity="0.95"/>
+      <circle cx="22%" cy="11%" r="0.4" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:28% 4%;animation-duration:3.2s;animation-delay:-3.5s;">
+      <circle cx="28%" cy="4%" r="3.6" fill="#fb7185" opacity="0.28"/>
+      <circle cx="28%" cy="4%" r="1.5" fill="#fb7185" opacity="0.95"/>
+      <circle cx="28%" cy="4%" r="0.7" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:34% 16%;animation-duration:4.1s;animation-delay:-4.2s;">
+      <circle cx="34%" cy="16%" r="2.9" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="34%" cy="16%" r="1.2" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="34%" cy="16%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:40% 7%;animation-duration:5.0s;animation-delay:0.0s;">
+      <circle cx="40%" cy="7%" r="4.8" fill="#4ade80" opacity="0.28"/>
+      <circle cx="40%" cy="7%" r="2" fill="#4ade80" opacity="0.95"/>
+      <circle cx="40%" cy="7%" r="0.9" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:45% 22%;animation-duration:5.9s;animation-delay:-0.7s;">
+      <circle cx="45%" cy="22%" r="2.4" fill="#c084fc" opacity="0.28"/>
+      <circle cx="45%" cy="22%" r="1" fill="#c084fc" opacity="0.95"/>
+      <circle cx="45%" cy="22%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:51% 12%;animation-duration:6.8s;animation-delay:-1.4s;">
+      <circle cx="51%" cy="12%" r="4.1" fill="#fde047" opacity="0.28"/>
+      <circle cx="51%" cy="12%" r="1.7" fill="#fde047" opacity="0.95"/>
+      <circle cx="51%" cy="12%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:58% 5%;animation-duration:3.2s;animation-delay:-2.1s;">
+      <circle cx="58%" cy="5%" r="2.6" fill="#ffffff" opacity="0.28"/>
+      <circle cx="58%" cy="5%" r="1.1" fill="#ffffff" opacity="0.95"/>
+      <circle cx="58%" cy="5%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:64% 19%;animation-duration:4.1s;animation-delay:-2.8s;">
+      <circle cx="64%" cy="19%" r="4.3" fill="#fb7185" opacity="0.28"/>
+      <circle cx="64%" cy="19%" r="1.8" fill="#fb7185" opacity="0.95"/>
+      <circle cx="64%" cy="19%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:70% 9%;animation-duration:5.0s;animation-delay:-3.5s;">
+      <circle cx="70%" cy="9%" r="3.1" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="70%" cy="9%" r="1.3" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="70%" cy="9%" r="0.6" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:76% 25%;animation-duration:5.9s;animation-delay:-4.2s;">
+      <circle cx="76%" cy="25%" r="5.3" fill="#c084fc" opacity="0.28"/>
+      <circle cx="76%" cy="25%" r="2.2" fill="#c084fc" opacity="0.95"/>
+      <circle cx="76%" cy="25%" r="1.0" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:82% 14%;animation-duration:6.8s;animation-delay:0.0s;">
+      <circle cx="82%" cy="14%" r="2.2" fill="#4ade80" opacity="0.28"/>
+      <circle cx="82%" cy="14%" r="0.9" fill="#4ade80" opacity="0.95"/>
+      <circle cx="82%" cy="14%" r="0.4" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:87% 4%;animation-duration:3.2s;animation-delay:-0.7s;">
+      <circle cx="87%" cy="4%" r="3.8" fill="#fde047" opacity="0.28"/>
+      <circle cx="87%" cy="4%" r="1.6" fill="#fde047" opacity="0.95"/>
+      <circle cx="87%" cy="4%" r="0.7" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:93% 18%;animation-duration:4.1s;animation-delay:-1.4s;">
+      <circle cx="93%" cy="18%" r="3.4" fill="#ffffff" opacity="0.28"/>
+      <circle cx="93%" cy="18%" r="1.4" fill="#ffffff" opacity="0.95"/>
+      <circle cx="93%" cy="18%" r="0.6" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:97% 8%;animation-duration:5.0s;animation-delay:-2.1s;">
+      <circle cx="97%" cy="8%" r="4.8" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="97%" cy="8%" r="2" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="97%" cy="8%" r="0.9" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:2% 32%;animation-duration:5.9s;animation-delay:-2.8s;">
+      <circle cx="2%" cy="32%" r="3.6" fill="#c084fc" opacity="0.28"/>
+      <circle cx="2%" cy="32%" r="1.5" fill="#c084fc" opacity="0.95"/>
+      <circle cx="2%" cy="32%" r="0.7" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:8% 44%;animation-duration:6.8s;animation-delay:-3.5s;">
+      <circle cx="8%" cy="44%" r="4.8" fill="#fde047" opacity="0.28"/>
+      <circle cx="8%" cy="44%" r="2" fill="#fde047" opacity="0.95"/>
+      <circle cx="8%" cy="44%" r="0.9" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:14% 36%;animation-duration:3.2s;animation-delay:-4.2s;">
+      <circle cx="14%" cy="36%" r="2.6" fill="#ffffff" opacity="0.28"/>
+      <circle cx="14%" cy="36%" r="1.1" fill="#ffffff" opacity="0.95"/>
+      <circle cx="14%" cy="36%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:19% 48%;animation-duration:4.1s;animation-delay:0.0s;">
+      <circle cx="19%" cy="48%" r="4.1" fill="#fb7185" opacity="0.28"/>
+      <circle cx="19%" cy="48%" r="1.7" fill="#fb7185" opacity="0.95"/>
+      <circle cx="19%" cy="48%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:25% 33%;animation-duration:5.0s;animation-delay:-0.7s;">
+      <circle cx="25%" cy="33%" r="2.2" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="25%" cy="33%" r="0.9" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="25%" cy="33%" r="0.4" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:75% 38%;animation-duration:5.9s;animation-delay:-1.4s;">
+      <circle cx="75%" cy="38%" r="2.9" fill="#4ade80" opacity="0.28"/>
+      <circle cx="75%" cy="38%" r="1.2" fill="#4ade80" opacity="0.95"/>
+      <circle cx="75%" cy="38%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:81% 46%;animation-duration:6.8s;animation-delay:-2.1s;">
+      <circle cx="81%" cy="46%" r="4.8" fill="#c084fc" opacity="0.28"/>
+      <circle cx="81%" cy="46%" r="2" fill="#c084fc" opacity="0.95"/>
+      <circle cx="81%" cy="46%" r="0.9" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:86% 34%;animation-duration:3.2s;animation-delay:-2.8s;">
+      <circle cx="86%" cy="34%" r="3.4" fill="#ffffff" opacity="0.28"/>
+      <circle cx="86%" cy="34%" r="1.4" fill="#ffffff" opacity="0.95"/>
+      <circle cx="86%" cy="34%" r="0.6" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:92% 49%;animation-duration:4.1s;animation-delay:-3.5s;">
+      <circle cx="92%" cy="49%" r="4.3" fill="#fde047" opacity="0.28"/>
+      <circle cx="92%" cy="49%" r="1.8" fill="#fde047" opacity="0.95"/>
+      <circle cx="92%" cy="49%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:98% 36%;animation-duration:5.0s;animation-delay:-4.2s;">
+      <circle cx="98%" cy="36%" r="2.4" fill="#fb7185" opacity="0.28"/>
+      <circle cx="98%" cy="36%" r="1" fill="#fb7185" opacity="0.95"/>
+      <circle cx="98%" cy="36%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:3% 58%;animation-duration:5.9s;animation-delay:0.0s;">
+      <circle cx="3%" cy="58%" r="5.0" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="3%" cy="58%" r="2.1" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="3%" cy="58%" r="0.9" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:9% 65%;animation-duration:6.8s;animation-delay:-0.7s;">
+      <circle cx="9%" cy="65%" r="2.9" fill="#4ade80" opacity="0.28"/>
+      <circle cx="9%" cy="65%" r="1.2" fill="#4ade80" opacity="0.95"/>
+      <circle cx="9%" cy="65%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:15% 54%;animation-duration:3.2s;animation-delay:-1.4s;">
+      <circle cx="15%" cy="54%" r="3.8" fill="#c084fc" opacity="0.28"/>
+      <circle cx="15%" cy="54%" r="1.6" fill="#c084fc" opacity="0.95"/>
+      <circle cx="15%" cy="54%" r="0.7" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:21% 62%;animation-duration:4.1s;animation-delay:-2.1s;">
+      <circle cx="21%" cy="62%" r="2.4" fill="#ffffff" opacity="0.28"/>
+      <circle cx="21%" cy="62%" r="1" fill="#ffffff" opacity="0.95"/>
+      <circle cx="21%" cy="62%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:80% 56%;animation-duration:5.0s;animation-delay:-2.8s;">
+      <circle cx="80%" cy="56%" r="3.6" fill="#fde047" opacity="0.28"/>
+      <circle cx="80%" cy="56%" r="1.5" fill="#fde047" opacity="0.95"/>
+      <circle cx="80%" cy="56%" r="0.7" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:85% 66%;animation-duration:5.9s;animation-delay:-3.5s;">
+      <circle cx="85%" cy="66%" r="5.3" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="85%" cy="66%" r="2.2" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="85%" cy="66%" r="1.0" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:91% 55%;animation-duration:6.8s;animation-delay:-4.2s;">
+      <circle cx="91%" cy="55%" r="2.6" fill="#fb7185" opacity="0.28"/>
+      <circle cx="91%" cy="55%" r="1.1" fill="#fb7185" opacity="0.95"/>
+      <circle cx="91%" cy="55%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:96% 64%;animation-duration:3.2s;animation-delay:0.0s;">
+      <circle cx="96%" cy="64%" r="4.1" fill="#c084fc" opacity="0.28"/>
+      <circle cx="96%" cy="64%" r="1.7" fill="#c084fc" opacity="0.95"/>
+      <circle cx="96%" cy="64%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:4% 76%;animation-duration:4.1s;animation-delay:-0.7s;">
+      <circle cx="4%" cy="76%" r="4.1" fill="#fb7185" opacity="0.28"/>
+      <circle cx="4%" cy="76%" r="1.7" fill="#fb7185" opacity="0.95"/>
+      <circle cx="4%" cy="76%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:10% 84%;animation-duration:5.0s;animation-delay:-1.4s;">
+      <circle cx="10%" cy="84%" r="4.8" fill="#ffffff" opacity="0.28"/>
+      <circle cx="10%" cy="84%" r="2" fill="#ffffff" opacity="0.95"/>
+      <circle cx="10%" cy="84%" r="0.9" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:16% 73%;animation-duration:5.9s;animation-delay:-2.1s;">
+      <circle cx="16%" cy="73%" r="2.6" fill="#fde047" opacity="0.28"/>
+      <circle cx="16%" cy="73%" r="1.1" fill="#fde047" opacity="0.95"/>
+      <circle cx="16%" cy="73%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:22% 86%;animation-duration:6.8s;animation-delay:-2.8s;">
+      <circle cx="22%" cy="86%" r="3.6" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="22%" cy="86%" r="1.5" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="22%" cy="86%" r="0.7" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:27% 78%;animation-duration:3.2s;animation-delay:-3.5s;">
+      <circle cx="27%" cy="78%" r="2.2" fill="#c084fc" opacity="0.28"/>
+      <circle cx="27%" cy="78%" r="0.9" fill="#c084fc" opacity="0.95"/>
+      <circle cx="27%" cy="78%" r="0.4" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:73% 75%;animation-duration:4.1s;animation-delay:-4.2s;">
+      <circle cx="73%" cy="75%" r="3.4" fill="#4ade80" opacity="0.28"/>
+      <circle cx="73%" cy="75%" r="1.4" fill="#4ade80" opacity="0.95"/>
+      <circle cx="73%" cy="75%" r="0.6" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:78% 88%;animation-duration:5.0s;animation-delay:0.0s;">
+      <circle cx="78%" cy="88%" r="5.3" fill="#ffffff" opacity="0.28"/>
+      <circle cx="78%" cy="88%" r="2.2" fill="#ffffff" opacity="0.95"/>
+      <circle cx="78%" cy="88%" r="1.0" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:84% 79%;animation-duration:5.9s;animation-delay:-0.7s;">
+      <circle cx="84%" cy="79%" r="2.4" fill="#c084fc" opacity="0.28"/>
+      <circle cx="84%" cy="79%" r="1" fill="#c084fc" opacity="0.95"/>
+      <circle cx="84%" cy="79%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:90% 85%;animation-duration:6.8s;animation-delay:-1.4s;">
+      <circle cx="90%" cy="85%" r="4.3" fill="#fb7185" opacity="0.28"/>
+      <circle cx="90%" cy="85%" r="1.8" fill="#fb7185" opacity="0.95"/>
+      <circle cx="90%" cy="85%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:96% 74%;animation-duration:3.2s;animation-delay:-2.1s;">
+      <circle cx="96%" cy="74%" r="3.1" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="96%" cy="74%" r="1.3" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="96%" cy="74%" r="0.6" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:5% 94%;animation-duration:4.1s;animation-delay:-2.8s;">
+      <circle cx="5%" cy="94%" r="3.6" fill="#fde047" opacity="0.28"/>
+      <circle cx="5%" cy="94%" r="1.5" fill="#fde047" opacity="0.95"/>
+      <circle cx="5%" cy="94%" r="0.7" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:12% 97%;animation-duration:5.0s;animation-delay:-3.5s;">
+      <circle cx="12%" cy="97%" r="2.4" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="12%" cy="97%" r="1" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="12%" cy="97%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:19% 93%;animation-duration:5.9s;animation-delay:-4.2s;">
+      <circle cx="19%" cy="93%" r="4.3" fill="#4ade80" opacity="0.28"/>
+      <circle cx="19%" cy="93%" r="1.8" fill="#4ade80" opacity="0.95"/>
+      <circle cx="19%" cy="93%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:26% 96%;animation-duration:6.8s;animation-delay:0.0s;">
+      <circle cx="26%" cy="96%" r="2.9" fill="#ffffff" opacity="0.28"/>
+      <circle cx="26%" cy="96%" r="1.2" fill="#ffffff" opacity="0.95"/>
+      <circle cx="26%" cy="96%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:33% 91%;animation-duration:3.2s;animation-delay:-0.7s;">
+      <circle cx="33%" cy="91%" r="4.8" fill="#c084fc" opacity="0.28"/>
+      <circle cx="33%" cy="91%" r="2" fill="#c084fc" opacity="0.95"/>
+      <circle cx="33%" cy="91%" r="0.9" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:41% 95%;animation-duration:4.1s;animation-delay:-1.4s;">
+      <circle cx="41%" cy="95%" r="2.2" fill="#fb7185" opacity="0.28"/>
+      <circle cx="41%" cy="95%" r="0.9" fill="#fb7185" opacity="0.95"/>
+      <circle cx="41%" cy="95%" r="0.4" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:48% 93%;animation-duration:5.0s;animation-delay:-2.1s;">
+      <circle cx="48%" cy="93%" r="3.8" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="48%" cy="93%" r="1.6" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="48%" cy="93%" r="0.7" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:55% 97%;animation-duration:5.9s;animation-delay:-2.8s;">
+      <circle cx="55%" cy="97%" r="3.1" fill="#fde047" opacity="0.28"/>
+      <circle cx="55%" cy="97%" r="1.3" fill="#fde047" opacity="0.95"/>
+      <circle cx="55%" cy="97%" r="0.6" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:62% 92%;animation-duration:6.8s;animation-delay:-3.5s;">
+      <circle cx="62%" cy="92%" r="5.0" fill="#ffffff" opacity="0.28"/>
+      <circle cx="62%" cy="92%" r="2.1" fill="#ffffff" opacity="0.95"/>
+      <circle cx="62%" cy="92%" r="0.9" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:69% 96%;animation-duration:3.2s;animation-delay:-4.2s;">
+      <circle cx="69%" cy="96%" r="2.4" fill="#4ade80" opacity="0.28"/>
+      <circle cx="69%" cy="96%" r="1" fill="#4ade80" opacity="0.95"/>
+      <circle cx="69%" cy="96%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:77% 93%;animation-duration:4.1s;animation-delay:0.0s;">
+      <circle cx="77%" cy="93%" r="4.1" fill="#c084fc" opacity="0.28"/>
+      <circle cx="77%" cy="93%" r="1.7" fill="#c084fc" opacity="0.95"/>
+      <circle cx="77%" cy="93%" r="0.8" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-1" style="transform-origin:85% 97%;animation-duration:5.0s;animation-delay:-0.7s;">
+      <circle cx="85%" cy="97%" r="3.4" fill="#fb7185" opacity="0.28"/>
+      <circle cx="85%" cy="97%" r="1.4" fill="#fb7185" opacity="0.95"/>
+      <circle cx="85%" cy="97%" r="0.6" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-2" style="transform-origin:92% 94%;animation-duration:5.9s;animation-delay:-1.4s;">
+      <circle cx="92%" cy="94%" r="4.8" fill="#38bdf8" opacity="0.28"/>
+      <circle cx="92%" cy="94%" r="2" fill="#38bdf8" opacity="0.95"/>
+      <circle cx="92%" cy="94%" r="0.9" fill="#ffffff" opacity="0.9"/>
+    </g>
+<g class="star-pulse-3" style="transform-origin:97% 98%;animation-duration:6.8s;animation-delay:-2.1s;">
+      <circle cx="97%" cy="98%" r="2.6" fill="#fde047" opacity="0.28"/>
+      <circle cx="97%" cy="98%" r="1.1" fill="#fde047" opacity="0.95"/>
+      <circle cx="97%" cy="98%" r="0.5" fill="#ffffff" opacity="0.9"/>
+    </g>
+
+  </svg>
+</div>
+<svg class="layer" id="game" style="display:none;width:100%;height:100%;z-index:1;" viewBox="0 0 1200 900" role="img" aria-label="Studio floor plan with the CEO cabin in the centre"></svg>
 
 <div class="ov" id="welcome">
   <div style="height:10px"></div>
@@ -1471,7 +1803,7 @@ function buildGame() {
   });
   d += '</defs>';
 
-  var s = d + R(0, 0, 1200, 900, "#080b12") +
+  var s = d + R(0, 0, 1200, 900, "rgba(4,7,16,0.35)") +
           R(0, 293, 1200, 24, "url(#fl)") +
           R(0, 583, 1200, 24, "url(#fl)") +
           R(393, 0, 24, 900, "url(#fl)") +

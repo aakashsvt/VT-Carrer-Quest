@@ -690,16 +690,17 @@ input[type=text]:focus {
   filter: brightness(1.15);
 }
 .hit.sel {
-  filter: drop-shadow(0 0 10px #f59e0b);
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.6));
 }
 .chip {
   cursor: pointer;
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;
 }
 .chip:hover {
-  transform: scale(1.15);
+  transform: translateY(-2px);
+  filter: brightness(1.15);
 }
 .chip.got {
   pointer-events: none;
@@ -707,14 +708,6 @@ input[type=text]:focus {
 }
 @keyframes chipGone {
   to { transform: translateY(-30px) scale(1.4); opacity: 0; }
-}
-.pulse-ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: pulseAnim 2.4s ease-in-out infinite;
-}
-@keyframes pulseAnim {
-  50% { transform: scale(1.12); opacity: 0.4; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -986,72 +979,87 @@ function desk(x, y, w, wood) {
   g += R(x, y, w, 16, topColor, 4);
   g += R(x, y, w, 2.5, hlColor, 2);
   g += R(x, y + 14, w, 3.5, edgeColor, 1);
-  g += Ci(x + w - 22, y + 6, 3, '#0b0f19', ' stroke="#334155" stroke-width="1"');
-  g += R(x + w / 2 - 45, y + 3, 90, 11, '#0f172a', 2, ' stroke="rgba(255,255,255,0.06)" stroke-width="0.8"');
-  g += R(x + w / 2 - 24, y + 5, 36, 7, '#1e293b', 1.5);
-  g += R(x + w / 2 + 18, y + 6, 7, 5, '#334155', 2);
+  g += Ci(x + w - 18, y + 6, 2.5, '#0b0f19', ' stroke="#334155" stroke-width="0.8"');
+  return g;
+}
+
+function deskMat(x, y, w, type) {
+  var g = '';
+  var padW = w || 48;
+  g += R(x - padW/2, y, padW, 11, '#0e1422', 2, ' stroke="rgba(255,255,255,0.08)" stroke-width="0.8"');
+  if (type === 'tablet') {
+    g += R(x - 18, y + 2, 28, 7, '#1e1b4b', 1.5, ' stroke="#818cf8" stroke-width="0.8"');
+    g += St('M'+(x+13)+' '+(y+3)+'L'+(x+18)+' '+(y+8), '#c084fc', 1.2);
+  } else if (type === 'gamepad') {
+    g += R(x - 12, y + 2, 24, 6.5, '#1e293b', 2.5);
+    g += Ci(x - 7, y + 5.2, 1.2, '#10b981');
+    g += Ci(x + 7, y + 5.2, 1.2, '#38bdf8');
+  } else {
+    g += R(x - padW/2 + 4, y + 2.5, padW - 16, 6, '#1e293b', 1);
+    g += R(x + padW/2 - 9, y + 3, 5, 5, '#334155', 1.5);
+  }
   return g;
 }
 
 function mon(x, y, w, k) {
-  var h = Math.round(w * 0.64);
+  var h = Math.round(w * 0.62);
   var g = '';
-  g += R(x + 2, y + 2, w, h, 'rgba(0,0,0,0.5)', 4);
-  g += R(x, y, w, h, '#090d16', 3.5, ' stroke="#1e293b" stroke-width="1.2"');
-  var scrBg = (k === 'art') ? '#141226' : (k === 'chart' ? '#0d1527' : (k === 'model' ? '#111827' : '#0a0e17'));
+  g += R(x + 2, y + 2, w, h, 'rgba(0,0,0,0.45)', 4);
+  g += R(x, y, w, h, '#0a0e17', 3, ' stroke="#1e293b" stroke-width="1"');
+  var scrBg = (k === 'art') ? '#131124' : (k === 'chart' ? '#0b1424' : (k === 'model' ? '#121620' : '#080c14'));
   g += R(x + 2, y + 2, w - 4, h - 4, scrBg, 2);
 
   if (k === 'code') {
-    g += R(x + 2, y + 2, 7, h - 4, '#0f172a');
-    g += Ci(x + 5.5, y + 6, 1.2, '#38bdf8');
+    g += R(x + 2, y + 2, 6, h - 4, '#0f172a');
+    g += Ci(x + 5, y + 5.5, 1, '#38bdf8');
     var colors = ['#38bdf8', '#c084fc', '#34d399', '#f59e0b', '#f43f5e', '#e2e8f0'];
-    for (var i = 0; i < 6; i++) {
-      var lw = 8 + (i * 17) % (w - 22);
-      g += R(x + 12, y + 5 + i * 4.6, lw, 2, colors[i % colors.length], 1);
+    for (var i = 0; i < 5; i++) {
+      var lw = 8 + (i * 15) % (w - 20);
+      g += R(x + 11, y + 5 + i * 4.4, lw, 2, colors[i % colors.length], 0.8);
     }
-    g += R(x + 2, y + h - 5.5, w - 4, 3.5, '#020617');
-    g += R(x + 5, y + h - 4.5, 14, 1.5, '#10b981', 0.5);
+    g += R(x + 2, y + h - 5, w - 4, 3, '#020617');
+    g += R(x + 4, y + h - 4, 12, 1.2, '#10b981', 0.5);
   } else if (k === 'model') {
     var cx = x + w / 2, cy = y + h / 2 - 1;
-    g += Pa('M'+cx+' '+(cy-9)+'L'+(cx+14)+' '+(cy-2)+'L'+cx+' '+(cy+5)+'L'+(cx-14)+' '+(cy-2)+'Z', 'rgba(249,115,22,0.15)', ' stroke="#f97316" stroke-width="1.2"');
-    g += St('M'+(cx-14)+' '+(cy-2)+'v10L'+cx+' '+(cy+17)+'v-12', '#f97316', 1.2);
-    g += St('M'+(cx+14)+' '+(cy-2)+'v10L'+cx+' '+(cy+17), '#f97316', 1.2);
-    g += St('M'+(x+7)+' '+(y+h-6)+'h7', '#ef4444', 1.2);
-    g += St('M'+(x+7)+' '+(y+h-6)+'v-7', '#22c55e', 1.2);
+    g += Pa('M'+cx+' '+(cy-8)+'L'+(cx+12)+' '+(cy-2)+'L'+cx+' '+(cy+4)+'L'+(cx-12)+' '+(cy-2)+'Z', 'rgba(249,115,22,0.12)', ' stroke="#f97316" stroke-width="1.1"');
+    g += St('M'+(cx-12)+' '+(cy-2)+'v9L'+cx+' '+(cy+15)+'v-11', '#f97316', 1.1);
+    g += St('M'+(cx+12)+' '+(cy-2)+'v9L'+cx+' '+(cy+15), '#f97316', 1.1);
+    g += St('M'+(x+6)+' '+(y+h-5)+'h6', '#ef4444', 1.1);
+    g += St('M'+(x+6)+' '+(y+h-5)+'v-6', '#22c55e', 1.1);
   } else if (k === 'art') {
-    g += Pa('M'+(x+4)+' '+(y+h-6)+'Q'+(x+w/2)+' '+(y+4)+' '+(x+w-4)+' '+(y+h-6)+'Z', 'rgba(168,85,247,0.3)');
-    g += Ci(x + w / 2, y + 9, 3.5, '#f59e0b');
-    for (var j = 0; j < 4; j++) {
-      g += Ci(x + w - 5.5, y + 6 + j * 4.5, 1.5, ['#f43f5e', '#a855f7', '#38bdf8', '#34d399'][j]);
+    g += Pa('M'+(x+4)+' '+(y+h-5)+'Q'+(x+w/2)+' '+(y+4)+' '+(x+w-4)+' '+(y+h-5)+'Z', 'rgba(168,85,247,0.25)');
+    g += Ci(x + w / 2, y + 8, 3, '#f59e0b');
+    for (var j = 0; j < 3; j++) {
+      g += Ci(x + w - 5, y + 6 + j * 4.2, 1.3, ['#f43f5e', '#a855f7', '#38bdf8'][j]);
     }
   } else if (k === 'chart') {
-    g += Pa('M'+(x+6)+' '+(y+h-7)+'Q'+(x+w*0.35)+' '+(y+11)+' '+(x+w*0.65)+' '+(y+15)+'T'+(x+w-6)+' '+(y+6)+'v'+(h-13)+'H'+(x+6)+'Z', 'rgba(56,189,248,0.12)');
-    g += St('M'+(x+6)+' '+(y+h-7)+'Q'+(x+w*0.35)+' '+(y+11)+' '+(x+w*0.65)+' '+(y+15)+'T'+(x+w-6)+' '+(y+6), '#38bdf8', 1.5);
-    g += R(x + 6, y + 5, 11, 3.5, '#0369a1', 1);
+    g += Pa('M'+(x+5)+' '+(y+h-6)+'Q'+(x+w*0.35)+' '+(y+9)+' '+(x+w*0.65)+' '+(y+13)+'T'+(x+w-5)+' '+(y+6)+'v'+(h-11)+'H'+(x+5)+'Z', 'rgba(56,189,248,0.12)');
+    g += St('M'+(x+5)+' '+(y+h-6)+'Q'+(x+w*0.35)+' '+(y+9)+' '+(x+w*0.65)+' '+(y+13)+'T'+(x+w-5)+' '+(y+6), '#38bdf8', 1.3);
+    g += R(x + 5, y + 4.5, 9, 3, '#0369a1', 0.8);
   } else if (k === 'game') {
     g += R(x + 4, y + 4, w - 8, h - 8, '#1e1b4b', 1.5);
-    g += R(x + w / 2 - 8, y + h / 2 - 7, 7, 7, '#f59e0b', 1);
-    g += R(x + w / 2 + 1, y + h / 2 - 7, 7, 7, '#38bdf8', 1);
-    g += R(x + w / 2 - 4, y + h / 2 + 1, 8, 7, '#10b981', 1);
-    g += R(x + 5, y + 5, 8, 2.5, '#10b981', 0.5);
+    g += R(x + w / 2 - 7, y + h / 2 - 6, 6, 6, '#f59e0b', 1);
+    g += R(x + w / 2 + 1, y + h / 2 - 6, 6, 6, '#38bdf8', 1);
+    g += R(x + w / 2 - 3, y + h / 2 + 1, 7, 6, '#10b981', 1);
   }
-  g += R(x + w / 2 - 2.5, y + h, 5, 6, '#0f172a');
-  g += R(x + w / 2 - 10, y + h + 5, 20, 3, '#1e293b', 1.5);
+
+  g += R(x + w / 2 - 2, y + h, 4, 6, '#0f172a');
+  g += R(x + w / 2 - 9, y + h + 5, 18, 2.5, '#1e293b', 1);
   return g;
 }
 
 function chairb(x, y, c) {
   var meshColor = c || '#1e293b';
   var g = '';
-  g += Ci(x + 28, y + 52, 14, 'rgba(0,0,0,0.3)');
+  g += Ci(x + 28, y + 54, 14, 'rgba(0,0,0,0.3)');
   for (var a = 0; a < 5; a++) {
     var rad = (a * 72 * Math.PI) / 180;
-    var bx = x + 28 + Math.cos(rad) * 13;
-    var by = y + 52 + Math.sin(rad) * 9;
-    g += St('M'+(x+28)+' '+(y+52)+'L'+bx+' '+by, '#0f172a', 2.5);
+    var bx = x + 28 + Math.cos(rad) * 14;
+    var by = y + 54 + Math.sin(rad) * 10;
+    g += St('M'+(x+28)+' '+(y+54)+'L'+bx+' '+by, '#0f172a', 2.5);
     g += Ci(bx, by, 1.8, '#334155');
   }
-  g += R(x + 26, y + 42, 4, 10, '#475569', 1);
+  g += R(x + 26, y + 42, 4, 12, '#475569', 1);
   g += R(x + 5, y + 26, 46, 18, mix(meshColor, -0.2), 6);
   g += R(x + 7, y + 27, 42, 14, meshColor, 5);
   g += R(x + 8, y, 40, 28, '#0f172a', 10);
@@ -1062,28 +1070,126 @@ function chairb(x, y, c) {
   return g;
 }
 
-function plant(x, y, s) {
+/* Four Hand-Crafted Botanical Plant Varieties */
+function plant(x, y, s, type) {
+  var t = (type !== undefined) ? type : 0;
   var g = '<g transform="translate('+x+' '+y+') scale('+s+')">';
-  g += Pa('M-14 26C-14 22 14 22 14 26C14 30 -14 30 -14 26Z', 'rgba(0,0,0,0.35)');
-  g += Pa('M-10 2L10 2L8 24L-8 24Z', '#e2e8f0');
-  g += R(-11, 0, 22, 3.5, '#f8fafc', 1.5);
-  g += Pa('M-10 2L-8 24L-3 24L-5 2Z', 'rgba(0,0,0,0.06)');
-  g += Pa('M-8 2C-8 0 8 0 8 2Z', '#292524');
-  var leaves = [
-    [-15, -16, -38, 7, 20],
-    [0, -28, 0, 8, 24],
-    [15, -16, 38, 7, 20],
-    [-8, -24, -18, 7.5, 22],
-    [9, -24, 18, 7.5, 22]
-  ];
-  leaves.forEach(function(l, i) {
-    var c1 = i % 2 ? '#059669' : '#10b981';
-    var c2 = i % 2 ? '#047857' : '#059669';
-    g += '<g transform="translate('+l[0]+' '+l[1]+') rotate('+l[2]+')">';
-    g += '<ellipse cx="0" cy="0" rx="'+l[3]+'" ry="'+l[4]+'" fill="'+c1+'"/>';
-    g += St('M0 '+(-l[4]+2)+'V'+(l[4]-2), c2, 1.2);
-    g += '</g>';
-  });
+
+  if (t === 0) {
+    // Monstera Deliciosa (Charcoal ribbed ceramic pot)
+    g += Pa('M-16 28C-16 24 16 24 16 28C16 32 -16 32 -16 28Z', 'rgba(0,0,0,0.3)');
+    g += R(-12, 24, 24, 3.5, '#1e2430', 1.5);
+    g += Pa('M-10 4 L10 4 L8.5 24 L-8.5 24 Z', '#2d3748');
+    g += R(-11, 1.5, 22, 3.5, '#3b465b', 1.5);
+    g += Pa('M-8 4C-8 2 8 2 8 4C8 5 -8 5 -8 4Z', '#1a1410');
+    // Stems
+    g += St('M0 4 Q-6 -6 -14 -16', '#143823', 1.8);
+    g += St('M0 4 Q-1 -12 -1 -28', '#1b4d30', 2);
+    g += St('M0 4 Q8 -8 16 -16', '#143823', 1.8);
+    g += St('M0 4 Q6 -18 8 -30', '#235e3b', 1.8);
+    // Background deeper leaves
+    g += Pa('M-14 -16 C-24 -18 -26 -28 -20 -33 C-14 -37 -8 -28 -14 -16 Z', '#143d26');
+    g += St('M-14 -16 C-17 -22 -19 -28 -20 -32', '#225e3b', 1);
+    g += Pa('M16 -16 C25 -18 27 -27 21 -32 C15 -36 9 -27 16 -16 Z', '#17472c');
+    g += St('M16 -16 C19 -22 21 -27 21 -31', '#286b43', 1);
+    // Foreground broad split-fenestrated leaves
+    g += Pa('M-1 -28 C-12 -32 -14 -46 -1 -51 C11 -46 9 -32 -1 -28 Z', '#22633e');
+    g += Pa('M-6 -38 C-11 -39 -10 -43 -5 -41 Z', '#131a26');
+    g += Pa('M4 -37 C9 -38 8 -42 2 -40 Z', '#131a26');
+    g += St('M-1 -28 L-1 -49', '#52b788', 1.2);
+    g += Pa('M8 -30 C18 -34 21 -46 11 -50 C3 -50 2 -38 8 -30 Z', '#2d7a50');
+    g += Pa('M13 -40 C17 -41 16 -45 11 -43 Z', '#131a26');
+    g += St('M8 -30 C11 -37 12 -44 10 -48', '#74c69d', 1.2);
+    g += Pa('M-1 -4 C-6 -8 -6 -14 -2 -16 C2 -16 3 -10 -1 -4 Z', '#40916c');
+  } else if (t === 1) {
+    // Snake Plant / Sansevieria (Broad, lush, architectural sword blades)
+    g += Pa('M-18 28C-18 23 18 23 18 28C18 33 -18 33 -18 28Z', 'rgba(0,0,0,0.35)');
+    g += Pa('M-13 5 L13 5 L10.5 26 L-10.5 26 Z', '#171d28');
+    g += R(-14, 2, 28, 3.5, '#334155', 1);
+    g += St('M-5 5 L-4 26', '#10141d', 1.2);
+    g += St('M5 5 L4 26', 'rgba(255,255,255,0.06)', 1.2);
+    g += Pa('M-10 4C-10 2 10 2 10 4C10 5 -10 5 -10 4Z', '#18120e');
+    // Broad sword-shaped variegated leaves
+    // 1. Left outer broad blade
+    g += Pa('M-8 4 C-20 -10 -22 -24 -15 -38 C-9 -24 -4 -6 -2 4 Z', '#86efac');
+    g += Pa('M-7 4 C-17.5 -10 -19.5 -24 -14.5 -36 C-9.5 -24 -5 -6 -3 4 Z', '#14532d');
+    g += St('M-14 -12 h6', '#0f3e22', 1.2);
+    g += St('M-15 -22 h5.5', '#0f3e22', 1.2);
+    // 2. Right outer broad blade
+    g += Pa('M2 4 C4 -6 9 -24 15 -38 C22 -24 20 -10 8 4 Z', '#86efac');
+    g += Pa('M3 4 C5 -6 9.5 -24 14.5 -36 C19.5 -24 17.5 -10 7 4 Z', '#14532d');
+    g += St('M8 -12 h6', '#0f3e22', 1.2);
+    g += St('M10 -22 h5.5', '#0f3e22', 1.2);
+    // 3. Left-center tall broad blade
+    g += Pa('M-5 4 C-14 -14 -13 -36 -5 -52 C2 -36 1 -14 -0.5 4 Z', '#99d98c');
+    g += Pa('M-4.2 4 C-11.8 -14 -11 -36 -4.5 -49 C0.5 -36 -0.2 -14 -1.2 4 Z', '#166534');
+    g += St('M-6 -10 h7', '#0e3b1c', 1.4);
+    g += St('M-8 -22 h7.5', '#0e3b1c', 1.4);
+    g += St('M-7 -34 h6', '#0e3b1c', 1.4);
+    g += St('M-5 -42 h4', '#0e3b1c', 1.2);
+    // 4. Right-center tallest broad sword blade
+    g += Pa('M-0.5 4 C-1 -14 2 -38 4 -56 C12 -38 13 -14 5 4 Z', '#74c69d');
+    g += Pa('M0.5 4 C0.2 -14 2.8 -38 3.8 -53 C10.2 -38 11.2 -14 4.2 4 Z', '#1b4332');
+    g += St('M2 -12 h7.5', '#0e3b1c', 1.4);
+    g += St('M3 -25 h7', '#0e3b1c', 1.4);
+    g += St('M3.5 -38 h6', '#0e3b1c', 1.4);
+    g += St('M3.8 -46 h4', '#0e3b1c', 1.2);
+    // 5. Front-center overlapping broad blade
+    g += Pa('M-4 4 C-8 -4 -8 -18 -2 -26 C4 -18 4 -4 2 4 Z', '#99d98c');
+    g += Pa('M-3.2 4 C-6.5 -4 -6.5 -17 -1.8 -24 C3 -17 3 -4 1.2 4 Z', '#1e4b38');
+    g += St('M-3 -8 h5', '#0e3b1c', 1.2);
+    g += St('M-2.5 -16 h4.5', '#0e3b1c', 1.2);
+  } else if (t === 2) {
+    // Kentia Studio Palm (Terracotta pot & arching fronds)
+    g += Pa('M-15 28C-15 24 15 24 15 28C15 32 -15 32 -15 28Z', 'rgba(0,0,0,0.3)');
+    g += R(-12, 24, 24, 3.5, '#7c2d12', 1.5);
+    g += Pa('M-10 4 L10 4 L8.5 24 L-8.5 24 Z', '#9a3412');
+    g += R(-11, 1.5, 22, 3.5, '#c2410c', 1.5);
+    g += Pa('M-8 3C-8 1 8 1 8 3C8 4 -8 4 -8 3Z', '#24140e');
+    // Fronds
+    g += St('M0 4 Q-12 -8 -26 -20', '#1c4d28', 1.8);
+    g += Pa('M-7 -2 Q-14 -2 -18 4 Q-14 -1 -7 -2 Z', '#276749');
+    g += Pa('M-12 -6 Q-20 -7 -25 -2 Q-19 -6 -12 -6 Z', '#2e7a57');
+    g += Pa('M-18 -11 Q-26 -13 -30 -9 Q-25 -12 -18 -11 Z', '#388e3c');
+    g += Pa('M-22 -16 Q-29 -21 -31 -18 Q-27 -18 -22 -16 Z', '#40916c');
+    g += St('M0 4 Q1 -18 0 -44', '#235e38', 1.8);
+    g += Pa('M0 -12 Q-8 -14 -12 -9 Q-7 -12 0 -12 Z', '#2e7a57');
+    g += Pa('M0 -12 Q8 -14 12 -9 Q7 -12 0 -12 Z', '#388e3c');
+    g += Pa('M0 -22 Q-9 -25 -13 -20 Q-7 -23 0 -22 Z', '#40916c');
+    g += Pa('M0 -22 Q9 -25 13 -20 Q7 -23 0 -22 Z', '#4caf50');
+    g += Pa('M0 -32 Q-7 -37 -10 -32 Q-6 -35 0 -32 Z', '#52b788');
+    g += Pa('M0 -32 Q7 -37 10 -32 Q6 -35 0 -32 Z', '#66bb6a');
+    g += St('M0 4 Q12 -8 26 -20', '#1c4d28', 1.8);
+    g += Pa('M7 -2 Q14 -2 18 4 Q14 -1 7 -2 Z', '#276749');
+    g += Pa('M12 -6 Q20 -7 25 -2 Q19 -6 12 -6 Z', '#2e7a57');
+    g += Pa('M18 -11 Q26 -13 30 -9 Q25 -12 18 -11 Z', '#388e3c');
+    g += Pa('M22 -16 Q29 -21 31 -18 Q27 -18 22 -16 Z', '#40916c');
+  } else if (t === 3) {
+    // Ficus Lyrata / Fiddle-Leaf Fig (Mid-century wooden tripod stand)
+    g += Pa('M-14 30C-14 26 14 26 14 30C14 34 -14 34 -14 30Z', 'rgba(0,0,0,0.3)');
+    g += St('M-9 16 L-12 29', '#78350f', 2);
+    g += St('M9 16 L12 29', '#78350f', 2);
+    g += St('M0 18 L0 29', '#5c2b0c', 2);
+    g += St('M-10 22 L10 22', '#78350f', 1.8);
+    g += R(-10, 4, 20, 16, '#e2e8f0', 2);
+    g += St('M-6 4 L-6 20', 'rgba(0,0,0,0.06)', 1);
+    g += St('M-2 4 L-2 20', 'rgba(0,0,0,0.06)', 1);
+    g += St('M2 4 L2 20', 'rgba(0,0,0,0.06)', 1);
+    g += St('M6 4 L6 20', 'rgba(0,0,0,0.06)', 1);
+    g += Pa('M-9 3C-9 1 9 1 9 3C9 4 -9 4 -9 3Z', '#1c1917');
+    g += St('M0 4 L0 -22', '#5c3d2e', 2.2);
+    g += Pa('M0 -4 C-8 -4 -16 -10 -14 -18 C-10 -22 -2 -14 0 -8 Z', '#1b4a2e');
+    g += St('M0 -6 Q-7 -10 -13 -17', '#388e3c', 1);
+    g += Pa('M0 -6 C8 -6 16 -12 14 -20 C10 -24 2 -16 0 -10 Z', '#225e3b');
+    g += St('M0 -8 Q7 -12 13 -19', '#40916c', 1);
+    g += Pa('M0 -14 C-10 -16 -20 -24 -16 -34 C-10 -38 -2 -24 0 -18 Z', '#297349');
+    g += St('M0 -16 Q-8 -22 -15 -33', '#52b788', 1.2);
+    g += Pa('M0 -16 C10 -18 19 -26 15 -36 C9 -40 2 -26 0 -20 Z', '#318554');
+    g += St('M0 -18 Q8 -24 14 -35', '#74c69d', 1.2);
+    g += Pa('M0 -22 C-8 -28 -6 -44 0 -46 C6 -44 8 -28 0 -22 Z', '#389e63');
+    g += St('M0 -22 L0 -44', '#95d5b2', 1.2);
+  }
+
   return g + '</g>';
 }
 
@@ -1104,12 +1210,22 @@ function shelf(x, y, w, rows) {
 function sofa(x, y, w, c) {
   var base = c || '#7c2d12';
   var g = '';
-  g += R(x + 4, y + 40, w - 8, 8, 'rgba(0,0,0,0.4)', 4);
-  g += R(x + 10, y + 4, w - 20, 32, mix(base, -0.2), 10);
-  g += R(x + 2, y + 18, w - 4, 28, base, 8);
-  g += R(x + 12, y + 20, w - 24, 18, mix(base, 0.15), 6);
-  g += R(x, y + 10, 14, 34, mix(base, -0.1), 6);
-  g += R(x + w - 14, y + 10, 14, 34, mix(base, -0.1), 6);
+  g += R(x + 4, y + 38, w - 8, 8, 'rgba(0,0,0,0.35)', 4);
+  g += St('M'+(x+8)+' '+(y+36)+'L'+(x+5)+' '+(y+44), '#1c1917', 2.5);
+  g += St('M'+(x+w-8)+' '+(y+36)+'L'+(x+w-5)+' '+(y+44), '#1c1917', 2.5);
+  g += R(x + 8, y + 2, w - 16, 26, mix(base, -0.22), 8);
+  g += R(x + 10, y + 4, w - 20, 22, base, 6);
+  for (var i = 1; i <= 3; i++) {
+    var sx = x + 10 + i * ((w - 20) / 4);
+    g += St('M'+sx+' '+(y+6)+'L'+sx+' '+(y+24), mix(base, -0.35), 1.2);
+  }
+  g += R(x + 2, y + 16, w - 4, 22, mix(base, -0.1), 6);
+  g += R(x + 12, y + 18, (w - 28) / 2, 18, mix(base, 0.15), 4);
+  g += R(x + 16 + (w - 28) / 2, y + 18, (w - 28) / 2, 18, mix(base, 0.15), 4);
+  g += R(x, y + 10, 13, 28, mix(base, -0.15), 5);
+  g += R(x + 1.5, y + 11, 10, 12, mix(base, 0.2), 3);
+  g += R(x + w - 13, y + 10, 13, 28, mix(base, -0.15), 5);
+  g += R(x + w - 11.5, y + 11, 10, 12, mix(base, 0.2), 3);
   return g;
 }
 
@@ -1121,11 +1237,11 @@ function arcade(x, y, c) {
   g += Tx(x + 21, y + 16, 'ARCADE', 7, ac);
   g += R(x + 4, y + 24, 34, 30, '#090d16', 2, ' stroke="#1e293b" stroke-width="1"');
   g += R(x + 6, y + 26, 30, 26, '#181230', 2);
-  g += Ci(x + 21, y + 39, 7, ac, ' opacity="0.4"');
+  g += Ci(x + 21, y + 39, 6, ac, ' opacity="0.6"');
   g += R(x + 4, y + 58, 34, 8, '#1e293b', 2);
-  g += Ci(x + 12, y + 62, 3, '#ef4444');
-  g += Ci(x + 24, y + 62, 3, '#f59e0b');
-  g += Ci(x + 32, y + 62, 3, '#38bdf8');
+  g += Ci(x + 12, y + 62, 2.5, '#ef4444');
+  g += Ci(x + 22, y + 62, 2.5, '#f59e0b');
+  g += Ci(x + 30, y + 62, 2.5, '#38bdf8');
   g += R(x + 15, y + 70, 12, 6, '#090d16', 1, ' stroke="#334155" stroke-width="0.8"');
   return g;
 }
@@ -1136,15 +1252,15 @@ function skyW(x, y, w, h) {
     var bw = 12 + (i * 7) % 14, bh = 14 + (i * 13) % (h - 20);
     g += R(x + 4 + i * (w / 9.2), y + h - bh - 2, bw, bh, '#0d1326');
   }
-  g += R(x, y, w, h, 'none', 4, ' stroke="#334155" stroke-width="3"');
+  g += R(x, y, w, h, 'none', 4, ' stroke="#334155" stroke-width="2.5"');
   g += R(x + w / 2 - 1.5, y, 3, h, '#334155');
   return g;
 }
 
-function tagpill(x, y, t, c, sub) {
-  var pw = Math.max(100, t.length * 8.5 + 24);
-  return '<g><rect x="'+(x - pw / 2)+'" y="'+y+'" width="'+pw+'" height="24" rx="6" fill="#0c1220" stroke="'+c+'" stroke-width="1.4" opacity="0.95"/>'+
-         Tx(x, y + 16, esc(t), 11, "#ffffff")+'</g>';
+function tagpill(x, y, t, c) {
+  var pw = Math.max(90, t.length * 8 + 20);
+  return '<g><rect x="'+(x - pw / 2)+'" y="'+y+'" width="'+pw+'" height="22" rx="5" fill="#0b101b" stroke="'+c+'" stroke-width="1.2"/>'+
+         Tx(x, y + 15, esc(t), 10.5, "#ffffff")+'</g>';
 }
 
 function PP(pi, x, y, s, deskY) {
@@ -1162,10 +1278,10 @@ function chipG(c, x, y) {
   var idx = CONFIG.chips.indexOf(c);
   return '<g transform="translate('+x+' '+y+')">'+
          '<g class="chip" data-c="'+idx+'" tabindex="0" role="button" aria-label="'+c.n+'">'+
-         '<circle class="pulse-ring" cx="0" cy="0" r="22" fill="'+c.c+'" opacity="0.2"/>'+
-         '<circle cx="0" cy="0" r="16" fill="#090d16" stroke="'+c.c+'" stroke-width="2.5"/>'+
-         '<circle cx="0" cy="0" r="12" fill="'+c.c+'" opacity="0.3"/>'+
-         Tx(0, 5, c.g, c.g.length > 2 ? 9 : 13, "#ffffff")+
+         '<ellipse cx="0" cy="18" rx="14" ry="4" fill="rgba(0,0,0,0.35)"/>'+
+         '<circle cx="0" cy="0" r="16" fill="#090e18" stroke="'+c.c+'" stroke-width="2"/>'+
+         '<circle cx="0" cy="0" r="12" fill="none" stroke="'+c.c+'" stroke-width="0.8" opacity="0.6"/>'+
+         Tx(0, 4.5, c.g, c.g.length > 2 ? 8.5 : 12, "#ffffff")+
          '</g></g>';
 }
 
@@ -1191,113 +1307,133 @@ function room(z) {
            Tx(220, 36, "VIRTUALIZE", 11, "#f59e0b") +
            Tx(220, 46, "TECHNOLOGIES", 6.5, "#94a3b8") +
            shelf(278, 20, 108, 2) +
-           sofa(14, 196, 120, '#652b19') +
-           plant(374, 230, 1.3) +
-           plant(24, 148, 1.0) +
-           chairb(172, 104, '#1e293b') +
-           PP(pp("Himanshu Bansal"), 200, 84, 0.74, 168) +
-           desk(92, 168, 216, '#281c16') +
-           mon(116, 128, 64, 'chart') +
-           mon(220, 128, 64, 'code');
+           sofa(70, 200, 110, '#4a2c1b') +
+           plant(42, 195, 1.15, 0) +
+           plant(358, 195, 1.15, 0) +
+           chairb(172, 94, '#1e293b') +
+           PP(pp("Himanshu Bansal"), 200, 78, 0.76, 154) +
+           desk(88, 154, 224, '#261b17') +
+           deskMat(200, 156, 44, 'keys') +
+           mon(108, 122, 60, 'chart') +
+           mon(232, 122, 60, 'code');
   } else if (id === 'a2') {
-    body = R(90, 20, 52, 60, '#1c1630', 4, ' stroke="#a855f7" stroke-width="1.2"') +
-           Tx(116, 44, "CONCEPT", 8, "#c084fc") +
-           Tx(116, 56, "BOARD", 7, "#94a3b8") +
-           shelf(256, 20, 92, 2) +
-           plant(328, 172, 1) +
-           chairb(162, 92, '#4c1d95') +
-           PP(pp("Abhishek"), 190, 86, 0.68, 152) +
-           desk(100, 152, 180, '#241a38') +
-           mon(140, 112, 62, 'art');
+    body = R(34, 20, 84, 64, '#1c1630', 4, ' stroke="#a855f7" stroke-width="1.2"') +
+           Tx(76, 42, "CONCEPT", 9, "#c084fc") +
+           Tx(76, 54, "BOARD", 7, "#94a3b8") +
+           R(44, 60, 14, 14, '#fef08a', 1) + R(62, 60, 14, 14, '#bae6fd', 1) + R(80, 60, 14, 14, '#fbcfe8', 1) +
+           shelf(250, 20, 96, 2) +
+           plant(36, 188, 1.1, 1) +
+           plant(324, 188, 1.1, 1) +
+           chairb(152, 92, '#3b1854') +
+           PP(pp("Abhishek"), 180, 78, 0.70, 152) +
+           desk(72, 152, 216, '#241a36') +
+           deskMat(180, 154, 40, 'tablet') +
+           mon(92, 118, 56, 'art') +
+           mon(212, 118, 56, 'art');
   } else if (id === 'hr') {
-    body = R(36, 20, 140, 64, '#13282b', 5, ' stroke="#14b8a6" stroke-width="1.2"') +
-           Tx(106, 42, "PEOPLE & TALENT", 10, "#2dd4bf") +
-           Tx(106, 56, "PIPELINE ACTIVE", 7, "#94a3b8") +
-           plant(26, 176, 1.1) +
-           sofa(230, 194, 114, '#134e4a') +
-           chairb(152, 92, '#115e59') +
-           PP(pp("Rytham Raj"), 180, 86, 0.68, 152) +
-           desk(95, 152, 170, '#162e2a') +
-           mon(138, 112, 58, 'chart');
+    body = R(34, 20, 140, 64, '#13282b', 5, ' stroke="#14b8a6" stroke-width="1.2"') +
+           Tx(104, 42, "PEOPLE & TALENT", 10, "#2dd4bf") +
+           Tx(104, 56, "PIPELINE ACTIVE", 7, "#94a3b8") +
+           plant(36, 188, 1.1, 2) +
+           plant(324, 188, 1.1, 2) +
+           sofa(128, 204, 104, '#115e59') +
+           chairb(152, 92, '#0f766e') +
+           PP(pp("Rytham Raj"), 180, 78, 0.70, 152) +
+           desk(75, 152, 210, '#162e2a') +
+           deskMat(180, 154, 42, 'keys') +
+           mon(94, 118, 56, 'chart') +
+           mon(210, 118, 54, 'code');
   } else if (id === 'sales') {
-    body = R(32, 20, 160, 68, '#261320', 5, ' stroke="#f43f5e" stroke-width="1.2"') +
-           Tx(112, 44, "GLOBAL REACH", 10, "#fb7185") +
-           Tx(112, 58, "PUBLISHING NETWORK", 7, "#94a3b8") +
-           plant(26, 176, 1) +
-           sofa(240, 196, 104, '#881337') +
-           chairb(122, 92, '#9f1239') +
-           PP(pp("Sangeeta"), 150, 86, 0.68, 152) +
-           desk(60, 152, 196, '#2d1522') +
-           mon(78, 112, 54, 'chart') +
-           mon(206, 112, 54, 'code');
+    body = R(32, 20, 156, 66, '#261320', 5, ' stroke="#f43f5e" stroke-width="1.2"') +
+           Tx(110, 42, "GLOBAL REACH", 10, "#fb7185") +
+           Tx(110, 56, "PUBLISHING NETWORK", 7, "#94a3b8") +
+           plant(36, 188, 1.1, 3) +
+           plant(324, 188, 1.1, 3) +
+           sofa(128, 204, 104, '#881337') +
+           chairb(132, 92, '#9f1239') +
+           PP(pp("Sangeeta"), 160, 78, 0.70, 152) +
+           desk(64, 152, 192, '#2d1522') +
+           deskMat(160, 154, 40, 'keys') +
+           mon(82, 118, 54, 'chart') +
+           mon(184, 118, 54, 'chart');
   } else if (id === 'a3') {
     body = shelf(24, 20, 100, 2) +
-           R(276, 50, 64, 44, '#241712', 4, ' stroke="#f97316" stroke-width="1.2"') +
-           Tx(308, 70, "3D LAB", 9, "#fb923c") +
-           Tx(308, 82, "MAYA / UNITY", 6.5, "#94a3b8") +
-           plant(26, 176, 1) +
-           chairb(162, 92, '#9a3412') +
-           PP(pp("Tarique"), 190, 86, 0.68, 152) +
-           desk(70, 152, 226, '#311c14') +
-           mon(92, 110, 56, 'model') +
-           mon(160, 106, 62, 'model') +
-           mon(238, 110, 56, 'model');
+           R(272, 48, 68, 46, '#241712', 4, ' stroke="#f97316" stroke-width="1.2"') +
+           Tx(306, 68, "3D LAB", 9, "#fb923c") +
+           Tx(306, 80, "MAYA / UNITY", 6.5, "#94a3b8") +
+           plant(36, 188, 1.1, 0) +
+           plant(324, 188, 1.1, 0) +
+           chairb(160, 92, '#9a3412') +
+           PP(pp("Tarique"), 188, 78, 0.70, 152) +
+           desk(70, 152, 236, '#311c14') +
+           deskMat(188, 154, 42, 'tablet') +
+           mon(92, 118, 58, 'model') +
+           mon(226, 118, 58, 'model');
   } else if (id === 'dev') {
-    body = R(70, 20, 180, 68, '#0f1c30', 5, ' stroke="#38bdf8" stroke-width="1.2"') +
-           Tx(160, 44, "ENGINE RUNTIME", 10, "#38bdf8") +
-           Tx(160, 58, "C# · PHYSICS · CLIENT/SERVER", 7, "#94a3b8") +
-           R(304, 50, 42, 94, '#090e18', 4, ' stroke="#1e3a8a" stroke-width="1.5"') +
-           R(308, 56, 34, 10, '#0f172a', 2) + Ci(314, 61, 1.5, '#10b981') + Ci(319, 61, 1.5, '#38bdf8') +
-           R(308, 70, 34, 10, '#0f172a', 2) + Ci(314, 75, 1.5, '#10b981') + Ci(319, 75, 1.5, '#10b981') +
-           R(308, 84, 34, 10, '#0f172a', 2) + Ci(314, 89, 1.5, '#10b981') + Ci(319, 89, 1.5, '#38bdf8') +
-           R(308, 98, 34, 10, '#0f172a', 2) + Ci(314, 103, 1.5, '#10b981') +
-           R(308, 112, 34, 10, '#0f172a', 2) + Ci(314, 117, 1.5, '#10b981') + Ci(319, 117, 1.5, '#38bdf8') +
-           chairb(90, 92, '#1e3a8a') +
-           chairb(208, 92, '#1e3a8a') +
-           PP(pp("Harshdeep Singh"), 118, 86, 0.66, 152) +
-           PP(pp("Pankaj soni"), 236, 86, 0.66, 152) +
-           desk(30, 152, 262, '#132238') +
-           mon(46, 112, 50, 'code') +
-           mon(102, 112, 50, 'code') +
-           mon(174, 112, 50, 'code') +
-           mon(230, 112, 50, 'code');
+    body = R(60, 20, 180, 66, '#0f1c30', 5, ' stroke="#38bdf8" stroke-width="1.2"') +
+           Tx(150, 42, "ENGINE RUNTIME", 10, "#38bdf8") +
+           Tx(150, 56, "C# · PHYSICS · CLIENT/SERVER", 7, "#94a3b8") +
+           R(298, 48, 48, 106, '#090e18', 4, ' stroke="#1e3a8a" stroke-width="1.5"') +
+           R(302, 54, 40, 12, '#0f172a', 2) + Ci(308, 60, 1.5, '#10b981') + Ci(314, 60, 1.5, '#38bdf8') + Ci(320, 60, 1.5, '#10b981') +
+           R(302, 70, 40, 12, '#0f172a', 2) + Ci(308, 76, 1.5, '#10b981') + Ci(314, 76, 1.5, '#10b981') + Ci(320, 76, 1.5, '#38bdf8') +
+           R(302, 86, 40, 12, '#0f172a', 2) + Ci(308, 92, 1.5, '#38bdf8') + Ci(314, 92, 1.5, '#10b981') + Ci(320, 92, 1.5, '#10b981') +
+           R(302, 102, 40, 12, '#0f172a', 2) + Ci(308, 108, 1.5, '#10b981') + Ci(314, 108, 1.5, '#10b981') +
+           R(302, 118, 40, 12, '#0f172a', 2) + Ci(308, 124, 1.5, '#10b981') + Ci(314, 124, 1.5, '#38bdf8') + Ci(320, 124, 1.5, '#10b981') +
+           chairb(64, 92, '#1e3a8a') +
+           chairb(198, 92, '#312e81') +
+           PP(pp("Harshdeep Singh"), 92, 78, 0.68, 152) +
+           PP(pp("Pankaj soni"), 226, 78, 0.68, 152) +
+           desk(24, 152, 270, '#132238') +
+           deskMat(92, 154, 38, 'keys') +
+           deskMat(226, 154, 38, 'keys') +
+           mon(30, 118, 44, 'code') +
+           mon(112, 118, 44, 'code') +
+           mon(164, 118, 44, 'code') +
+           mon(246, 118, 44, 'code');
   } else if (id === 'qa') {
-    body = R(30, 20, 150, 68, '#0f241c', 5, ' stroke="#10b981" stroke-width="1.2"') +
-           Tx(105, 44, "VERIFICATION LAB", 10, "#34d399") +
-           Tx(105, 58, "CROSS-PLATFORM QA", 7, "#94a3b8") +
-           arcade(304, 116, '#10b981') +
-           R(24, 112, 44, 28, '#0b1612', 3, ' stroke="#10b981" stroke-width="1"') +
-           R(28, 116, 10, 18, '#1e293b', 1.5) + Ci(33, 131, 1, '#10b981') +
-           R(42, 116, 10, 18, '#1e293b', 1.5) + Ci(47, 131, 1, '#10b981') +
-           R(56, 114, 8, 20, '#1e293b', 1.5) + Ci(60, 131, 1, '#38bdf8') +
-           chairb(142, 92, '#064e3b') +
-           PP(pp("Hitesh"), 170, 86, 0.68, 152) +
-           desk(80, 152, 200, '#122c22') +
-           mon(96, 112, 52, 'game') +
-           mon(156, 106, 62, 'game') +
-           mon(228, 112, 52, 'code');
+    body = R(30, 20, 150, 66, '#0f241c', 5, ' stroke="#10b981" stroke-width="1.2"') +
+           Tx(105, 42, "VERIFICATION LAB", 10, "#34d399") +
+           Tx(105, 56, "CROSS-PLATFORM QA", 7, "#94a3b8") +
+           arcade(304, 114, '#10b981') +
+           R(24, 110, 46, 32, '#0b1612', 3, ' stroke="#10b981" stroke-width="1"') +
+           R(28, 114, 10, 20, '#1e293b', 1.5) + Ci(33, 131, 1, '#10b981') +
+           R(42, 114, 10, 20, '#1e293b', 1.5) + Ci(47, 131, 1, '#10b981') +
+           R(56, 112, 10, 22, '#1e293b', 1.5) + Ci(61, 131, 1, '#38bdf8') +
+           plant(36, 188, 1.1, 2) +
+           plant(324, 188, 1.1, 2) +
+           chairb(146, 92, '#064e3b') +
+           PP(pp("Hitesh"), 174, 78, 0.70, 152) +
+           desk(78, 152, 196, '#122c22') +
+           deskMat(174, 154, 40, 'gamepad') +
+           mon(96, 118, 54, 'game') +
+           mon(198, 118, 54, 'code');
   } else if (id === 'portal') {
     body = R(30, 20, 190, 64, '#1f1a14', 6, ' stroke="#f59e0b" stroke-width="1.5"') +
-           Tx(125, 44, "VIRTUALIZE", 12, "#f59e0b") +
-           Tx(125, 58, "TECHNOLOGIES", 7.5, "#94a3b8") +
+           Tx(125, 42, "VIRTUALIZE", 12, "#f59e0b") +
+           Tx(125, 56, "TECHNOLOGIES", 7.5, "#94a3b8") +
            '<g class="hit" data-portal="1" tabindex="0" role="button" aria-label="Open positions">'+
-           '<rect x="230" y="80" width="115" height="120" rx="14" fill="#141926" stroke="#f59e0b" stroke-width="2"/>'+
-           '<rect x="236" y="86" width="103" height="108" rx="10" fill="url(#portal-glow)"/>'+
-           Tx(287, 134, "OPEN", 10, "#ffffff") +
-           Tx(287, 150, "POSITIONS", 8, "#f59e0b") +
-           tagpill(287, 210, "OPEN POSITIONS", "#f59e0b") +
+           '<rect x="210" y="74" width="115" height="120" rx="10" fill="#0c121e" stroke="#f59e0b" stroke-width="1.8"/>'+
+           '<rect x="216" y="80" width="103" height="108" rx="8" fill="#141a29"/>'+
+           '<line x1="267" y1="80" x2="267" y2="188" stroke="#f59e0b" stroke-width="1" opacity="0.3"/>'+
+           '<line x1="216" y1="134" x2="319" y2="134" stroke="#f59e0b" stroke-width="1" opacity="0.2"/>'+
+           '<circle cx="267" cy="116" r="20" fill="#1a2336" stroke="#f59e0b" stroke-width="1.5"/>'+
+           Tx(267, 113, "OPEN", 10, "#ffffff") +
+           Tx(267, 125, "POSITIONS", 7, "#f59e0b") +
+           tagpill(267, 210, "OPEN POSITIONS", "#f59e0b") +
            '</g>' +
-           sofa(14, 190, 110, '#312519') +
-           plant(230, 214, 1.1) +
-           plant(350, 236, 0.9);
+           sofa(72, 198, 108, '#2d2217') +
+           plant(36, 188, 1.1, 1) +
+           plant(324, 188, 1.1, 1);
   } else if (id === 'lounge') {
     body = arcade(30, 30, '#f97316') +
            arcade(82, 30, '#ec4899') +
-           Tx(250, 56, "LOUNGE", 14, "#fb923c") +
-           R(170, 210, 60, 16, '#281c15', 3) + Ci(185, 218, 4, '#e2e8f0') + Ci(200, 218, 4, '#e2e8f0') +
-           sofa(180, 146, 150, '#78350f') +
-           sofa(18, 178, 120, '#1c1917') +
-           plant(340, 230, 1.2);
+           Tx(250, 54, "STUDIO LOUNGE", 12, "#fb923c") +
+           Tx(250, 68, "RELAX & RECHARGE", 7.5, "#94a3b8") +
+           sofa(100, 142, 160, '#5c2d12') +
+           R(142, 206, 76, 18, '#261912', 3, ' stroke="#3d261b" stroke-width="1"') +
+           Ci(156, 215, 3.5, '#e2e8f0') + Ci(170, 215, 3.5, '#e2e8f0') +
+           plant(36, 188, 1.1, 0) +
+           plant(324, 188, 1.1, 0);
   }
 
   g += body;

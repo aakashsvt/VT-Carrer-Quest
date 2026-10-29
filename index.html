@@ -35,8 +35,10 @@
 }
 *, *::before, *::after { box-sizing: inherit; }
 html, body {
-  height: 100%;
+  width: 100dvw;
+  height: 100dvh;
   margin: 0;
+  padding: 0;
   background: var(--bg);
   color: var(--ink);
   font: 400 15px/1.6 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -62,57 +64,68 @@ svg { display: block; }
 .layer {
   position: fixed;
   inset: 0;
+  width: 100dvw;
+  height: 100dvh;
 }
 
-/* Button System */
+/* Glowing Orange Cyber Button System */
 .btn {
   font-family: 'Space Grotesk', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  padding: 10px 20px;
-  background: #2563eb;
-  color: #ffffff;
+  font-weight: 700;
+  font-size: 15.5px;
+  border: 2px solid #f97316;
+  border-radius: 10px;
+  padding: 12px 24px;
+  background: rgba(22, 14, 8, 0.92);
+  color: #ffedd5;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.5), inset 0 0 10px rgba(249, 115, 22, 0.25);
+  cursor: pointer;
 }
 .btn:hover {
-  background: #1d4ed8;
-  border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  border-color: #fed7aa;
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(249, 115, 22, 0.9);
 }
 .btn:active {
   transform: translateY(0);
 }
 .btn.alt {
-  background: var(--surface-elevated);
-  border-color: var(--border-strong);
-  color: var(--ink);
+  background: rgba(26, 16, 10, 0.88);
+  border: 2px solid rgba(249, 115, 22, 0.6);
+  color: #fed7aa;
+  box-shadow: 0 0 14px rgba(249, 115, 22, 0.35);
 }
 .btn.alt:hover {
-  background: #242f47;
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%);
+  color: #ffffff;
+  border-color: #fed7aa;
+  box-shadow: 0 0 26px rgba(249, 115, 22, 0.85);
 }
 .btn.primary, .press {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: #090c13;
-  font-weight: 700;
-  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  font-weight: 800;
+  border: 2.5px solid #fed7aa;
+  border-radius: 12px;
+  padding: 13px 28px;
+  font-size: 16px;
+  box-shadow: 0 0 28px rgba(249, 115, 22, 0.85), inset 0 2px 0 rgba(255, 255, 255, 0.45);
 }
 .btn.primary:hover, .press:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+  filter: brightness(1.15);
+  box-shadow: 0 0 38px rgba(249, 115, 22, 1);
+  transform: translateY(-2px);
 }
 
 button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
-  outline: 2px solid #38bdf8;
+  outline: 2px solid #f97316;
   outline-offset: 3px;
 }
 
@@ -120,6 +133,8 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
 .ov {
   position: fixed;
   inset: 0;
+  width: 100dvw;
+  height: 100dvh;
   z-index: 5;
   display: flex;
   flex-direction: column;
@@ -127,51 +142,284 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
   justify-content: center;
   gap: 16px;
   text-align: center;
-  padding: 24px;
-  overflow: auto;
+  padding: 16px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* Welcome Overlay */
+
+/* Welcome Overlay (Clean, Focused, Responsive with dvh/dvw) */
 #welcome {
+  position: fixed;
+  inset: 0;
+  width: 100dvw;
+  height: 100dvh;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  background: radial-gradient(circle at 50% 30%, rgba(19, 26, 39, 0.4), rgba(8, 11, 17, 0.95) 80%);
-  padding: clamp(24px, 5vh, 60px) 24px clamp(24px, 4vh, 48px);
+  align-items: center;
+  gap: 0;
+  /* Moved both the logo and buttons inward by 10% (10dvh) symmetrically */
+  padding: calc(clamp(14px, 2.5dvh, 26px) + 10dvh) clamp(16px, 3dvw, 36px);
+  pointer-events: none;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: transparent;
 }
+#welcome > * {
+  pointer-events: auto;
+}
+
+/* 1. BIGGER VIRTUALIZE TECHNOLOGIES LOGO / BANNER (Symmetrically spaced from top) */
+.top-banner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(9, 14, 24, 0.94);
+  backdrop-filter: blur(12px);
+  border: 3px solid #f59e0b;
+  border-radius: 14px;
+  padding: clamp(10px, 1.8dvh, 18px) clamp(30px, 4.5dvw, 64px);
+  box-shadow: 0 0 35px rgba(245, 158, 11, 0.6), inset 0 0 16px rgba(245, 158, 11, 0.3);
+  margin: 0;
+  transition: transform 0.2s ease;
+}
+.top-banner::before, .top-banner::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 28px;
+  background: #f59e0b;
+  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+}
+.top-banner::before { left: -20px; }
+.top-banner::after { right: -20px; transform: translateY(-50%) scaleX(-1); }
+.top-banner span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: clamp(16px, 2.6dvw, 26px);
+  letter-spacing: clamp(2.5px, 0.4dvw, 4.5px);
+  color: #fbbf24;
+  text-shadow: 0 0 14px rgba(251, 191, 36, 0.85), 0 2px 4px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+}
+
+/* 2. HERO BOX */
 .hero-box {
-  background: rgba(19, 26, 39, 0.75);
+  background: rgba(8, 14, 28, 0.90);
   backdrop-filter: blur(20px);
-  border: 1px solid var(--border-strong);
-  border-radius: 20px;
-  padding: clamp(28px, 4vw, 44px) clamp(24px, 4vw, 48px);
-  max-width: min(780px, 94vw);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  border: 2px solid #00f0ff;
+  border-radius: 16px;
+  padding: clamp(12px, 2.2dvh, 24px) clamp(18px, 3.5dvw, 40px);
+  width: min(580px, 92dvw);
+  max-width: min(580px, 92dvw);
+  box-shadow: 0 0 35px rgba(0, 240, 255, 0.45), inset 0 0 18px rgba(0, 240, 255, 0.15);
+  position: relative;
+  text-align: center;
+  margin: 0 auto;
+}
+.hero-box::before, .hero-box::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid #38bdf8;
+  pointer-events: none;
+}
+.hero-box::before {
+  top: -2px; left: -2px;
+  border-right: none; border-bottom: none;
+  border-top-left-radius: 6px;
+}
+.hero-box::after {
+  bottom: -2px; right: -2px;
+  border-left: none; border-top: none;
+  border-bottom-right-radius: 6px;
 }
 #welcome h1 {
-  font-size: clamp(28px, 4.4vw, 52px);
-  max-width: 22ch;
-  margin: 0 auto 14px;
-  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: clamp(18px, 3.2dvw, 32px);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 auto 6px;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  word-break: normal;
+  background: none;
+  -webkit-text-fill-color: initial;
 }
 #welcome p {
-  color: var(--mut);
-  margin: 6px auto 0;
-  max-width: 54ch;
-  font-size: clamp(14px, 1.6vw, 16px);
-  line-height: 1.6;
+  color: #38bdf8;
+  font-size: clamp(11.5px, 1.4dvw, 14px);
+  line-height: 1.45;
+  margin: 0;
+  max-width: 52ch;
+  text-wrap: balance;
 }
-.press {
-  font-size: 15px;
-  padding: 12px 28px;
-  border-radius: 9px;
+#welcome p b {
+  color: #38bdf8;
+  font-weight: 700;
 }
-.row {
+
+/* 3. BUTTONS (HORIZONTAL ROW ON PHONE, TABLET, AND PC) - GLOWING ORANGE THEME */
+.btn-group {
   display: flex;
-  gap: 12px;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+  gap: clamp(14px, 3dvw, 26px);
+  width: 100%;
+  margin: 0;
 }
+.btn.press {
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: clamp(16px, 1.8dvw, 20px);
+  border: 2.5px solid #fed7aa;
+  border-radius: 12px;
+  padding: clamp(14px, 1.8dvh, 18px) clamp(32px, 4.2dvw, 50px);
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.85), inset 0 2px 0 rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.5px;
+  text-transform: none;
+  white-space: nowrap;
+}
+.btn.press:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 42px rgba(249, 115, 22, 1);
+  transform: translateY(-2px);
+}
+#exp {
+  background: rgba(22, 14, 8, 0.92);
+  border: 2.5px solid #f97316;
+  color: #fed7aa;
+  font-weight: 800;
+  font-size: clamp(15px, 1.7dvw, 19px);
+  border-radius: 12px;
+  padding: clamp(13px, 1.8dvh, 18px) clamp(28px, 3.8dvw, 44px);
+  box-shadow: 0 0 24px rgba(249, 115, 22, 0.65), inset 0 0 14px rgba(249, 115, 22, 0.3);
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+#exp:hover {
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  border-color: #fed7aa;
+  box-shadow: 0 0 36px rgba(249, 115, 22, 0.95);
+  transform: translateY(-2px);
+}
+
+/* RESPONSIVE TUNING FOR IPADS AND MOBILES */
+@media (max-width: 1024px) {
+  /* On iPads and mobiles: place hero box close to buttons below the building */
+  .hero-box {
+    margin-top: auto !important;
+    margin-bottom: clamp(10px, 1.6dvh, 16px) !important;
+    transform: none !important;
+    width: min(600px, 92dvw);
+    max-width: min(600px, 92dvw);
+    padding: clamp(10px, 1.8dvh, 18px) clamp(16px, 3dvw, 32px);
+  }
+  .btn-group {
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  #welcome {
+    padding: calc(clamp(14px, 2dvh, 22px) + 10dvh) 12px;
+  }
+  .top-banner {
+    margin: 0;
+    padding: 10px 24px;
+    border-width: 2.5px;
+  }
+  .top-banner span {
+    font-size: 15px;
+    letter-spacing: 2px;
+  }
+  .hero-box {
+    margin: auto auto clamp(10px, 1.5dvh, 14px) auto !important;
+    padding: 10px 14px;
+    width: 92dvw;
+    transform: none !important;
+  }
+  #welcome h1 {
+    font-size: 16.5px;
+    line-height: 1.22;
+    margin-bottom: 4px;
+  }
+  #welcome p {
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  .btn-group {
+    flex-direction: row;
+    gap: 12px;
+    margin: 0;
+  }
+  .btn.press {
+    padding: 12px 24px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+  #exp {
+    padding: 12px 22px;
+    font-size: 14.5px;
+    border-radius: 10px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .top-banner {
+    margin: 0;
+  }
+  .hero-box {
+    margin: auto auto clamp(12px, 1.8dvh, 16px) auto !important;
+    width: min(580px, 86dvw);
+    transform: none !important;
+  }
+  #welcome h1 {
+    font-size: clamp(18px, 2.5dvw, 24px);
+    margin-bottom: 6px;
+  }
+  #welcome p {
+    font-size: clamp(11.5px, 1.4dvw, 13.5px);
+  }
+  .btn-group {
+    margin: 0;
+    gap: 16px;
+  }
+  .btn.press {
+    padding: 14px 34px;
+    font-size: 17.5px;
+  }
+  #exp {
+    padding: 14px 30px;
+    font-size: 16.5px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .top-banner {
+    margin: 0;
+  }
+  .hero-box {
+    margin: 0 auto;
+    width: 580px;
+  }
+  .btn-group {
+    margin: 0;
+  }
+}
+
 
 /* Character Creation Wizard */
 #create {
@@ -257,21 +505,33 @@ input[type=text]:focus {
   line-height: 1.4;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .sw {
   width: 44px;
   height: 44px;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  transition: all 0.2s;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
 }
 .sw:hover {
-  transform: scale(1.08);
+  transform: translateY(-2px) scale(1.08);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
 }
 .sw[aria-pressed=true] {
   border-color: #ffffff;
-  transform: scale(1.12);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+  transform: translateY(-3px) scale(1.12);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.65), 0 6px 16px rgba(0, 0, 0, 0.5);
 }
 
 /* Studio ID Pass Card */
@@ -385,17 +645,21 @@ input[type=text]:focus {
   flex-wrap: wrap;
 }
 #nav .btn {
-  padding: 8px 14px;
-  font-size: 12px;
-  background: var(--surface-glass);
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  background: rgba(22, 14, 8, 0.88);
   backdrop-filter: blur(16px);
-  border: 1px solid var(--border-strong);
-  color: var(--ink);
+  border: 1.5px solid #f97316;
+  color: #ffedd5;
   border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 16px rgba(249, 115, 22, 0.45);
 }
 #nav .btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  border-color: #fed7aa;
+  box-shadow: 0 0 24px rgba(249, 115, 22, 0.85);
 }
 
 /* Modals & Dialogs */
@@ -720,8 +984,6 @@ input[type=text]:focus {
 </style>
 </head>
 <body>
-<div class="layer" id="hq"></div>
-<!-- Cosmic Space Cyber-Grid & Multi-Colored Stars Background Layer -->
 <div id="bg-space" style="position:fixed;inset:0;z-index:0;pointer-events:none;background:#030611;overflow:hidden;">
   <style>
     @keyframes star-pulse-1 {
@@ -1053,19 +1315,27 @@ input[type=text]:focus {
 
   </svg>
 </div>
+<div class="layer" id="hq"></div>
+<!-- Cosmic Space Cyber-Grid & Multi-Colored Stars Background Layer -->
+
 <svg class="layer" id="game" style="display:none;width:100%;height:100%;z-index:1;" viewBox="0 0 1200 900" role="img" aria-label="Studio floor plan with the CEO cabin in the centre"></svg>
 
 <div class="ov" id="welcome">
-  <div style="height:10px"></div>
+  <!-- Top Section: Bigger Golden Cyber Banner (Closer to room) -->
+  <div class="top-banner">
+    <span>VIRTUALIZE TECHNOLOGIES</span>
+  </div>
+
+  <!-- Hero Box -->
   <div class="hero-box">
     <h1>Your next adventure starts here.</h1>
     <p><b>Welcome to Virtualize: Career Quest</b><br>Enter the World. Discover the People. Unlock Your Next Level.</p>
   </div>
-  <div style="display:flex;flex-direction:column;gap:10px;align-items:center;font-size:14px">
-    <div class="row">
-      <button class="btn press" id="start">Press start</button>
-    </div>
-    <button class="btn alt" id="exp">Explore careers</button>
+
+  <!-- Action Buttons (In a Row Across All Devices) -->
+  <div class="btn-group">
+    <button class="btn press" id="start">Press start</button>
+    <button class="btn" id="exp">Explore careers</button>
   </div>
 </div>
 
@@ -1148,7 +1418,7 @@ var LOOK={"Himanshu Bansal":{s:"#d8a169",h:"#18171f",o:"#1e293b",a:"#f59e0b",st:
 
 var AVATARS=[{t:"The Challenger",d:"Competitive, bold, ready to level up.",L:{s:"#dfa76a",h:"#141416",o:"#1e3a8a",a:"#60a5fa",st:0}},{t:"The Explorer",d:"Curious and always up for a new adventure.",L:{s:"#c88b48",h:"#3d2a1d",o:"#065f46",a:"#34d399",st:1}},{t:"The Strategist",d:"Thinks before making a move.",L:{s:"#f1c485",h:"#282320",o:"#4338ca",a:"#a5b4fc",st:2}},{t:"The Creator",d:"Loves building and imagining new worlds.",L:{s:"#965d2f",h:"#831843",o:"#6b21a8",a:"#f59e0b",st:4}}];
 
-var COLORS=[["Electric blue","#2f6bff","#fff"],["Purple","#8b5cf6","#fff"],["Neon green","#39ff88","#06240f"],["Orange","#ff8a1f","#2a1200"],["Pink","#ff4fa3","#2a0517"],["Black and gold","linear-gradient(135deg,#0d0d0d,#4a3a10)","#ffd166"]];
+var COLORS=[["Electric blue","#2f6bff","#fff"],["Purple","#8b5cf6","#fff"],["Neon green","#39ff88","#06240f"],["Orange","#ff8a1f","#2a1200"],["Pink","#ff4fa3","#2a0517"],["Cyber cyan","linear-gradient(135deg,#00f0ff,#0ea5e9)","#022c3a"]];
 
 var MSG=["FIRST DISCOVERY UNLOCKED!","NICE FIND!","LEVEL-UP ENERGY!","HALFWAY THERE!","ONE MORE TO GO!","ALL SIX CHIPS COLLECTED!"];
 
@@ -1823,52 +2093,45 @@ function buildGame() {
 }
 
 /* Atmospheric Studio HQ Opening Scene */
+/* Studio HQ Opening Scene with Building Artwork */
 function hq() {
-  var G = 380, i, s = '<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMin slice" style="width:100%;height:100%"><defs>'+
-    '<linearGradient id="night-sky" x1="0" y1="0" x2="0" y2="1">'+
-      '<stop offset="0" stop-color="#050812"/>'+
-      '<stop offset="0.5" stop-color="#0f172a"/>'+
-      '<stop offset="0.8" stop-color="#1e1b4b"/>'+
-      '<stop offset="1" stop-color="#4c1d95"/>'+
-    '</linearGradient>'+
-    '<linearGradient id="bld-glass" x1="0" y1="0" x2="0" y2="1">'+
-      '<stop offset="0" stop-color="#1e293b"/><stop offset="1" stop-color="#090d16"/>'+
-    '</linearGradient>'+
-    '</defs>'+
-    R(0, 0, 1000, 600, "url(#night-sky)");
+  var s = '<svg viewBox="0 0 2752 1536" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block;">'+
+    // Perspective Cyber Ground Grid
+    '<g opacity="0.45">'+
+      '<line x1="0" y1="1400" x2="2752" y2="1400" stroke="#00f0ff" stroke-width="3"/>'+
+      '<line x1="0" y1="1300" x2="2752" y2="1300" stroke="#0284c7" stroke-width="2.5"/>'+
+      '<line x1="0" y1="1210" x2="2752" y2="1210" stroke="#0284c7" stroke-width="2.2"/>'+
+      '<line x1="0" y1="1130" x2="2752" y2="1130" stroke="#0369a1" stroke-width="2.0"/>'+
+      '<line x1="0" y1="1060" x2="2752" y2="1060" stroke="#075985" stroke-width="1.8"/>'+
+      '<line x1="0" y1="1000" x2="2752" y2="1000" stroke="#0c4a6e" stroke-width="1.5"/>'+
 
-  for (i = 0; i < 90; i++) {
-    s += Ci(Math.random() * 1000, Math.random() * 320, Math.random() * 1.2 + 0.3, "#ffffff", ' opacity="'+(Math.random() * 0.7 + 0.2)+'"');
-  }
+      '<line x1="-500" y1="1536" x2="900" y2="950" stroke="#00f0ff" stroke-width="2" opacity="0.6"/>'+
+      '<line x1="-100" y1="1536" x2="1050" y2="950" stroke="#00f0ff" stroke-width="2" opacity="0.6"/>'+
+      '<line x1="300" y1="1536" x2="1200" y2="950" stroke="#0284c7" stroke-width="1.8"/>'+
+      '<line x1="700" y1="1536" x2="1350" y2="950" stroke="#0284c7" stroke-width="1.8"/>'+
+      '<line x1="1100" y1="1536" x2="1500" y2="950" stroke="#0284c7" stroke-width="1.5"/>'+
+      '<line x1="1500" y1="1536" x2="1650" y2="950" stroke="#0284c7" stroke-width="1.5"/>'+
+      '<line x1="1900" y1="1536" x2="1800" y2="950" stroke="#0284c7" stroke-width="1.8"/>'+
+      '<line x1="2300" y1="1536" x2="1950" y2="950" stroke="#0284c7" stroke-width="1.8"/>'+
+      '<line x1="2700" y1="1536" x2="2100" y2="950" stroke="#00f0ff" stroke-width="2" opacity="0.6"/>'+
+      '<line x1="3100" y1="1536" x2="2250" y2="950" stroke="#00f0ff" stroke-width="2" opacity="0.6"/>'+
+    '</g>'+
 
-  s += R(0, G, 1000, 220, "#090d16");
-  s += '<line x1="0" y1="'+G+'" x2="1000" y2="'+G+'" stroke="#334155" stroke-width="1.5"/>';
+    // Golden Sparks / Embers Behind Building
+    '<g>'+
+      '<circle cx="1800" cy="450" r="4" fill="#fde047" opacity="0.8"/>'+
+      '<circle cx="1900" cy="380" r="5" fill="#f59e0b" opacity="0.9"/>'+
+      '<circle cx="2000" cy="500" r="3.5" fill="#fde047" opacity="0.75"/>'+
+      '<circle cx="2080" cy="400" r="4.5" fill="#fbbf24" opacity="0.85"/>'+
+      '<circle cx="1880" cy="300" r="5.5" fill="#f59e0b" opacity="0.9"/>'+
+      '<circle cx="1950" cy="250" r="4" fill="#fde047" opacity="0.7"/>'+
+    '</g>'+
 
-  var bx = 280, bw = 440, bh = 290, by = G - bh;
-  s += R(bx, by, bw, bh, "url(#bld-glass)", 8, ' stroke="#334155" stroke-width="1.5"');
-  for (var wy = by + 24; wy < G - 10; wy += 42) {
-    for (var wx = bx + 20; wx < bx + bw - 20; wx += 44) {
-      var isLit = Math.sin(wx * 2 + wy) > -0.2;
-      s += R(wx, wy, 34, 30, isLit ? '#fef3c7' : '#0f172a', 3, isLit ? ' opacity="0.65"' : ' opacity="0.3"');
-      if (isLit) {
-        s += '<line x1="'+wx+'" y1="'+(wy+15)+'" x2="'+(wx+34)+'" y2="'+(wy+15)+'" stroke="rgba(0,0,0,0.2)"/>';
-      }
-    }
-  }
+    // Authentic Building Image
+    '<image href="building.png" x="0" y="0" width="2752" height="1536" />'+
+  '</svg>';
 
-  s += R(bx + 40, by - 24, bw - 80, 28, '#090d16', 6, ' stroke="#f59e0b" stroke-width="1.5"');
-  s += Tx(bx + bw / 2, by - 6, "VIRTUALIZE TECHNOLOGIES", 13, "#f59e0b");
-
-  s += R(bx + bw / 2 - 40, G - 48, 80, 48, '#fef3c7', 4, ' opacity="0.8"');
-  s += R(bx + bw / 2 - 36, G - 44, 34, 44, '#090d16', 2, ' opacity="0.4"');
-  s += R(bx + bw / 2 + 2, G - 44, 34, 44, '#090d16', 2, ' opacity="0.4"');
-
-  [180, 230, 770, 820].forEach(function(lx) {
-    s += R(lx - 2, G - 20, 4, 20, '#334155');
-    s += Ci(lx, G - 22, 3, '#f59e0b');
-  });
-
-  $("hq").innerHTML = s + '</svg>';
+  $("hq").innerHTML = s;
 }
 
 /* Camera System */

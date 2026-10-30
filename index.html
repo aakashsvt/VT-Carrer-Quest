@@ -2047,185 +2047,258 @@ function room(z) {
            mon(96, 118, 54, 'game') +
            mon(198, 118, 54, 'code');
   } else if (id === 'portal') {
-    body = // 1. Architectural Floor-to-Ceiling Glass Window with Garden View (Left Wall)
-           R(14, 16, 76, 86, '#0f172a', 3, ' stroke="#334155" stroke-width="1.6"') +
-           '<defs>' +
+    body = '<defs>' +
+             // Floor gradient with realistic ambient lighting
+             '<linearGradient id="iso-floor" x1="0" y1="0" x2="0.3" y2="1">' +
+               '<stop offset="0%" stop-color="#334155"/>' +
+               '<stop offset="40%" stop-color="#1e293b"/>' +
+               '<stop offset="100%" stop-color="#0f172a"/>' +
+             '</linearGradient>' +
+             '<linearGradient id="floor-glaze" x1="0" y1="0" x2="1" y2="0.8">' +
+               '<stop offset="0%" stop-color="rgba(186,230,253,0.12)"/>' +
+               '<stop offset="50%" stop-color="rgba(255,255,255,0.04)"/>' +
+               '<stop offset="100%" stop-color="rgba(0,0,0,0.2)"/>' +
+             '</linearGradient>' +
+             // Window garden gradient
              '<linearGradient id="win-garden" x1="0" y1="0" x2="0" y2="1">' +
                '<stop offset="0%" stop-color="#bae6fd"/>' +
                '<stop offset="55%" stop-color="#e0f2fe"/>' +
                '<stop offset="100%" stop-color="#86efac"/>' +
              '</linearGradient>' +
+             // Warm honey oak table top gradient
+             '<linearGradient id="wood-top" x1="0" y1="0" x2="1" y2="0.7">' +
+               '<stop offset="0%" stop-color="#f59e0b"/>' +
+               '<stop offset="50%" stop-color="#d97706"/>' +
+               '<stop offset="100%" stop-color="#b45309"/>' +
+             '</linearGradient>' +
+             // Charcoal outer frames
+             '<linearGradient id="charcoal-top" x1="0" y1="0" x2="0" y2="1">' +
+               '<stop offset="0%" stop-color="#475569"/>' +
+               '<stop offset="100%" stop-color="#334155"/>' +
+             '</linearGradient>' +
+             '<linearGradient id="charcoal-side" x1="0" y1="0" x2="1" y2="0">' +
+               '<stop offset="0%" stop-color="#1e293b"/>' +
+               '<stop offset="100%" stop-color="#0f172a"/>' +
+             '</linearGradient>' +
+             '<linearGradient id="charcoal-front" x1="0" y1="0" x2="0" y2="1">' +
+               '<stop offset="0%" stop-color="#334155"/>' +
+               '<stop offset="100%" stop-color="#1e293b"/>' +
+             '</linearGradient>' +
+             // Vibrant orange cushion gradients
+             '<linearGradient id="orange-cushion-top" x1="0" y1="0" x2="0" y2="1">' +
+               '<stop offset="0%" stop-color="#fb923c"/>' +
+               '<stop offset="100%" stop-color="#ea580c"/>' +
+             '</linearGradient>' +
+             '<linearGradient id="orange-cushion-front" x1="0" y1="0" x2="0" y2="1">' +
+               '<stop offset="0%" stop-color="#ea580c"/>' +
+               '<stop offset="100%" stop-color="#c2410c"/>' +
+             '</linearGradient>' +
+             '<linearGradient id="orange-back-slant" x1="0" y1="0" x2="0.3" y2="1">' +
+               '<stop offset="0%" stop-color="#f97316"/>' +
+               '<stop offset="100%" stop-color="#9a3412"/>' +
+             '</linearGradient>' +
            '</defs>' +
-           R(16, 18, 72, 82, 'url(#win-garden)', 2) +
-           // Lush green trees and garden outside
-           Ci(30, 75, 16, '#15803d', ' opacity="0.65"') +
-           Ci(52, 70, 20, '#16a34a', ' opacity="0.75"') +
-           Ci(74, 78, 14, '#22c55e', ' opacity="0.65"') +
-           // Minimalist steel window mullions
-           St("M16 56h72", "#334155", 1.6) +
-           St("M52 18v82", "#334155", 1.6) +
-           '<polygon points="16,18 38,18 24,100 16,100" fill="rgba(255,255,255,0.2)"/>' +
 
-           // 2. Geometric Wireframe Bookshelf (Center-Left Wall)
-           R(98, 18, 48, 82, 'none', 1, ' stroke="#475569" stroke-width="1.2"') +
-           St("M98 46h48", "#475569", 1.2) +
-           St("M98 72h48", "#475569", 1.2) +
-           St("M98 18L146 100", "#475569", 0.8, ' opacity="0.6"') +
-           St("M146 18L98 100", "#475569", 0.8, ' opacity="0.6"') +
-           // Books & modern art decor
-           R(103, 30, 7, 15, '#f97316', 1) + R(112, 33, 6, 12, '#38bdf8', 1) +
-           R(126, 56, 12, 15, '#f8fafc', 1) + Ci(110, 65, 4, '#fbbf24') +
-           R(104, 84, 14, 15, '#3b82f6', 1) + R(124, 86, 10, 13, '#10b981', 1) +
+           // 1. Perspective Floor & Receding Grid Lines
+           R(0, 96, 360, 164, 'url(#iso-floor)') +
+           R(0, 96, 360, 164, 'url(#floor-glaze)') +
+           '<path d="M-60 210 L160 96 M20 260 L240 96 M120 260 L320 96 M-10 120 L180 260 M70 96 L270 260 M170 96 L350 250" stroke="#475569" stroke-width="0.8" opacity="0.3"/>' +
+           St("M0 96h360", "#334155", 1.8) +
 
-           // 3. Vertical Warm Wood Paneling (Center-Right Accent Wall)
-           R(154, 16, 136, 86, '#78350f', 0) +
-           St("M168 16v86", "#451a03", 1.2) + St("M182 16v86", "#451a03", 1.2) +
-           St("M196 16v86", "#451a03", 1.2) + St("M210 16v86", "#451a03", 1.2) +
-           St("M224 16v86", "#451a03", 1.2) + St("M238 16v86", "#451a03", 1.2) +
-           St("M252 16v86", "#451a03", 1.2) + St("M266 16v86", "#451a03", 1.2) +
-           St("M280 16v86", "#451a03", 1.2) +
+           // 2. Architectural Floor-to-Ceiling Window with Garden View (Left)
+           '<polygon points="10,12 80,12 80,108 10,118" fill="#090e17" stroke="#334155" stroke-width="1.8"/>' +
+           '<polygon points="12,14 78,14 78,106 12,116" fill="url(#win-garden)"/>' +
+           Ci(26, 85, 18, '#15803d', ' opacity="0.75"') +
+           Ci(50, 78, 24, '#16a34a', ' opacity="0.85"') +
+           Ci(72, 88, 15, '#22c55e', ' opacity="0.7"') +
+           St("M12 62h66", "#334155", 1.8) +
+           St("M45 14v97", "#334155", 1.8) +
+           '<polygon points="12,14 36,14 22,114 12,116" fill="rgba(255,255,255,0.22)"/>' +
 
-           // Modern Floor Lamp with conical white shade
-           St("M282 96L286 34", "#e2e8f0", 1.5) +
-           Ci(282, 96, 3, "#334155") +
-           '<polygon points="282,36 294,30 292,42" fill="#f8fafc" style="filter:drop-shadow(0 0 8px #fef08a)"/>' +
-           Ci(288, 38, 2, "#fde047") +
+           // 3. Center-Left Background: Geometric Wireframe Bookshelf
+           R(94, 16, 52, 84, 'none', 1, ' stroke="#475569" stroke-width="1.2"') +
+           St("M94 44h52", "#475569", 1.2) +
+           St("M94 72h52", "#475569", 1.2) +
+           St("M94 16L146 100", "#475569", 0.8, ' opacity="0.55"') +
+           St("M146 16L94 100", "#475569", 0.8, ' opacity="0.55"') +
+           R(99, 27, 8, 17, '#f97316', 1) + R(109, 30, 6, 14, '#38bdf8', 1) +
+           R(125, 53, 14, 19, '#f8fafc', 1) + Ci(108, 63, 4.5, '#fbbf24') +
+           R(100, 83, 16, 17, '#3b82f6', 1) + R(122, 85, 12, 15, '#10b981', 1) +
 
-           // 4. Executive Interview Room Door on the Side (Interactive: click opens Careers Modal!)
+           // 4. Center-Right Background: Vertical Warm Oak Paneling
+           R(156, 14, 134, 88, '#78350f', 0) +
+           St("M170 14v88 M184 14v88 M198 14v88 M212 14v88 M226 14v88 M240 14v88 M254 14v88 M268 14v88 M282 14v88", "#451a03", 1.4) +
+           // Modern Angled Task Floor Lamp
+           St("M278 104L283 34", "#e2e8f0", 1.6) +
+           Ci(278, 104, 3.5, "#334155") +
+           '<polygon points="279,36 292,30 290,44" fill="#f8fafc" style="filter:drop-shadow(0 0 8px #fef08a)"/>' +
+           Ci(285, 38, 2.2, "#fde047") +
+
+           // 5. Right Wall: Executive Interview Room Door (Click opens Careers Modal!)
            '<g class="hit" data-portal="1" tabindex="0" role="button" aria-label="Open Positions / Interview Room" style="cursor: pointer;">' +
-             // Outer Glowing Door Frame
-             R(298, 22, 52, 194, '#0f172a', 6, ' stroke="#fbbf24" stroke-width="2" style="filter:drop-shadow(0 0 10px rgba(251,191,36,0.45))"') +
-             // Frosted Interior Obsidian Glass
-             R(304, 30, 40, 178, '#192238', 4) +
-             St("M304 85h40", "#334155", 1.5) +
-             St("M304 140h40", "#334155", 1.5) +
-             '<polygon points="304,30 326,30 314,208 304,208" fill="rgba(255,255,255,0.08)"/>' +
-             // Sleek Vertical Metallic Handle
-             R(308, 102, 3.5, 30, '#f8fafc', 1.5, ' style="filter:drop-shadow(0 0 2px #fff)"') +
-             // Illuminated Door Header Plaque
-             R(296, 10, 56, 17, '#070b14', 4, ' stroke="#fbbf24" stroke-width="1.2" style="filter:drop-shadow(0 0 6px #fbbf24)"') +
-             Tx(324, 21.5, "INTERVIEW ROOM", 6.2, "#fbbf24", 800) +
-             Ci(303, 18.5, 2.2, '#22c55e', ' style="filter:drop-shadow(0 0 4px #22c55e)"') +
+             R(298, 18, 52, 198, '#0f172a', 6, ' stroke="#fbbf24" stroke-width="2" style="filter:drop-shadow(0 0 12px rgba(251,191,36,0.45))"') +
+             R(304, 26, 40, 182, '#192238', 4) +
+             St("M304 86h40", "#334155", 1.5) +
+             St("M304 142h40", "#334155", 1.5) +
+             '<polygon points="304,26 326,26 314,208 304,208" fill="rgba(255,255,255,0.08)"/>' +
+             R(308, 104, 3.5, 32, '#f8fafc', 1.7, ' style="filter:drop-shadow(0 0 2px #fff)"') +
+             R(296, 6, 56, 17, '#070b14', 4, ' stroke="#fbbf24" stroke-width="1.2" style="filter:drop-shadow(0 0 6px #fbbf24)"') +
+             Tx(324, 17.5, "INTERVIEW ROOM", 6.2, "#fbbf24", 800) +
+             Ci(303, 14.5, 2.2, '#22c55e', ' style="filter:drop-shadow(0 0 4px #22c55e)"') +
            '</g>' +
 
-           // 5. Signature Modular Furniture (Charcoal Outer Frames + Bright Orange Cushions)
-           // Soft Floor Shadows under seating
-           R(16, 178, 54, 12, 'rgba(0,0,0,0.3)', 6) +
-           R(80, 178, 204, 12, 'rgba(0,0,0,0.3)', 6) +
+           // 6. MIDGROUND FURNITURE: Pedestal Side Table & Modular Waiting Sofa
+           // Round Pedestal Side Table between Armchair & Sofa (with books)
+           '<ellipse cx="80" cy="140" rx="13" ry="6" fill="#d97706" stroke="#b45309" stroke-width="0.8"/>' +
+           '<ellipse cx="80" cy="140" rx="11" ry="5" fill="#f59e0b"/>' +
+           '<polygon points="73,136 86,135 88,139 75,140" fill="#f8fafc" stroke="#cbd5e1" stroke-width="0.5"/>' +
+           '<polygon points="72,133 84,132 86,137 74,138" fill="#38bdf8" stroke="#0284c7" stroke-width="0.5"/>' +
+           St("M80 145v29", "#334155", 2.2) +
+           '<ellipse cx="80" cy="174" rx="9" ry="4" fill="#1e293b" stroke="#334155" stroke-width="0.8"/>' +
 
-           // Left: Matching Modular Single Armchair
-           R(16, 130, 54, 52, '#242b35', 6) + // Charcoal Frame
-           R(20, 144, 46, 36, '#ea580c', 4) + // Bright Orange Seat Cushion
-           R(20, 132, 46, 15, '#c2410c', 3) + // Orange Backrest
-           St("M18 182v7", "#94a3b8", 2) + St("M68 182v7", "#94a3b8", 2) +
-
-           // Small Round Pedestal Side Table between Armchair and Sofa (with stacked papers)
-           Ci(74, 154, 7, '#d97706') +
-           Ci(74, 154, 5, '#b45309') +
-           St("M74 154v24", "#334155", 1.8) +
-           Ci(74, 178, 5, '#334155') +
-           R(70, 148, 8, 5, '#f8fafc', 1) +
-
-           // Right: 4-Seater Modular Waiting Sofa with Center Console
+           // Modular Waiting Sofa (Charcoal Frame + Bright Orange Cushions)
+           R(100, 168, 186, 12, 'rgba(0,0,0,0.35)', 6) +
+           St("M104 172v10 M178 172v10 M206 172v10 M280 172v10", "#94a3b8", 2) +
+           // Left outer armrest
+           '<polygon points="100,122 106,120 106,170 100,172" fill="url(#charcoal-side)"/>' +
+           '<polygon points="100,122 106,120 114,121 106,124" fill="url(#charcoal-top)"/>' +
+           '<polygon points="100,122 106,124 106,170 100,172" fill="url(#charcoal-front)"/>' +
            // Seat 1
-           R(82, 130, 44, 52, '#242b35', 5) +
-           R(85, 144, 38, 36, '#ea580c', 3) +
-           R(85, 132, 38, 15, '#c2410c', 2.5) +
+           R(107, 118, 34, 20, 'url(#orange-back-slant)', 3) +
+           '<polygon points="107,136 141,136 140,156 106,156" fill="url(#orange-cushion-top)"/>' +
+           R(106, 156, 35, 14, 'url(#orange-cushion-front)', 2.5, ' stroke="#9a3412" stroke-width="0.5"') +
            // Seat 2
-           R(128, 130, 44, 52, '#242b35', 5) +
-           R(131, 144, 38, 36, '#ea580c', 3) +
-           R(131, 132, 38, 15, '#c2410c', 2.5) +
-           // Center Wooden Console Table (Between seats)
-           R(174, 134, 22, 46, '#92400e', 3) +
-           R(177, 140, 16, 12, '#b45309', 2) +
-           R(178, 162, 14, 8, '#334155', 1.5) +
-           R(180, 164, 10, 4, '#e2e8f0', 1) +
+           R(143, 118, 34, 20, 'url(#orange-back-slant)', 3) +
+           '<polygon points="143,136 177,136 176,156 142,156" fill="url(#orange-cushion-top)"/>' +
+           R(142, 156, 35, 14, 'url(#orange-cushion-front)', 2.5, ' stroke="#9a3412" stroke-width="0.5"') +
+           // Center Console Table (Iconic Wood Top + Charcoal Body + Silver Dock)
+           R(179, 128, 24, 42, '#1e293b', 2, ' stroke="#0f172a" stroke-width="1"') +
+           '<polygon points="179,128 203,128 202,142 178,142" fill="url(#wood-top)" stroke="#92400e" stroke-width="0.7"/>' +
+           '<polygon points="183,131 197,130 198,138 184,139" fill="#f8fafc" stroke="#94a3b8" stroke-width="0.5"/>' +
+           '<polygon points="185,132 195,131 196,136 186,137" fill="#0284c7"/>' +
+           R(183, 150, 16, 9, '#334155', 1.5, ' stroke="#64748b" stroke-width="0.8"') +
+           R(186, 152, 10, 5, '#e2e8f0', 1) +
            // Seat 3
-           R(198, 130, 44, 52, '#242b35', 5) +
-           R(201, 144, 38, 36, '#ea580c', 3) +
-           R(201, 132, 38, 15, '#c2410c', 2.5) +
+           R(205, 118, 34, 20, 'url(#orange-back-slant)', 3) +
+           '<polygon points="205,136 239,136 238,156 204,156" fill="url(#orange-cushion-top)"/>' +
+           R(204, 156, 35, 14, 'url(#orange-cushion-front)', 2.5, ' stroke="#9a3412" stroke-width="0.5"') +
            // Seat 4
-           R(244, 130, 44, 52, '#242b35', 5) +
-           R(247, 144, 38, 36, '#ea580c', 3) +
-           R(247, 132, 38, 15, '#c2410c', 2.5) +
-           // Steel Sofa Legs
-           St("M84 182v7", "#94a3b8", 2) + St("M172 182v7", "#94a3b8", 2) +
-           St("M198 182v7", "#94a3b8", 2) + St("M286 182v7", "#94a3b8", 2) +
+           R(241, 118, 34, 20, 'url(#orange-back-slant)', 3) +
+           '<polygon points="241,136 275,136 274,156 240,156" fill="url(#orange-cushion-top)"/>' +
+           R(240, 156, 35, 14, 'url(#orange-cushion-front)', 2.5, ' stroke="#9a3412" stroke-width="0.5"') +
+           // Right outer armrest
+           '<polygon points="276,122 282,120 282,170 276,172" fill="url(#charcoal-side)"/>' +
+           '<polygon points="270,121 276,120 282,122 276,124" fill="url(#charcoal-top)"/>' +
+           '<polygon points="276,124 282,122 282,170 276,172" fill="url(#charcoal-front)"/>' +
 
-           // Modern Low Wooden Coffee Table (In front of sofa)
-           R(112, 196, 130, 24, '#d97706', 4, ' stroke="#b45309" stroke-width="1.2"') +
-           R(110, 201, 134, 4, '#92400e', 2) +
-           St("M124 220v10", "#0f172a", 2.2) + St("M230 220v10", "#0f172a", 2.2) +
-           St("M120 230h114", "#0f172a", 1.8) +
-           // Coffee table decor (Blue Mug & Resume Paper)
-           R(140, 201, 16, 12, '#fef08a', 1) +
-           St("M143 204h10", "#854d0e", 0.8) + St("M143 207h10", "#854d0e", 0.8) +
-           Ci(180, 205, 3.5, '#0284c7') +
-           Ci(180, 205, 1.8, '#38bdf8') +
-           R(200, 202, 14, 10, '#f8fafc', 1) +
-
-           // Round Ottoman Stool (Foreground Left, matching reference photo)
-           Ci(42, 206, 15, '#334155') +
-           R(28, 206, 28, 12, '#334155', 3) +
-           R(30, 214, 24, 7, '#f8fafc', 2) +
-
-           // 6. Five Formal Candidates Seated with Files & Portfolios in Hand
-           // Candidate 1: In Left Armchair (Charcoal Suit & Burgundy Tie, Gold Folder)
-           '<g id="cand-1" transform="translate(26 98)">' +
-             '<g transform="scale(0.48)">' +
-               person({s:"#dfa76a",h:"#18171f",o:"#1e293b",a:"#991b1b",st:0}, false) +
-             '</g>' +
-             '<g id="cand-1-file" transform="translate(17 50)">' +
-               '<rect x="-7" y="-5" width="15" height="12" rx="1.5" fill="#fef08a" stroke="#ca8a04" stroke-width="1" style="filter:drop-shadow(0 0 3px rgba(254,240,138,0.5))"/>' +
-               '<line x1="-4" y1="-2" x2="4" y2="-2" stroke="#854d0e" stroke-width="0.8"/>' +
-               '<line x1="-4" y1="1" x2="4" y2="1" stroke="#854d0e" stroke-width="0.8"/>' +
-             '</g>' +
-           '</g>' +
-
-           // Candidate 2: In Sofa Seat 1 (Navy Suit, Black Leather Portfolio)
-           '<g id="cand-2" transform="translate(87 98)">' +
+           // 7. SEATED CANDIDATES ON SOFA (Candidates 2, 3, 4, 5)
+           // Candidate 2: In Sofa Seat 1 (Navy Suit, Leather Portfolio)
+           '<g id="cand-2" transform="translate(104 94)">' +
              '<g transform="scale(0.48)">' +
                person({s:"#c88b48",h:"#2b221e",o:"#1e3a8a",a:"#38bdf8",st:2}, false) +
              '</g>' +
-             '<g id="cand-2-file" transform="translate(17 50)">' +
-               '<rect x="-7" y="-5" width="15" height="12" rx="1.5" fill="#0f172a" stroke="#334155" stroke-width="1"/>' +
-               '<circle cx="0" cy="1" r="1.5" fill="#fbbf24"/>' +
+             '<g id="cand-2-file" transform="translate(17 49)">' +
+               '<rect x="-8" y="-6" width="16" height="13" rx="1.5" fill="#0f172a" stroke="#334155" stroke-width="1"/>' +
+               '<circle cx="0" cy="0.5" r="1.5" fill="#fbbf24"/>' +
              '</g>' +
            '</g>' +
 
-           // Candidate 3: In Sofa Seat 2 (Emerald Business Blazer, Glowing Tablet Portfolio)
-           '<g id="cand-3" transform="translate(133 98)">' +
+           // Candidate 3: In Sofa Seat 2 (Emerald Blazer, Glowing Tablet Portfolio)
+           '<g id="cand-3" transform="translate(140 94)">' +
              '<g transform="scale(0.48)">' +
                person({s:"#f1c485",h:"#3d2a1d",o:"#065f46",a:"#34d399",st:1}, false) +
              '</g>' +
-             '<g id="cand-3-file" transform="translate(17 50)">' +
-               '<rect x="-6" y="-5" width="13" height="12" rx="1.5" fill="#0f172a" stroke="#38bdf8" stroke-width="1" style="filter:drop-shadow(0 0 3px #38bdf8)"/>' +
-               '<rect x="-4" y="-3" width="9" height="8" rx="0.8" fill="#0284c7"/>' +
+             '<g id="cand-3-file" transform="translate(17 49)">' +
+               '<rect x="-7" y="-6" width="14" height="13" rx="1.5" fill="#0f172a" stroke="#38bdf8" stroke-width="1" style="filter:drop-shadow(0 0 3px #38bdf8)"/>' +
+               '<rect x="-5" y="-4" width="10" height="9" rx="0.8" fill="#0284c7"/>' +
              '</g>' +
            '</g>' +
 
            // Candidate 4: In Sofa Seat 3 (Royal Purple Formal Blazer, White Dossier Binder)
-           '<g id="cand-4" transform="translate(203 98)">' +
+           '<g id="cand-4" transform="translate(202 94)">' +
              '<g transform="scale(0.48)">' +
                person({s:"#965d2f",h:"#141416",o:"#581c87",a:"#c084fc",st:4}, false) +
              '</g>' +
-             '<g id="cand-4-file" transform="translate(17 50)">' +
-               '<rect x="-7" y="-5" width="15" height="12" rx="1.5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>' +
-               '<line x1="-4" y1="-2" x2="4" y2="-2" stroke="#475569" stroke-width="0.8"/>' +
-               '<line x1="-4" y1="1" x2="4" y2="1" stroke="#475569" stroke-width="0.8"/>' +
+             '<g id="cand-4-file" transform="translate(17 49)">' +
+               '<rect x="-8" y="-6" width="16" height="13" rx="1.5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>' +
+               '<line x1="-5" y1="-2" x2="5" y2="-2" stroke="#475569" stroke-width="0.8"/>' +
+               '<line x1="-5" y1="1" x2="5" y2="1" stroke="#475569" stroke-width="0.8"/>' +
              '</g>' +
            '</g>' +
 
            // Candidate 5: In Sofa Seat 4 (Slate Blue Formal Suit, Amber Resume Folder)
-           '<g id="cand-5" transform="translate(249 98)">' +
+           '<g id="cand-5" transform="translate(238 94)">' +
              '<g transform="scale(0.48)">' +
                person({s:"#dfa76a",h:"#282320",o:"#334155",a:"#f59e0b",st:3}, false) +
              '</g>' +
-             '<g id="cand-5-file" transform="translate(17 50)">' +
-               '<rect x="-7" y="-5" width="15" height="12" rx="1.5" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>' +
-               '<line x1="-4" y1="-2" x2="4" y2="-2" stroke="#9a3412" stroke-width="0.8"/>' +
-               '<line x1="-4" y1="1" x2="4" y2="1" stroke="#9a3412" stroke-width="0.8"/>' +
+             '<g id="cand-5-file" transform="translate(17 49)">' +
+               '<rect x="-8" y="-6" width="16" height="13" rx="1.5" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>' +
+               '<line x1="-5" y1="-2" x2="5" y2="-2" stroke="#9a3412" stroke-width="0.8"/>' +
+               '<line x1="-5" y1="1" x2="5" y2="1" stroke="#9a3412" stroke-width="0.8"/>' +
              '</g>' +
+           '</g>' +
+
+           // 8. FOREGROUND LAYER: 3/4 ANGLED ARMCHAIR, ISOMETRIC COFFEE TABLE, AND OTTOMAN
+           // Left: Armchair in 3/4 Isometric Perspective (Angled ~30° inward towards coffee table)
+           '<g id="iso-armchair" transform="translate(18 136)">' +
+             '<ellipse cx="28" cy="56" rx="30" ry="10" fill="rgba(0,0,0,0.4)"/>' +
+             St("M6 48v10 M52 48v10", "#94a3b8", 2.2) +
+             St("M16 38v10 M58 38v10", "#64748b", 1.8) +
+             '<polygon points="0,0 12,-6 12,44 0,48" fill="url(#charcoal-side)"/>' +
+             '<polygon points="0,0 12,-6 24,-4 12,2" fill="url(#charcoal-top)"/>' +
+             '<polygon points="0,0 12,2 12,46 0,48" fill="url(#charcoal-front)"/>' +
+             '<polygon points="12,-6 56,-11 56,12 12,17" fill="#1e293b"/>' +
+             '<polygon points="14,-2 54,-7 54,20 14,24" fill="url(#orange-back-slant)" stroke="#c2410c" stroke-width="0.6"/>' +
+             '<polygon points="13,18 55,13 52,38 10,42" fill="url(#orange-cushion-top)"/>' +
+             '<polygon points="10,42 52,38 52,48 10,51" fill="url(#orange-cushion-front)" stroke="#9a3412" stroke-width="0.6"/>' +
+             '<polygon points="53,-8 62,-10 62,-6 53,-4" fill="url(#charcoal-top)"/>' +
+             '<polygon points="53,-4 62,-6 62,40 53,42" fill="url(#charcoal-side)"/>' +
+           '</g>' +
+
+           // Candidate 1: Seated in 3/4 Armchair (Navy Suit, Burgundy Tie, Gold Folder)
+           '<g id="cand-1" transform="translate(32 116)">' +
+             '<g transform="scale(0.48)">' +
+               person({s:"#dfa76a",h:"#18171f",o:"#1e293b",a:"#991b1b",st:0}, false) +
+             '</g>' +
+             '<g id="cand-1-file" transform="translate(17 49)">' +
+               '<rect x="-8" y="-6" width="16" height="13" rx="1.5" fill="#fef08a" stroke="#ca8a04" stroke-width="1" style="filter:drop-shadow(0 0 3px rgba(254,240,138,0.5))"/>' +
+               '<line x1="-5" y1="-2" x2="5" y2="-2" stroke="#854d0e" stroke-width="0.8"/>' +
+               '<line x1="-5" y1="1" x2="5" y2="1" stroke="#854d0e" stroke-width="0.8"/>' +
+             '</g>' +
+           '</g>' +
+
+           // Foreground: Modern Low Wooden Coffee Table (In Isometric 3/4 Perspective!)
+           '<g id="iso-coffee-table">' +
+             '<polygon points="116,228 238,228 252,240 130,240" fill="rgba(0,0,0,0.34)"/>' +
+             St("M140 206v26 M228 206v26", "#0f172a", 2.6) +
+             '<path d="M128 232h26 M216 232h26" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round"/>' +
+             St("M140 232h88", "#1e293b", 1.8) +
+             '<polygon points="116,204 246,204 254,208 124,208" fill="#78350f"/>' +
+             '<polygon points="122,186 240,186 252,205 116,205" fill="url(#wood-top)" stroke="#b45309" stroke-width="1"/>' +
+             // Yellow folder / papers on table
+             '<polygon points="138,191 158,190 163,201 143,202" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>' +
+             St("M143 195h14 M144 198h11", "#854d0e", 0.8) +
+             // Blue ceramic coffee mug in 3D
+             '<g id="table-blue-mug" transform="translate(186 189)">' +
+               '<path d="M0,4 C0,9 1.5,12 5,12 C8.5,12 10,9 10,4 Z" fill="#0284c7"/>' +
+               '<path d="M10,5 C13,5 13,10 10,10" fill="none" stroke="#0284c7" stroke-width="1.5"/>' +
+               '<ellipse cx="5" cy="4" rx="5" ry="2" fill="#0284c7"/>' +
+               '<ellipse cx="5" cy="4" rx="4" ry="1.5" fill="#38bdf8"/>' +
+               '<ellipse cx="5" cy="4" rx="3.2" ry="1.1" fill="#451a03"/>' +
+             '</g>' +
+             // White brochure in perspective
+             '<polygon points="206,192 224,191 228,200 210,201" fill="#f8fafc" stroke="#cbd5e1" stroke-width="0.7"/>' +
+             St("M210 195h12", "#3b82f6", 1) +
+           '</g>' +
+
+           // Foreground Left: Round Cylindrical Ottoman Stool (With Recessed White Base Ring)
+           '<g id="iso-ottoman" transform="translate(76 198)">' +
+             '<ellipse cx="18" cy="34" rx="22" ry="8" fill="rgba(0,0,0,0.45)"/>' +
+             '<path d="M4,20 C4,25 10,28 18,28 C26,28 32,25 32,20 L32,26 C32,31 26,34 18,34 C10,34 4,31 4,26 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="0.6"/>' +
+             '<ellipse cx="18" cy="20" rx="14" ry="4.5" fill="#e2e8f0"/>' +
+             '<path d="M0,6 C0,13 8,18 18,18 C28,18 36,13 36,6 L36,18 C36,25 28,30 18,30 C8,30 0,25 0,18 Z" fill="#242e3d" stroke="#151c27" stroke-width="0.8"/>' +
+             '<ellipse cx="18" cy="6" rx="18" ry="8" fill="#3d495c" stroke="#475569" stroke-width="0.8"/>' +
+             '<ellipse cx="18" cy="5" rx="15" ry="6.5" fill="#475569" opacity="0.6"/>' +
            '</g>;'
   } else if (id === 'lounge') {
     body = arcade(24, 20, '#f97316', 'arcade-dot-1') +
@@ -2855,7 +2928,7 @@ function initChipAnimation() {
         }
       }
 
-            // 3. Careers Portal: Candidates Waiting Lounge Animation
+                        // 3. Careers Portal: Candidates Waiting Lounge Animation
       var c1 = svg.querySelector('#cand-1');
       var c2 = svg.querySelector('#cand-2');
       var c3 = svg.querySelector('#cand-3');
@@ -2864,23 +2937,23 @@ function initChipAnimation() {
 
       if (c1) {
         var s1 = Math.sin(now * 0.003) * 0.8;
-        c1.setAttribute('transform', 'translate(26 ' + (98 + s1) + ')');
+        c1.setAttribute('transform', 'translate(32 ' + (116 + s1) + ')');
       }
       if (c2) {
         var s2 = Math.cos(now * 0.0035) * 0.8;
-        c2.setAttribute('transform', 'translate(87 ' + (98 + s2) + ')');
+        c2.setAttribute('transform', 'translate(104 ' + (94 + s2) + ')');
       }
       if (c3) {
         var s3 = Math.sin(now * 0.004) * 0.8;
-        c3.setAttribute('transform', 'translate(133 ' + (98 + s3) + ')');
+        c3.setAttribute('transform', 'translate(140 ' + (94 + s3) + ')');
       }
       if (c4) {
         var s4 = Math.cos(now * 0.004) * 0.7;
-        c4.setAttribute('transform', 'translate(203 ' + (98 + s4) + ')');
+        c4.setAttribute('transform', 'translate(202 ' + (94 + s4) + ')');
       }
       if (c5) {
         var s5 = Math.sin(now * 0.0032) * 0.8;
-        c5.setAttribute('transform', 'translate(249 ' + (98 + s5) + ')');
+        c5.setAttribute('transform', 'translate(238 ' + (94 + s5) + ')');
       }
     }
     requestAnimationFrame(tick);

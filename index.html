@@ -2834,13 +2834,13 @@ function getChipBounds(c) {
 }
 
 function initChipAnimation() {
+  var CHIP_STATE = {};
   function tick(now) {
     if (state === "office") {
       // 1. Collectables Dynamic Animation (Firefly Wandering vs Bouncing)
       var chips = svg.querySelectorAll('.chip:not(.got)');
       for (var i = 0; i < chips.length; i++) {
         var chip = chips[i];
-        if (chip.matches(':hover')) continue;
         var idx = +chip.dataset.c;
         var c = CONFIG.chips[idx];
         if (!c) continue;
@@ -2848,12 +2848,33 @@ function initChipAnimation() {
         var shadow = chip.querySelector('.chip-shadow');
         if (!body) continue;
 
+        // Hover pause-and-resume tracker to prevent position snapping
+        if (!CHIP_STATE[idx]) {
+          CHIP_STATE[idx] = { hovered: false, hoverStart: 0, timeOffset: 0 };
+        }
+        var st = CHIP_STATE[idx];
+        var isHovered = chip.matches(':hover');
+
+        if (isHovered) {
+          if (!st.hovered) {
+            st.hovered = true;
+            st.hoverStart = now;
+          }
+          continue; // Pause motion at current position while hovered
+        } else {
+          if (st.hovered) {
+            st.hovered = false;
+            st.timeOffset += (now - st.hoverStart);
+          }
+        }
+
+        var effNow = now - st.timeOffset;
         var animType = getChipAnimType(c);
 
         if (animType === 'bounce') {
           // Classic 3-hop bounce idle animation (Dev Zone & QA Arena)
           chip.setAttribute('transform', 'translate(0 0)');
-          var t = ((now * 0.001) + idx * 0.4) % 2.5;
+          var t = ((effNow * 0.001) + idx * 0.4) % 2.5;
           var h = 0, sx = 1, sy = 1;
 
           if (t < 0.26) {
@@ -2887,7 +2908,7 @@ function initChipAnimation() {
           // Dynamic Firefly Randomly Floating Animation (Strictly Contained within Room Bounds)
           var b = getChipBounds(c);
           var seed = idx * 1.731 + 0.5;
-          var sec = now * 0.001;
+          var sec = effNow * 0.001;
 
           // Multi-frequency organic wandering (coefficients sum to <= 0.90 for guaranteed containment)
           var wx = 0.46 * Math.sin(sec * 0.55 + seed * 1.618) +

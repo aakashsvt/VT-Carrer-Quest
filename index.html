@@ -1699,7 +1699,16 @@ var PROFILE={"Himanshu Bansal":{tag:"LEADERSHIP & VISION",about:"Leads Virtualiz
 "Tarique":{tag:"3D ART & MODELING",about:"Builds the 3D models and assets that bring game worlds to life.",team:"The 3D team models, textures and prepares the characters and environments players see."},
 "Hitesh":{tag:"QUALITY ASSURANCE",about:"Tests our games to find bugs and keep the player experience smooth.",team:"QA plays, breaks and re-tests builds so games feel polished before they reach players."}};
 
-var LOOK={"Himanshu Bansal":{s:"#d8a169",h:"#18171f",o:"#1e293b",a:"#f59e0b",st:4},"Rytham Raj":{s:"#dfa76a",h:"#2b221e",o:"#0f766e",a:"#2dd4bf",st:2},"Sangeeta":{s:"#c88b48",h:"#18171f",o:"#9f1239",a:"#fda4af",st:2},"Harshdeep Singh":{s:"#c88b48",h:"#141416",o:"#1d4ed8",a:"#60a5fa",st:0},"Pankaj soni":{s:"#d8a169",h:"#282320",o:"#312e81",a:"#818cf8",st:0},"Abhishek":{s:"#dfa76a",h:"#282320",o:"#581c87",a:"#c084fc",st:3},"Tarique":{s:"#c88b48",h:"#141416",o:"#c2410c",a:"#38bdf8",st:1},"Hitesh":{s:"#f1c485",h:"#3d2a1d",o:"#065f46",a:"#34d399",st:0}};
+var LOOK={
+  "Himanshu Bansal": {s:"#d8a169", h:"#18171f", o:"#1e293b", a:"#f59e0b", g:"m", b:"light", st:4},
+  "Rytham Raj":      {s:"#dfa76a", h:"#2b221e", o:"#0f766e", a:"#2dd4bf", g:"f", b:"none",  st:2},
+  "Sangeeta":        {s:"#c88b48", h:"#18171f", o:"#9f1239", a:"#fda4af", g:"f", b:"none",  st:5},
+  "Harshdeep Singh": {s:"#c88b48", h:"#141416", o:"#1d4ed8", a:"#60a5fa", g:"m", b:"light", st:0},
+  "Pankaj soni":     {s:"#d8a169", h:"#282320", o:"#312e81", a:"#818cf8", g:"m", b:"dark",  st:0},
+  "Abhishek":        {s:"#dfa76a", h:"#282320", o:"#581c87", a:"#c084fc", g:"m", b:"dark",  st:3},
+  "Tarique":         {s:"#c88b48", h:"#141416", o:"#c2410c", a:"#38bdf8", g:"m", b:"light", st:1},
+  "Hitesh":          {s:"#f1c485", h:"#3d2a1d", o:"#065f46", a:"#34d399", g:"m", b:"light", st:0}
+};
 
 var AVATARS=[{t:"The Challenger",d:"Competitive, bold, ready to level up.",L:{s:"#dfa76a",h:"#141416",o:"#1e3a8a",a:"#60a5fa",st:0}},{t:"The Explorer",d:"Curious and always up for a new adventure.",L:{s:"#c88b48",h:"#3d2a1d",o:"#065f46",a:"#34d399",st:1}},{t:"The Strategist",d:"Thinks before making a move.",L:{s:"#f1c485",h:"#282320",o:"#4338ca",a:"#a5b4fc",st:2}},{t:"The Creator",d:"Loves building and imagining new worlds.",L:{s:"#965d2f",h:"#831843",o:"#6b21a8",a:"#f59e0b",st:4}}];
 
@@ -1716,6 +1725,127 @@ function mix(h, a){
   var n = parseInt(h.slice(1), 16), r = n >> 16, g = n >> 8 & 255, b = n & 255;
   var f = function(v){ return Math.max(0, Math.min(255, Math.round(a > 0 ? v + (255 - v) * a : v * (1 + a)))); };
   return "#" + ((1 << 24) + (f(r) << 16) + (f(g) << 8) + f(b)).toString(16).slice(1);
+}
+
+var bgmGain = null, bgmTimer = null, bgmStep = 0;
+
+function initBGM() {
+  if (bgmGain) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    bgmGain = actx.createGain();
+    bgmGain.gain.setValueAtTime(0, actx.currentTime);
+    bgmGain.connect(actx.destination);
+
+    var filter = actx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(780, actx.currentTime);
+    filter.Q.setValueAtTime(1.2, actx.currentTime);
+    filter.connect(bgmGain);
+
+    var delay = actx.createDelay();
+    delay.delayTime.setValueAtTime(0.38, actx.currentTime);
+    var delayFeedback = actx.createGain();
+    delayFeedback.gain.setValueAtTime(0.28, actx.currentTime);
+    var delayFilter = actx.createBiquadFilter();
+    delayFilter.type = "lowpass";
+    delayFilter.frequency.setValueAtTime(1100, actx.currentTime);
+
+    delay.connect(delayFeedback);
+    delayFeedback.connect(delayFilter);
+    delayFilter.connect(delay);
+    delay.connect(filter);
+
+    var chords = [
+      { bass: 73.42, notes: [146.83, 174.61, 220.00, 261.63, 329.63] },
+      { bass: 58.27, notes: [116.54, 146.83, 174.61, 220.00, 293.66] },
+      { bass: 49.00, notes: [98.00, 116.54, 146.83, 174.61, 220.00] },
+      { bass: 55.00, notes: [110.00, 146.83, 164.81, 220.00, 277.18] }
+    ];
+
+    var melodyNotes = [329.63, 369.99, 440.00, 493.88, 587.33, 659.25, 739.99];
+    var beatDuration = 0.55;
+    var nextNoteTime = actx.currentTime + 0.1;
+
+    function scheduleBGM() {
+      if (!actx || actx.state !== "running") return;
+      var lookahead = 0.4;
+      while (nextNoteTime < actx.currentTime + lookahead) {
+        var chordIdx = Math.floor(bgmStep / 8) % chords.length;
+        var beatInChord = bgmStep % 8;
+        var chord = chords[chordIdx];
+
+        if (beatInChord === 0) {
+          var bOsc = actx.createOscillator();
+          var bGain = actx.createGain();
+          bOsc.type = "sine";
+          bOsc.frequency.setValueAtTime(chord.bass, nextNoteTime);
+          bGain.gain.setValueAtTime(0.045, nextNoteTime);
+          bGain.gain.exponentialRampToValueAtTime(0.001, nextNoteTime + beatDuration * 7.5);
+          bOsc.connect(bGain);
+          bGain.connect(filter);
+          bOsc.start(nextNoteTime);
+          bOsc.stop(nextNoteTime + beatDuration * 8);
+
+          chord.notes.forEach(function(freq, i) {
+            var pOsc = actx.createOscillator();
+            var pGain = actx.createGain();
+            pOsc.type = i % 2 === 0 ? "triangle" : "sine";
+            pOsc.frequency.setValueAtTime(freq * (1 + (i - 2) * 0.0015), nextNoteTime);
+            pGain.gain.setValueAtTime(0.001, nextNoteTime);
+            pGain.gain.linearRampToValueAtTime(0.012, nextNoteTime + 0.9);
+            pGain.gain.linearRampToValueAtTime(0.008, nextNoteTime + beatDuration * 6);
+            pGain.gain.exponentialRampToValueAtTime(0.0005, nextNoteTime + beatDuration * 8);
+            pOsc.connect(pGain);
+            pGain.connect(filter);
+            pOsc.start(nextNoteTime);
+            pOsc.stop(nextNoteTime + beatDuration * 8.2);
+          });
+        }
+
+        if (beatInChord === 2 || beatInChord === 4 || beatInChord === 6 || (beatInChord === 7 && Math.random() > 0.5)) {
+          var mFreq = melodyNotes[Math.floor(Math.random() * melodyNotes.length)];
+          var mOsc = actx.createOscillator();
+          var mGain = actx.createGain();
+          mOsc.type = "sine";
+          mOsc.frequency.setValueAtTime(mFreq, nextNoteTime);
+          mGain.gain.setValueAtTime(0.018, nextNoteTime);
+          mGain.gain.exponentialRampToValueAtTime(0.0005, nextNoteTime + 0.6);
+          mOsc.connect(mGain);
+          mGain.connect(delay);
+          mGain.connect(filter);
+          mOsc.start(nextNoteTime);
+          mOsc.stop(nextNoteTime + 0.65);
+        }
+
+        nextNoteTime += beatDuration;
+        bgmStep++;
+      }
+    }
+
+    bgmTimer = setInterval(scheduleBGM, 100);
+  } catch(e){}
+}
+
+function updateBGMState() {
+  if (snd) {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === "suspended") actx.resume();
+      initBGM();
+      if (bgmGain) {
+        bgmGain.gain.cancelScheduledValues(actx.currentTime);
+        bgmGain.gain.setValueAtTime(bgmGain.gain.value, actx.currentTime);
+        bgmGain.gain.linearRampToValueAtTime(0.12, actx.currentTime + 0.6);
+      }
+    } catch(e){}
+  } else {
+    if (bgmGain && actx) {
+      bgmGain.gain.cancelScheduledValues(actx.currentTime);
+      bgmGain.gain.setValueAtTime(bgmGain.gain.value, actx.currentTime);
+      bgmGain.gain.linearRampToValueAtTime(0, actx.currentTime + 0.4);
+    }
+  }
 }
 
 function beep(f){
@@ -1755,6 +1885,8 @@ function Tx(x, y, t, sz, f, fw, e){
 /* Character Illustration */
 function person(L, full) {
   var s = L.s, h = L.h, o = L.o, a = L.a, st = L.st;
+  var isFemale = L.g === 'f' || (!L.g && (st === 2 || st === 5));
+  var beard = L.b || 'none';
   var sh = mix(o, -0.32), sk = mix(s, -0.22), lt = mix(o, 0.18), hl = mix(h, 0.35);
   var g = '';
 
@@ -1769,6 +1901,7 @@ function person(L, full) {
     g += R(48.5, 158, 27, 3, a, 1.5);
   }
 
+  // Arms / Shoulders
   g += Pa('M24 74C18 78 12 90 12 110C12 120 18 124 23 124C28 124 30 116 30 108L32 78Z', sh);
   g += Pa('M76 74C82 78 88 90 88 110C88 120 82 124 77 124C72 124 70 116 70 108L68 78Z', sh);
   g += Ci(20, 122, 6.5, s);
@@ -1776,6 +1909,7 @@ function person(L, full) {
   g += R(14, 117, 12, 3, '#0f172a', 1);
   g += Ci(20, 118.5, 2.5, '#38bdf8');
 
+  // Torso / Outfit
   g += Pa('M28 72C36 65 64 65 72 72L81 122H19L28 72Z', o);
   g += Pa('M28 72C40 68 50 67 50 72L50 122H19L28 72Z', 'rgba(255,255,255,0.06)');
   g += Pa('M50 72C50 67 60 68 72 72L81 122H50L50 72Z', 'rgba(0,0,0,0.12)');
@@ -1794,56 +1928,142 @@ function person(L, full) {
   g += Pa('M43 52h14v16c0 4-3 6-7 6s-7-2-7-6V52z', sk);
   g += Pa('M45 52h10v12c0 2-2 3-5 3s-5-1-5-3V52z', s);
 
-  if (st === 2) {
-    g += Pa('M25 42C20 62 18 85 24 100C27 108 36 104 35 90L37 60Z', h);
-    g += Pa('M75 42C80 62 82 85 76 100C73 108 64 104 65 90L63 60Z', h);
+  // Female hair back layer
+  if (isFemale) {
+    if (st === 5) {
+      // Sangeeta: luxurious flowing long dark hair
+      g += Pa('M24 38C16 54 14 80 18 108C20 116 28 116 32 104C35 90 35 70 37 54Z', h);
+      g += Pa('M76 38C84 54 86 80 82 108C80 116 72 116 68 104C65 90 65 70 63 54Z', h);
+    } else {
+      // Rytham: chic layered shoulder lob
+      g += Pa('M25 42C20 62 18 85 24 100C27 108 36 104 35 90L37 60Z', h);
+      g += Pa('M75 42C80 62 82 85 76 100C73 108 64 104 65 90L63 60Z', h);
+    }
   }
 
-  g += Pa('M32 38C32 23 40 16 50 16C60 16 68 23 68 38C68 53 61 63 50 63C39 63 32 53 32 38Z', s);
-  g += Pa('M34 44C34 56 42 63 50 63C50 63 43 60 41 50C40 45 40 41 40 40Z', 'rgba(0,0,0,0.08)');
+  // Face head base
+  if (isFemale) {
+    g += Pa('M32 38C32 23 40 16 50 16C60 16 68 23 68 38C68 51 59 62 50 62C41 62 32 51 32 38Z', s);
+  } else {
+    g += Pa('M32 38C32 23 40 16 50 16C60 16 68 23 68 38C68 53 61 63 50 63C39 63 32 53 32 38Z', s);
+  }
+
+  g += Pa('M34 44C34 56 42 63 50 63C50 63 43 60 41 50C40 45 40 41 40 40Z', 'rgba(0,0,0,0.06)');
+
+  // Ears
   g += Pa('M29 38c-3 0-5 2-5 6s2 7 5 6c1 0 1-12 0-12z', s);
   g += Pa('M71 38c3 0 5 2 5 6s-2 7-5 6c-1 0-1-12 0-12z', s);
 
-  g += St('M37 32c3-1.5 7-1.5 9 0', h, 2);
-  g += St('M63 32c-3-1.5-7-1.5-9 0', h, 2);
+  // Female earrings
+  if (isFemale) {
+    g += Ci(27.5, 45.5, 2, a);
+    g += Ci(72.5, 45.5, 2, a);
+    g += Ci(27.5, 45.5, 1, '#ffffff');
+    g += Ci(72.5, 45.5, 1, '#ffffff');
+  }
 
+  // Eyebrows
+  if (isFemale) {
+    g += St('M37 32.5c2.5-2 6.5-2 9 -.5', h, 1.4);
+    g += St('M63 32.5c-2.5-2-6.5-2-9 -.5', h, 1.4);
+  } else {
+    g += St('M37 32c3-1.5 7-1.5 9 0', h, 2.3);
+    g += St('M63 32c-3-1.5-7-1.5-9 0', h, 2.3);
+  }
+
+  // Eyes
   [41, 59].forEach(function(x) {
     g += Pa('M'+(x-5.5)+' 39.5c1.5-2.5 7.5-2.5 9.5 0c-1.5 2.5-7.5 2.5-9.5 0z', '#ffffff');
     g += Ci(x + 0.2, 39.5, 3.2, '#1e293b');
     g += Ci(x + 0.2, 39.5, 2, '#090d16');
     g += Ci(x + 1.2, 38.4, 0.9, '#ffffff');
-    g += St('M'+(x-6.2)+' 39.2c2.5-3 8-3 10.8 0', '#090d16', 1.5);
+    g += St('M'+(x-6.2)+' 39.2c2.5-3 8-3 10.8 0', '#090d16', isFemale ? 1.8 : 1.4);
   });
 
-  g += St('M50 36v8c0 1.2-1 2.2-2 2.2', sk, 1.4);
-  g += Pa('M45 52c2-1 6-1 10 0c-2 2-6 2-10 0z', mix(s, -0.28));
-  g += St('M45.5 52c2-.6 5.5-.6 9 0', mix(s, -0.45), 1.2);
-
-  if (st === 0) {
-    g += Pa('M28 36C28 17 40 11 50 11C60 11 72 17 72 36C72 37 68 28 62 27C55 26 52 23 47 24C41 25 36 29 28 36Z', h);
-    g += St('M40 18c6-3 14-2 20 2', hl, 1.4);
-  } else if (st === 1) {
-    g += Pa('M28 37C27 15 42 9 52 10C64 11 73 19 72 38C68 28 62 25 54 26C45 27 36 30 28 37Z', h);
-    g += St('M38 18c8-2 18 1 24 6', hl, 1.5);
-  } else if (st === 2) {
-    g += Pa('M27 38C26 15 42 10 50 11C58 10 74 15 73 38C68 25 61 22 50 25C39 22 32 25 27 38Z', h);
-    g += Pa('M33 22C41 15 50 18 50 25C44 20 38 20 33 22Z', hl);
-  } else if (st === 3) {
-    g += Pa('M28 36C28 18 40 13 50 13C60 13 72 18 72 36C70 27 62 25 50 25C38 25 30 27 28 36Z', h);
-    g += Ci(50, 8, 7, h);
-    g += St('M46 11c2-3 6-3 8 0', a, 1.8);
-  } else if (st === 4) {
-    g += Pa('M28 36C27 16 41 10 51 10C63 10 73 17 72 36C68 26 59 23 49 24C39 25 32 28 28 36Z', h);
-    g += St('M36 17c8-3 18-2 26 4', hl, 1.6);
+  // Eyelashes & Soft Blush for Female
+  if (isFemale) {
+    g += St('M35 39c-1.5-1.5-2.2-3.2-3.8-4', '#090d16', 1.3);
+    g += St('M65 39c1.5-1.5 2.2-3.2 3.8-4', '#090d16', 1.3);
+    g += Ci(37, 46.5, 3.8, 'rgba(244, 63, 94, 0.18)');
+    g += Ci(63, 46.5, 3.8, 'rgba(244, 63, 94, 0.18)');
   }
 
-  if (st === 2 || st === 1) {
+  // Nose
+  g += St('M50 36v8c0 1.2-1 2.2-2 2.2', sk, isFemale ? 1.2 : 1.4);
+
+  // Lips
+  if (isFemale) {
+    g += Pa('M45 52c1.5-1.4 5.5-1.4 10 0c-2 2.6-6 2.6-10 0z', '#f43f5e');
+    g += St('M45.5 52c2-.6 5.5-.6 9 0', '#be123c', 1.2);
+    g += Ci(50, 52.8, 1.2, 'rgba(255,255,255,0.45)');
+  } else {
+    g += Pa('M45 52c2-1 6-1 10 0c-2 2-6 2-10 0z', mix(s, -0.28));
+    g += St('M45.5 52c2-.6 5.5-.6 9 0', mix(s, -0.45), 1.2);
+  }
+
+  // Beards for Male characters (dark or light)
+  if (!isFemale && beard !== 'none') {
+    var isDark = beard === 'dark';
+    var beardCol = isDark ? '#141118' : mix(h, -0.05);
+    var beardOp = isDark ? '0.90' : '0.42';
+
+    g += '<g fill="' + beardCol + '" opacity="' + beardOp + '">';
+    // Jawline & chin beard
+    g += Pa('M32 42C32 54 40 63.5 50 63.5C60 63.5 68 54 68 42C68 48 60 59.5 50 59.5C40 59.5 32 48 32 42Z', beardCol);
+    // Chin goatee patch
+    g += Pa('M43.5 54C43.5 62.5 56.5 62.5 56.5 54C54 57 46 57 43.5 54Z', beardCol);
+    // Groomed mustache
+    g += Pa('M43 49C45.5 47.5 48 47.8 50 49C52 47.8 54.5 47.5 57 49C55 51.5 45 51.5 43 49Z', beardCol);
+    // Sideburns connecting to hair
+    g += R(31.5, 36, 2.5, 9, beardCol, 1);
+    g += R(66, 36, 2.5, 9, beardCol, 1);
+    g += '</g>';
+  }
+
+  // Hair Styles
+  if (isFemale) {
+    if (st === 5) {
+      // Sangeeta: luxurious flowing long dark hair
+      g += Pa('M26 38C25 15 42 9 50 10C58 9 75 15 74 38C69 24 61 21 50 24C39 21 31 24 26 38Z', h);
+      g += Pa('M33 21C41 14 50 17 50 24C44 19 38 19 33 21Z', hl);
+      g += St('M38 23c6 4 12 4 16 0', hl, 1.5);
+    } else {
+      // Rytham: chic layered lob with hair clip
+      g += Pa('M27 38C26 15 42 10 50 11C58 10 74 15 73 38C68 25 61 22 50 25C39 22 32 25 27 38Z', h);
+      g += Pa('M33 22C41 15 50 18 50 25C44 20 38 20 33 22Z', hl);
+      g += R(62, 23, 7, 2.5, a, 1.2);
+    }
+  } else {
+    // Male Hairstyles
+    if (st === 0) {
+      // Crew cut / tech cut
+      g += Pa('M28 36C28 17 40 11 50 11C60 11 72 17 72 36C72 37 68 28 62 27C55 26 52 23 47 24C41 25 36 29 28 36Z', h);
+      g += St('M40 18c6-3 14-2 20 2', hl, 1.4);
+    } else if (st === 1) {
+      // Textured side crop
+      g += Pa('M28 37C27 15 42 9 52 10C64 11 73 19 72 38C68 28 62 25 54 26C45 27 36 30 28 37Z', h);
+      g += St('M38 18c8-2 18 1 24 6', hl, 1.5);
+    } else if (st === 3) {
+      // Modern creative male undercut / textured quiff (Abhishek)
+      g += Pa('M28 36C27 15 41 8 51 9C63 9 73 17 72 36C68 25 59 22 49 23C39 24 32 28 28 36Z', h);
+      g += St('M38 15c8-3 18-2 25 5', hl, 1.8);
+      g += St('M33 21c6-3 12-2 17 2', hl, 1.3);
+    } else if (st === 4) {
+      // Executive styled pompadour / side part (Himanshu)
+      g += Pa('M28 36C27 16 41 10 51 10C63 10 73 17 72 36C68 26 59 23 49 24C39 25 32 28 28 36Z', h);
+      g += St('M36 17c8-3 18-2 26 4', hl, 1.6);
+    }
+  }
+
+  // Tech glasses for Tarique
+  if (st === 1 && !isFemale) {
     g += Pa('M35 36h12c1.5 0 2.5 1 2.5 2.5v7c0 1.5-1 2.5-2.5 2.5H35c-1.5 0-2.5-1-2.5-2.5v-7c0-1.5 1-2.5 2.5-2.5z', 'none', ' stroke="#38bdf8" stroke-width="1.6"');
     g += Pa('M53 36h12c1.5 0 2.5 1 2.5 2.5v7c0 1.5-1 2.5-2.5 2.5H53c-1.5 0-2.5-1-2.5-2.5v-7c0-1.5 1-2.5 2.5-2.5z', 'none', ' stroke="#38bdf8" stroke-width="1.6"');
     g += St('M47 40h6', '#38bdf8', 1.6);
   }
 
-  if (st === 0) {
+  // Developer / QA headsets
+  if (st === 0 && !isFemale) {
     g += Pa('M22 74C20 64 35 60 50 60C65 60 80 64 78 74', 'none', ' stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"');
     g += Pa('M22 74C20 64 35 60 50 60C65 60 80 64 78 74', 'none', ' stroke="'+a+'" stroke-width="1.5" stroke-linecap="round"');
     g += Pa('M19 72h7c2 0 3 1.5 3 3.5v9c0 2-1 3.5-3 3.5h-7c-2 0-3-1.5-3-3.5v-9c0-2 1-3.5 3-3.5z', '#1e293b');
@@ -1938,109 +2158,6 @@ function personBack(L) {
 
   return g;
 }
-function person(L, full) {
-  var s = L.s, h = L.h, o = L.o, a = L.a, st = L.st;
-  var sh = mix(o, -0.32), sk = mix(s, -0.22), lt = mix(o, 0.18), hl = mix(h, 0.35);
-  var g = '';
-
-  if (full) {
-    g += R(33, 114, 15, 40, "#151b28", 3);
-    g += R(52, 114, 15, 40, "#151b28", 3);
-    g += St('M40 114v38', 'rgba(0,0,0,0.3)', 1);
-    g += St('M60 114v38', 'rgba(0,0,0,0.3)', 1);
-    g += Pa('M29 152h20c1.5 0 2.5 1 2.5 2.5v3.5c0 1.5-1 2-2.5 2H28c-2 0-3.5-1.5-3.5-3.5v-1.5c0-1.8 1.8-3 4.5-3z', '#e2e8f0');
-    g += Pa('M51 152h20c2.7 0 4.5 1.2 4.5 3v1.5c0 2-1.5 3.5-3.5 3.5H48.5c-1.5 0-2.5-.5-2.5-2v-3.5c0-1.5 1-2.5 2.5-2.5z', '#e2e8f0');
-    g += R(24.5, 158, 27, 3, a, 1.5);
-    g += R(48.5, 158, 27, 3, a, 1.5);
-  }
-
-  g += Pa('M24 74C18 78 12 90 12 110C12 120 18 124 23 124C28 124 30 116 30 108L32 78Z', sh);
-  g += Pa('M76 74C82 78 88 90 88 110C88 120 82 124 77 124C72 124 70 116 70 108L68 78Z', sh);
-  g += Ci(20, 122, 6.5, s);
-  g += Ci(80, 122, 6.5, s);
-  g += R(14, 117, 12, 3, '#0f172a', 1);
-  g += Ci(20, 118.5, 2.5, '#38bdf8');
-
-  g += Pa('M28 72C36 65 64 65 72 72L81 122H19L28 72Z', o);
-  g += Pa('M28 72C40 68 50 67 50 72L50 122H19L28 72Z', 'rgba(255,255,255,0.06)');
-  g += Pa('M50 72C50 67 60 68 72 72L81 122H50L50 72Z', 'rgba(0,0,0,0.12)');
-  g += Pa('M41 62C45 61 55 61 59 62L54 94C53 96 47 96 46 94Z', '#f1f5f9');
-  g += Pa('M43 62L50 82L57 62Z', lt);
-
-  // Studio Lanyard
-  g += St('M44 65L38 98', a, 1.8);
-  g += St('M56 65L62 98', a, 1.8);
-  g += R(34, 98, 12, 16, '#0f172a', 2, ' stroke="'+a+'" stroke-width="1"');
-  g += R(36, 100, 8, 4, a, 1);
-  g += R(36, 106, 8, 1.5, '#f8fafc');
-
-  g += St('M41 66L48 122', sh, 1.5);
-  g += St('M59 66L52 122', sh, 1.5);
-  g += Pa('M43 52h14v16c0 4-3 6-7 6s-7-2-7-6V52z', sk);
-  g += Pa('M45 52h10v12c0 2-2 3-5 3s-5-1-5-3V52z', s);
-
-  if (st === 2) {
-    g += Pa('M25 42C20 62 18 85 24 100C27 108 36 104 35 90L37 60Z', h);
-    g += Pa('M75 42C80 62 82 85 76 100C73 108 64 104 65 90L63 60Z', h);
-  }
-
-  g += Pa('M32 38C32 23 40 16 50 16C60 16 68 23 68 38C68 53 61 63 50 63C39 63 32 53 32 38Z', s);
-  g += Pa('M34 44C34 56 42 63 50 63C50 63 43 60 41 50C40 45 40 41 40 40Z', 'rgba(0,0,0,0.08)');
-  g += Pa('M29 38c-3 0-5 2-5 6s2 7 5 6c1 0 1-12 0-12z', s);
-  g += Pa('M71 38c3 0 5 2 5 6s-2 7-5 6c-1 0-1-12 0-12z', s);
-
-  g += St('M37 32c3-1.5 7-1.5 9 0', h, 2);
-  g += St('M63 32c-3-1.5-7-1.5-9 0', h, 2);
-
-  [41, 59].forEach(function(x) {
-    g += Pa('M'+(x-5.5)+' 39.5c1.5-2.5 7.5-2.5 9.5 0c-1.5 2.5-7.5 2.5-9.5 0z', '#ffffff');
-    g += Ci(x + 0.2, 39.5, 3.2, '#1e293b');
-    g += Ci(x + 0.2, 39.5, 2, '#090d16');
-    g += Ci(x + 1.2, 38.4, 0.9, '#ffffff');
-    g += St('M'+(x-6.2)+' 39.2c2.5-3 8-3 10.8 0', '#090d16', 1.5);
-  });
-
-  g += St('M50 36v8c0 1.2-1 2.2-2 2.2', sk, 1.4);
-  g += Pa('M45 52c2-1 6-1 10 0c-2 2-6 2-10 0z', mix(s, -0.28));
-  g += St('M45.5 52c2-.6 5.5-.6 9 0', mix(s, -0.45), 1.2);
-
-  if (st === 0) {
-    g += Pa('M28 36C28 17 40 11 50 11C60 11 72 17 72 36C72 37 68 28 62 27C55 26 52 23 47 24C41 25 36 29 28 36Z', h);
-    g += St('M40 18c6-3 14-2 20 2', hl, 1.4);
-  } else if (st === 1) {
-    g += Pa('M28 37C27 15 42 9 52 10C64 11 73 19 72 38C68 28 62 25 54 26C45 27 36 30 28 37Z', h);
-    g += St('M38 18c8-2 18 1 24 6', hl, 1.5);
-  } else if (st === 2) {
-    g += Pa('M27 38C26 15 42 10 50 11C58 10 74 15 73 38C68 25 61 22 50 25C39 22 32 25 27 38Z', h);
-    g += Pa('M33 22C41 15 50 18 50 25C44 20 38 20 33 22Z', hl);
-  } else if (st === 3) {
-    g += Pa('M28 36C28 18 40 13 50 13C60 13 72 18 72 36C70 27 62 25 50 25C38 25 30 27 28 36Z', h);
-    g += Ci(50, 8, 7, h);
-    g += St('M46 11c2-3 6-3 8 0', a, 1.8);
-  } else if (st === 4) {
-    g += Pa('M28 36C27 16 41 10 51 10C63 10 73 17 72 36C68 26 59 23 49 24C39 25 32 28 28 36Z', h);
-    g += St('M36 17c8-3 18-2 26 4', hl, 1.6);
-  }
-
-  if (st === 2 || st === 1) {
-    g += Pa('M35 36h12c1.5 0 2.5 1 2.5 2.5v7c0 1.5-1 2.5-2.5 2.5H35c-1.5 0-2.5-1-2.5-2.5v-7c0-1.5 1-2.5 2.5-2.5z', 'none', ' stroke="#38bdf8" stroke-width="1.6"');
-    g += Pa('M53 36h12c1.5 0 2.5 1 2.5 2.5v7c0 1.5-1 2.5-2.5 2.5H53c-1.5 0-2.5-1-2.5-2.5v-7c0-1.5 1-2.5 2.5-2.5z', 'none', ' stroke="#38bdf8" stroke-width="1.6"');
-    g += St('M47 40h6', '#38bdf8', 1.6);
-  }
-
-  if (st === 0) {
-    g += Pa('M22 74C20 64 35 60 50 60C65 60 80 64 78 74', 'none', ' stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"');
-    g += Pa('M22 74C20 64 35 60 50 60C65 60 80 64 78 74', 'none', ' stroke="'+a+'" stroke-width="1.5" stroke-linecap="round"');
-    g += Pa('M19 72h7c2 0 3 1.5 3 3.5v9c0 2-1 3.5-3 3.5h-7c-2 0-3-1.5-3-3.5v-9c0-2 1-3.5 3-3.5z', '#1e293b');
-    g += Pa('M74 72h7c2 0 3 1.5 3 3.5v9c0 2-1 3.5-3 3.5h-7c-2 0-3-1.5-3-3.5v-9c0-2 1-3.5 3-3.5z', '#1e293b');
-    g += Ci(22.5, 80, 2.5, a);
-    g += Ci(77.5, 80, 2.5, a);
-  }
-  return g;
-}
-
-function svgP(L, full, vb, cls){ return '<svg viewBox="'+vb+'" aria-hidden="true"'+(cls?' class="'+cls+'"':'')+'>'+person(L, full)+'</svg>'; }
-function bust(L){ return svgP(L, false, "2 0 96 128"); }
 
 
 
@@ -3868,6 +3985,7 @@ $("nSnd").onclick = function(){
   this.textContent = "Sound: " + (snd ? "on" : "off");
   setTimeout(syncTopBar, 10);
   this.setAttribute("aria-pressed", snd);
+  updateBGMState();
   beep(520);
 };
 

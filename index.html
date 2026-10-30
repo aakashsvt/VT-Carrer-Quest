@@ -994,7 +994,7 @@ input[type=text]:focus {
   transition: filter 0.2s;
 }
 .chip:hover .chip-body {
-  filter: brightness(1.3) drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 22px #ffffff) !important;
+  filter: brightness(1.3) drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 14px #ffffff) !important;
 }
 .chip.got {
   pointer-events: none;
@@ -1910,13 +1910,13 @@ function PP(pi, x, y, s, deskY) {
 function chipG(c, x, y) {
   var idx = CONFIG.chips.indexOf(c);
   var icon = (c.g === '★' || c.g === '</>' || !c.g)
-    ? '<polygon points="0,-7 2.1,-2.3 7.3,-1.6 3.5,2.1 4.5,7.2 0,4.6 -4.5,7.2 -3.5,2.1 -7.3,-1.6 -2.1,-2.3" fill="#ffffff" style="filter:drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 8px '+c.c+')"/>'
+    ? '<polygon points="0,-7 2.1,-2.3 7.3,-1.6 3.5,2.1 4.5,7.2 0,4.6 -4.5,7.2 -3.5,2.1 -7.3,-1.6 -2.1,-2.3" fill="#ffffff" style="filter:drop-shadow(0 0 2.5px #ffffff) drop-shadow(0 0 5px '+c.c+')"/>'
     : Tx(0, 5, esc(c.g), c.g.length > 2 ? 10 : 13, "#ffffff", 800);
   return '<g transform="translate('+x+' '+y+')">'+
          '<g class="chip" data-c="'+idx+'" tabindex="0" role="button" aria-label="'+c.n+'">'+
          '<ellipse class="chip-shadow" cx="0" cy="18" rx="14" ry="4" fill="rgba(0,0,0,0.45)"/>'+
-         '<g class="chip-body" style="filter:drop-shadow(0 0 8px '+c.c+') drop-shadow(0 0 16px '+c.c+') drop-shadow(0 0 24px '+c.c+')">'+
-         '<circle cx="0" cy="0" r="22" fill="'+c.c+'" opacity="0.22" style="filter:blur(3px)"/>'+
+         '<g class="chip-body" style="filter:drop-shadow(0 0 5px '+c.c+') drop-shadow(0 0 10px '+c.c+') drop-shadow(0 0 14px '+c.c+')">'+
+         '<circle cx="0" cy="0" r="19" fill="'+c.c+'" opacity="0.18" style="filter:blur(2px)"/>'+
          '<circle cx="0" cy="0" r="17" fill="#080e18" stroke="'+c.c+'" stroke-width="2.8"/>'+
          '<circle cx="0" cy="0" r="12.5" fill="none" stroke="'+c.c+'" stroke-width="1.2" opacity="0.85"/>'+
          icon +

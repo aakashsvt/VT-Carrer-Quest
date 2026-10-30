@@ -577,44 +577,89 @@ input[type=text]:focus {
   font-size: 11px;
 }
 
-/* Modern Telemetry HUD */
-#hud {
+/* Top Navigation & Telemetry HUD Dock */
+#top-bar {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   z-index: 4;
-  padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 0;
   display: none;
+  align-items: center;
+  justify-content: space-between;
   pointer-events: none;
+  box-sizing: border-box;
+}
+#top-bar > * {
+  pointer-events: auto;
+}
+#nav {
+  display: inline-flex;
+  width: max-content;
+  flex: 0 0 auto;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+#nav .btn {
+  padding: 7px 12px;
+  font-size: 12.5px;
+  gap: 6px;
+  font-weight: 700;
+  background: rgba(22, 14, 8, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid #f97316;
+  color: #ffedd5;
+  border-radius: 10px;
+  box-shadow: 0 0 16px rgba(249, 115, 22, 0.45);
+  line-height: 1.2;
+}
+#nav .btn:hover {
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  border-color: #fed7aa;
+  box-shadow: 0 0 24px rgba(249, 115, 22, 0.85);
+}
+
+#hud {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
 }
 #hud .bar {
-  max-width: 680px;
-  margin: 0 auto;
+  box-sizing: border-box;
   background: rgba(9, 14, 24, 0.94);
   backdrop-filter: blur(20px);
-  border: 2px solid #00f0ff;
-  border-radius: 14px;
-  padding: 10px 22px;
+  border: 1.5px solid #00f0ff;
+  border-radius: 10px;
+  padding: 7px 14px;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
-  box-shadow: 0 0 26px rgba(0, 240, 255, 0.45), inset 0 0 14px rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.12);
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  justify-content: center;
+  gap: 4px;
+}
+.hud-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 #mt {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 12px;
   color: #ffffff;
-  letter-spacing: 0.08em;
-  text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+  white-space: nowrap;
 }
 .track {
-  height: 8px;
+  height: 5px;
   background: rgba(255, 255, 255, 0.12);
-  border-radius: 6px;
+  border-radius: 4px;
   overflow: hidden;
   position: relative;
 }
@@ -622,46 +667,17 @@ input[type=text]:focus {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
-  border-radius: 6px;
-  box-shadow: 0 0 14px rgba(251, 191, 36, 0.85);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.85);
   transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 #xpt {
-  color: #94a3b8;
+  color: #38bdf8;
   font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 12px;
-}
-
-/* Bottom Navigation Dock */
-#nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 4;
-  display: none;
-  gap: 8px;
-  justify-content: center;
-  padding: 6px 12px calc(10px + env(safe-area-inset-bottom, 0px));
-  flex-wrap: wrap;
-}
-#nav .btn {
-  padding: 10px 18px;
-  font-size: 13.5px;
   font-weight: 700;
-  background: rgba(22, 14, 8, 0.88);
-  backdrop-filter: blur(16px);
-  border: 1.5px solid #f97316;
-  color: #ffedd5;
-  border-radius: 10px;
-  box-shadow: 0 0 16px rgba(249, 115, 22, 0.45);
-}
-#nav .btn:hover {
-  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
-  color: #ffffff;
-  border-color: #fed7aa;
-  box-shadow: 0 0 24px rgba(249, 115, 22, 0.85);
+  font-size: 11px;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+  white-space: nowrap;
 }
 
 /* Modals & Dialogs */
@@ -1367,19 +1383,22 @@ input[type=text]:focus {
 
 <div class="ov" id="create"></div>
 
-<div id="hud">
-  <div class="bar">
-    <div id="mt">DISCOVERY MISSION: 0/6 XP CHIPS</div>
-    <div class="track"><div id="xpb"></div></div>
-    <div id="xpt" style="margin-top:4px">0 XP</div>
+<div id="top-bar">
+  <div id="nav">
+    <button class="btn" id="nOv">Overview</button>
+    <button class="btn" id="nTeam">Meet the team</button>
+    <button class="btn" id="nJobs">Careers</button>
+    <button class="btn" id="nSnd" aria-pressed="false">Sound: off</button>
   </div>
-</div>
-
-<div id="nav">
-  <button class="btn" id="nOv">Overview</button>
-  <button class="btn" id="nTeam">Meet the team</button>
-  <button class="btn" id="nJobs">Careers</button>
-  <button class="btn" id="nSnd" aria-pressed="false">Sound: off</button>
+  <div id="hud">
+    <div class="bar">
+      <div class="hud-head">
+        <div id="mt">DISCOVERY MISSION: 0/6 XP CHIPS</div>
+        <div id="xpt">0 XP · Player</div>
+      </div>
+      <div class="track"><div id="xpb"></div></div>
+    </div>
+  </div>
 </div>
 
 <div id="modal"></div>
@@ -2564,23 +2583,55 @@ function step(s){
   }
 }
 
+function syncTopBar(){
+  var tb = $("top-bar");
+  if (!tb || tb.style.display === "none") return;
+  var nav = $("nav"), hud = $("hud"), hudBar = document.querySelector("#hud .bar");
+  if (!nav || !hud || !hudBar) return;
+
+  var vbO = ovVB();
+  var scale = innerWidth / vbO[2];
+  var roomLeft = (30 - vbO[0]) * scale;
+  var roomRight = (1170 - vbO[0]) * scale;
+  var headerPillTop = (14 - vbO[1]) * scale;
+  var totalWidth = roomRight - roomLeft;
+
+  // Ensure nav takes natural content width
+  nav.style.width = "max-content";
+  var navW = nav.offsetWidth;
+  if (navW > 0) {
+    hudBar.style.width = navW + "px";
+  }
+
+  var barH = Math.max(nav.offsetHeight, hudBar.offsetHeight, 38);
+  var topPos = Math.max(12, Math.round((headerPillTop - barH) / 2));
+
+  tb.style.left = Math.round(roomLeft) + "px";
+  tb.style.width = Math.round(totalWidth) + "px";
+  tb.style.top = topPos + "px";
+}
+
 function enter(){
   state = "office";
   show("create", false);
   show("welcome", false);
   $("hq").style.display = "none";
   svg.style.display = "block";
-  $("hud").style.display = "block";
+  $("top-bar").style.display = "flex";
+  $("hud").style.display = "flex";
   $("nav").style.display = "flex";
   vb = ovVB();
   setVB(vb);
   hud();
+  syncTopBar();
+  setTimeout(syncTopBar, 50);
 }
 
 function hud(){
   $("mt").textContent = "DISCOVERY MISSION: " + n + "/6 XP CHIPS";
   $("xpb").style.width = (n / 6 * 100) + "%";
   $("xpt").textContent = xp + " XP · " + P.name;
+  syncTopBar();
 }
 
 function card(h){
@@ -2769,6 +2820,7 @@ $("nJobs").onclick = openCareers;
 $("nSnd").onclick = function(){
   snd = !snd;
   this.textContent = "Sound: " + (snd ? "on" : "off");
+  setTimeout(syncTopBar, 10);
   this.setAttribute("aria-pressed", snd);
   beep(520);
 };
@@ -2785,6 +2837,7 @@ addEventListener("resize", function(){
     vb = ovVB();
     setVB(vb);
   }
+  syncTopBar();
 });
 
 // Dynamic Collectable Animation System (Firefly Floating & Bouncing)
@@ -3071,12 +3124,13 @@ function initChipAnimation() {
 hq();
 buildGame();
 initChipAnimation();
-if (location.search.indexOf('office') !== -1) enter();
-if (location.search.indexOf('create2') !== -1) { state = "create"; show("welcome", false); show("create", true); step(2); }
-else if (location.search.indexOf('create3') !== -1) { state = "create"; show("welcome", false); show("create", true); step(3); }
-else if (location.search.indexOf('create') !== -1) { state = "create"; show("welcome", false); show("create", true); step(1); }
-if (location.search.indexOf('careers') !== -1) openCareers();
-if (location.search.indexOf('emp') !== -1) { enter(); setTimeout(function(){ openEmp(0, svg.querySelector('[data-p="0"]')); }, 50); }
+var loc = location.search + location.hash;
+if (loc.indexOf('office') !== -1) enter();
+if (loc.indexOf('create2') !== -1) { state = "create"; show("welcome", false); show("create", true); step(2); }
+else if (loc.indexOf('create3') !== -1) { state = "create"; show("welcome", false); show("create", true); step(3); }
+else if (loc.indexOf('create') !== -1) { state = "create"; show("welcome", false); show("create", true); step(1); }
+if (loc.indexOf('careers') !== -1) openCareers();
+if (loc.indexOf('emp') !== -1) { enter(); setTimeout(function(){ openEmp(0, svg.querySelector('[data-p="0"]')); }, 50); }
 })();
 </script>
 </body>

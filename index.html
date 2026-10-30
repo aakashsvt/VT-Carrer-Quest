@@ -805,16 +805,27 @@ input[type=text]:focus {
   top: 14px;
   width: 32px;
   height: 32px;
+  padding: 0;
+  margin: 0;
   border-radius: 8px;
   border: 1px solid var(--border-strong);
-  background: rgba(15, 21, 35, 0.8);
+  background: rgba(15, 21, 35, 0.85);
   color: var(--ink);
-  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
+  cursor: pointer;
   transition: all 0.2s;
-  z-index: 5;
+  z-index: 10;
+  box-sizing: border-box;
+}
+.mp .x svg,
+.arcade-modal .x svg {
+  width: 12px;
+  height: 12px;
+  display: block;
+  pointer-events: none;
 }
 .mp .x:hover,
 .arcade-modal .x:hover {
@@ -3085,7 +3096,7 @@ function openEmp(i, el){
 
   var m = $("modal");
   m.innerHTML = '<div class="card mp" role="dialog" aria-label="Meet the player" style="--zc:'+z.c+'">'+
-    '<button class="x" id="xx" aria-label="Close">&times;</button>'+
+    '<button class="x" id="xx" aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="10" y2="10"></line><line x1="10" y1="2" x2="2" y2="10"></line></svg></button>'+
     '<div class="pt">'+bust(LOOK[p.name])+'</div>'+
     '<div class="pi">'+
     '<small>MEET THE PLAYER</small>'+
@@ -3197,7 +3208,7 @@ function openLounge() {
 
   var m = $("modal");
   m.innerHTML = '<div class="card arcade-modal" role="dialog" aria-label="Studio Lounge Arcade">' +
-    '<button class="x" id="xx" aria-label="Close">&times;</button>' +
+    '<button class="x" id="xx" aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="10" y2="10"></line><line x1="10" y1="2" x2="2" y2="10"></line></svg></button>' +
     '<div class="arcade-header">' +
       '<span class="arcade-badge">RECREATION ZONE</span>' +
       '<h2>Studio Lounge Arcade</h2>' +
@@ -3263,17 +3274,23 @@ function startTTGame() {
   var ctx = canvas.getContext("2d");
   var W = 460, H = 260;
 
-  var p1 = { y: 105, h: 52, w: 9, score: 0 };
-  var p2 = { y: 105, h: 52, w: 9, score: 0 };
-  var ball = { x: W / 2, y: H / 2, vx: 3.8, vy: 1.8, r: 5, trail: [] };
+  var p1 = { y: 105, h: 54, w: 9, score: 0 };
+  var p2 = { y: 105, h: 54, w: 9, score: 0 };
+  var baseSpeed = 3.6;
+  var ballSpeed = baseSpeed;
+  var maxSpeed = 5.8;
+  var ball = { x: W / 2, y: H / 2, vx: 3.6, vy: 0, r: 5, trail: [] };
   var gameOver = false, winner = null;
   var keys = {};
 
   function resetBall(dir) {
+    ballSpeed = baseSpeed;
     ball.x = W / 2;
     ball.y = H / 2;
-    ball.vx = (dir || 1) * 3.8;
-    ball.vy = (Math.random() * 2 - 1) * 2.2;
+    var d = dir || (Math.random() < 0.5 ? 1 : -1);
+    var angle = (Math.random() * 0.4 - 0.2) * Math.PI;
+    ball.vx = d * ballSpeed * Math.cos(angle);
+    ball.vy = ballSpeed * Math.sin(angle);
     ball.trail = [];
   }
 
@@ -3316,13 +3333,13 @@ function startTTGame() {
       if (keys["ArrowDown"] || keys["s"] || keys["S"]) p1.y = Math.min(H - p1.h - 4, p1.y + 5);
 
       var targetY = ball.y - p2.h / 2;
-      var botSpeed = 3.2;
+      var botSpeed = Math.min(3.8, ballSpeed * 0.72);
       if (ball.vx > 0) {
-        if (p2.y < targetY - 4) p2.y += Math.min(botSpeed, targetY - p2.y);
-        else if (p2.y > targetY + 4) p2.y -= Math.min(botSpeed, p2.y - targetY);
+        if (p2.y < targetY - 3) p2.y += Math.min(botSpeed, targetY - p2.y);
+        else if (p2.y > targetY + 3) p2.y -= Math.min(botSpeed, p2.y - targetY);
       } else {
         var cy = H / 2 - p2.h / 2;
-        p2.y += (cy - p2.y) * 0.04;
+        p2.y += (cy - p2.y) * 0.05;
       }
       p2.y = Math.max(4, Math.min(H - p2.h - 4, p2.y));
 
@@ -3345,18 +3362,24 @@ function startTTGame() {
       var p1Left = 18, p1Right = 18 + p1.w;
       if (ball.vx < 0 && ball.x - ball.r <= p1Right && ball.x + ball.r >= p1Left && ball.y >= p1.y - 4 && ball.y <= p1.y + p1.h + 4) {
         ball.x = p1Right + ball.r;
+        ballSpeed = Math.min(maxSpeed, ballSpeed + 0.12);
         var hitOffset = (ball.y - (p1.y + p1.h / 2)) / (p1.h / 2);
-        ball.vx = Math.min(7.2, Math.abs(ball.vx) * 1.06 + 0.15);
-        ball.vy = hitOffset * 4.2;
+        hitOffset = Math.max(-1, Math.min(1, hitOffset));
+        var bounceAngle = hitOffset * (Math.PI / 4.2);
+        ball.vx = ballSpeed * Math.cos(bounceAngle);
+        ball.vy = ballSpeed * Math.sin(bounceAngle);
         beep(480);
       }
 
       var p2Left = W - 18 - p2.w, p2Right = W - 18;
       if (ball.vx > 0 && ball.x + ball.r >= p2Left && ball.x - ball.r <= p2Right && ball.y >= p2.y - 4 && ball.y <= p2.y + p2.h + 4) {
         ball.x = p2Left - ball.r;
+        ballSpeed = Math.min(maxSpeed, ballSpeed + 0.12);
         var hitOffset2 = (ball.y - (p2.y + p2.h / 2)) / (p2.h / 2);
-        ball.vx = -Math.min(7.2, Math.abs(ball.vx) * 1.06 + 0.15);
-        ball.vy = hitOffset2 * 4.2;
+        hitOffset2 = Math.max(-1, Math.min(1, hitOffset2));
+        var bounceAngle2 = hitOffset2 * (Math.PI / 4.2);
+        ball.vx = -ballSpeed * Math.cos(bounceAngle2);
+        ball.vy = ballSpeed * Math.sin(bounceAngle2);
         beep(420);
       }
 

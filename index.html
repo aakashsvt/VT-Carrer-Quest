@@ -2047,13 +2047,12 @@ function room(z) {
            mon(96, 118, 54, 'game') +
            mon(198, 118, 54, 'code');
   } else if (id === 'portal') {
-    body = R(24, 20, 168, 64, '#1f1a14', 6, ' stroke="#f59e0b" stroke-width="1.5"') +
-           Tx(108, 38, "VIRTUALIZE TALENT", 11, "#f59e0b", 800) +
-           Tx(108, 52, "INTERVIEW & APPLICATIONS", 7.2, "#94a3b8") +
-           R(44, 62, 128, 18, "#080d16", 4, ' stroke="#22c55e" stroke-width="1.2" style="filter:drop-shadow(0 0 6px rgba(34,197,94,0.35))"') +
-           Tx(108, 74.5, "NOW INTERVIEWING: OPEN ROLES", 7.5, "#4ade80", 800) +
+    body = // Top Wall Signage - Clean & Elegant
+           R(30, 20, 160, 60, '#1f1a14', 6, ' stroke="#f59e0b" stroke-width="1.4"') +
+           Tx(110, 42, "INTERVIEW SUITE", 11.5, "#f59e0b", 800) +
+           Tx(110, 58, "CANDIDATE ASSESSMENT", 7.5, "#94a3b8") +
 
-           // Interactive Career Portal Doorway
+           // Interactive Career Portal Doorway (Right Side)
            '<g class="hit" data-portal="1" tabindex="0" role="button" aria-label="Open positions">'+
            '<circle cx="267" cy="120" r="50" fill="url(#portal-sunburst)"/>'+
            '<circle cx="267" cy="120" r="34" fill="url(#portal-sunburst)" opacity="0.85"/>'+
@@ -2067,62 +2066,46 @@ function room(z) {
            tagpill(267, 212, "OPEN POSITIONS", "#fbbf24") +
            '</g>' +
 
-           // Check-in Desk / Application Kiosk
-           R(20, 142, 42, 38, "#2d1f14", 3, ' stroke="#f59e0b" stroke-width="1.2"') +
-           R(26, 124, 28, 20, "#080e18", 2, ' stroke="#38bdf8" stroke-width="1"') +
-           R(28, 126, 24, 16, "#0284c7", 1) +
-           Tx(40, 137, "APPLY", 6, "#ffffff", 800) +
-           R(34, 144, 12, 4, "#0f172a", 1) +
+           // Ergonomic Chairs for Interviewer (left) & Candidate (right)
+           chairb(42, 92, '#1e293b') +
+           chairb(138, 92, '#0f766e') +
 
-           // Queue Header Badge
-           '<g style="filter:drop-shadow(0 0 5px rgba(245,158,11,0.5))">'+
-           '<rect x="76" y="96" width="96" height="17" rx="5" fill="#080e18" stroke="#f59e0b" stroke-width="1.2"/>'+
-           Tx(124, 107.5, "INTERVIEW QUEUE", 7.5, "#fbbf24", 800)+
-           '</g>'+
+           // Person 1: Interviewer (Taking the Interview)
+           '<g id="interviewer-wrap" transform="translate(32 78) scale(0.68)">' +
+             person({s:"#dfa76a",h:"#18171f",o:"#1e293b",a:"#f59e0b",st:0}, false) +
+           '</g>' +
 
-           // Candidate 1 (Holding CV Folder at check-in)
-           '<g id="cand-1" transform="translate(68 112)">'+
-             '<g transform="scale(0.50)">'+
-               person({s:"#dfa76a",h:"#18171f",o:"#1e293b",a:"#f59e0b",st:0}, true)+
-             '</g>'+
-             // Resume / Portfolio Folder
-             '<g id="cand-1-cv" transform="translate(24 46)">'+
-               '<rect x="-5" y="-7" width="13" height="15" rx="1.5" fill="#fef08a" stroke="#ca8a04" stroke-width="1" style="filter:drop-shadow(0 0 3px rgba(254,240,138,0.5))"/>'+
-               '<line x1="-2" y1="-3" x2="5" y2="-3" stroke="#854d0e" stroke-width="1"/>'+
-               '<line x1="-2" y1="0" x2="5" y2="0" stroke="#854d0e" stroke-width="1"/>'+
-               '<line x1="-2" y1="3" x2="3" y2="3" stroke="#854d0e" stroke-width="1"/>'+
-             '</g>'+
-           '</g>'+
+           // Person 2: Candidate (Giving the Interview)
+           '<g id="candidate-wrap" transform="translate(128 78) scale(0.68)">' +
+             person({s:"#c88b48",h:"#2b221e",o:"#0284c7",a:"#38bdf8",st:2}, false) +
+           '</g>' +
 
-           // Candidate 2 (Standing in line holding digital tablet / iPad)
-           '<g id="cand-2" transform="translate(120 114)">'+
-             '<g transform="scale(0.50)">'+
-               person({s:"#c88b48",h:"#2b221e",o:"#4338ca",a:"#a5b4fc",st:2}, true)+
-             '</g>'+
-             // Digital Tablet displaying resume
-             '<g id="cand-2-tab" transform="translate(24 45)">'+
-               '<rect x="-5" y="-7" width="14" height="16" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="1" style="filter:drop-shadow(0 0 4px #38bdf8)"/>'+
-               '<rect x="-3" y="-5" width="10" height="12" rx="1" fill="#0284c7"/>'+
-               '<line x1="-1" y1="-2" x2="5" y2="-2" stroke="#ffffff" stroke-width="1"/>'+
-               '<line x1="-1" y1="1" x2="5" y2="1" stroke="#ffffff" stroke-width="1"/>'+
-             '</g>'+
-           '</g>'+
+           // Wide Clean Interview Desk
+           desk(18, 152, 174, '#241a12') +
+           // Desk Mats & Devices
+           deskMat(56, 154, 38, 'keys') +
+           deskMat(152, 154, 38, 'tablet') +
+           // Interviewer Laptop / Assessment Monitor
+           mon(36, 118, 38, 'chart') +
+           // Candidate Resume / Portfolio Folder on Desk
+           '<g transform="translate(152 153)">' +
+             '<rect x="-9" y="-6" width="18" height="13" rx="1.5" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>' +
+             '<line x1="-6" y1="-2" x2="6" y2="-2" stroke="#854d0e" stroke-width="0.8"/>' +
+             '<line x1="-6" y1="1" x2="6" y2="1" stroke="#854d0e" stroke-width="0.8"/>' +
+             '<line x1="-6" y1="4" x2="2" y2="4" stroke="#854d0e" stroke-width="0.8"/>' +
+           '</g>' +
+           // Coffee Mugs / Water Glasses
+           Ci(26, 153, 2.5, '#e2e8f0') + Ci(184, 153, 2.5, '#e2e8f0') +
 
-           // Candidate 3 (Waiting in line near the portal entrance)
-           '<g id="cand-3" transform="translate(168 116)">'+
-             '<g transform="scale(0.50)">'+
-               person({s:"#f1c485",h:"#3d2a1d",o:"#047857",a:"#34d399",st:1}, true)+
-             '</g>'+
-             // Job application folder
-             '<g transform="translate(24 46)">'+
-               '<rect x="-5" y="-7" width="13" height="15" rx="1.5" fill="#e2e8f0" stroke="#64748b" stroke-width="1"/>'+
-               '<line x1="-2" y1="-3" x2="5" y2="-3" stroke="#334155" stroke-width="1"/>'+
-               '<line x1="-2" y1="0" x2="5" y2="0" stroke="#334155" stroke-width="1"/>'+
-             '</g>'+
-           '</g>'+
-
-           // Waiting Bench along bottom
-           sofa(52, 206, 120, '#2d2217');
+           // Balanced Non-Overlapping Role Badges Under the Desk
+           '<g style="filter:drop-shadow(0 0 6px rgba(245,158,11,0.5))">'+
+             '<rect x="18" y="192" width="76" height="20" rx="5" fill="#070b14" stroke="#f59e0b" stroke-width="1.4"/>'+
+             Tx(56, 205, "INTERVIEWER", 8.5, "#f59e0b", 800)+
+           '</g>' +
+           '<g style="filter:drop-shadow(0 0 6px rgba(56,189,248,0.5))">'+
+             '<rect x="114" y="192" width="76" height="20" rx="5" fill="#070b14" stroke="#38bdf8" stroke-width="1.4"/>'+
+             Tx(152, 205, "CANDIDATE", 8.5, "#38bdf8", 800)+
+           '</g>';
   } else if (id === 'lounge') {
     body = arcade(24, 20, '#f97316', 'arcade-dot-1') +
            arcade(70, 20, '#ec4899', 'arcade-dot-2') +
@@ -2751,32 +2734,17 @@ function initChipAnimation() {
         }
       }
 
-      // 3. Careers Portal: Candidates Queue Animation
-      var cand1 = svg.querySelector('#cand-1');
-      var cand2 = svg.querySelector('#cand-2');
-      var cand3 = svg.querySelector('#cand-3');
-      var cand1Cv = svg.querySelector('#cand-1-cv');
-      var cand2Tab = svg.querySelector('#cand-2-tab');
+      // 3. Careers Portal: 1-on-1 Interview Animation
+      var interviewer = svg.querySelector('#interviewer-wrap');
+      var candidate = svg.querySelector('#candidate-wrap');
 
-      if (cand1) {
-        var c1Sway = Math.sin(now * 0.003) * 0.8;
-        cand1.setAttribute('transform', 'translate(' + (68 + c1Sway) + ' 112)');
-        if (cand1Cv) {
-          var cvLift = Math.sin(now * 0.005) * 1.5;
-          cand1Cv.setAttribute('transform', 'translate(24 ' + (46 + cvLift) + ')');
-        }
+      if (interviewer) {
+        var intNod = Math.sin(now * 0.003) * 0.8;
+        interviewer.setAttribute('transform', 'translate(32 ' + (78 + intNod) + ') scale(0.68)');
       }
-      if (cand2) {
-        var c2Sway = Math.cos(now * 0.0035) * 0.8;
-        cand2.setAttribute('transform', 'translate(' + (120 + c2Sway) + ' 114)');
-        if (cand2Tab) {
-          var tabGlow = 0.85 + Math.sin(now * 0.006) * 0.15;
-          cand2Tab.setAttribute('opacity', tabGlow.toFixed(2));
-        }
-      }
-      if (cand3) {
-        var c3Sway = Math.sin(now * 0.004) * 0.6;
-        cand3.setAttribute('transform', 'translate(' + (168 + c3Sway) + ' 116)');
+      if (candidate) {
+        var candNod = Math.cos(now * 0.0035) * 0.8;
+        candidate.setAttribute('transform', 'translate(128 ' + (78 + candNod) + ') scale(0.68)');
       }
     }
     requestAnimationFrame(tick);

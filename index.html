@@ -1861,7 +1861,7 @@ function sofa(x, y, w, c) {
   return g;
 }
 
-function arcade(x, y, c) {
+function arcade(x, y, c, dotId) {
   var ac = c || '#10b981';
   var g = '';
   g += R(x, y, 42, 80, '#0c101c', 6, ' stroke="#1e293b" stroke-width="1.5"');
@@ -1869,7 +1869,7 @@ function arcade(x, y, c) {
   g += Tx(x + 21, y + 16, 'ARCADE', 7, ac);
   g += R(x + 4, y + 24, 34, 30, '#090d16', 2, ' stroke="#1e293b" stroke-width="1"');
   g += R(x + 6, y + 26, 30, 26, '#181230', 2);
-  g += Ci(x + 21, y + 39, 6, ac, ' opacity="0.6"');
+  g += Ci(x + 21, y + 39, 6, ac, ' opacity="0.8" style="filter:drop-shadow(0 0 6px '+ac+')"' + (dotId ? ' id="'+dotId+'"' : ''));
   g += R(x + 4, y + 58, 34, 8, '#1e293b', 2);
   g += Ci(x + 12, y + 62, 2.5, '#ef4444');
   g += Ci(x + 22, y + 62, 2.5, '#f59e0b');
@@ -2065,15 +2065,61 @@ function room(z) {
            sofa(72, 198, 108, '#2d2217') +
            plant(36, 188, 1.1, 1);
   } else if (id === 'lounge') {
-    body = arcade(30, 30, '#f97316') +
-           arcade(82, 30, '#ec4899') +
-           Tx(250, 54, "STUDIO LOUNGE", 12, "#fb923c") +
-           Tx(250, 68, "RELAX & RECHARGE", 7.5, "#94a3b8") +
-           sofa(100, 142, 160, '#5c2d12') +
-           R(142, 206, 76, 18, '#261912', 3, ' stroke="#3d261b" stroke-width="1"') +
-           Ci(156, 215, 3.5, '#e2e8f0') + Ci(170, 215, 3.5, '#e2e8f0') +
-           plant(36, 188, 1.1, 0) +
-           plant(324, 188, 1.1, 0);
+    body = arcade(24, 20, '#f97316', 'arcade-dot-1') +
+           arcade(70, 20, '#ec4899', 'arcade-dot-2') +
+           // Person playing arcade machine
+           '<g id="arcade-player" transform="translate(48 38) scale(0.44)">' +
+             person({s:"#dfa76a",h:"#141416",o:"#475569",a:"#38bdf8",st:3}, true) +
+           '</g>' +
+           // Studio Lounge Top Wall Signage & Neon TT Scoreboard
+           Tx(250, 40, "STUDIO LOUNGE", 12, "#fb923c", 800) +
+           Tx(250, 54, "TABLE TENNIS & ARCADE", 7.5, "#94a3b8") +
+           R(202, 64, 96, 24, "#070b14", 4, ' stroke="#fb923c" stroke-width="1.4" style="filter:drop-shadow(0 0 6px #fb923c)"') +
+           Tx(250, 80, "TT MATCH: 11 - 9", 9.5, "#facc15", 800) +
+
+           // Table Tennis Floor Shadow
+           R(114, 185, 132, 14, "rgba(0,0,0,0.38)", 7) +
+           // Table Legs & Underframe
+           R(116, 172, 4, 22, "#334155", 1) + R(178, 172, 4, 22, "#334155", 1) + R(240, 172, 4, 22, "#334155", 1) +
+           St("M116 182h128", "#1e293b", 2.2) +
+           // Table 3D Rim
+           R(108, 186, 144, 4, "#172554", 2) +
+           // Table Blue Surface with Neon Border
+           R(108, 136, 144, 50, "#1d4ed8", 4, ' stroke="#60a5fa" stroke-width="1.8" style="filter:drop-shadow(0 0 8px rgba(37,99,235,0.4))"') +
+           // White Court Boundary Lines
+           R(111, 139, 138, 44, "none", 2, ' stroke="#ffffff" stroke-width="1.4" opacity="0.9"') +
+           St("M111 161h138", "#ffffff", 1.2, ' opacity="0.85"') +
+           // Center Net with Net Mesh
+           R(178.5, 130, 3, 62, "rgba(56,189,248,0.25)", 1) +
+           St("M180 130v62", "#ffffff", 2.2, ' stroke-dasharray="2 1.5"') +
+           Ci(180, 130, 2.5, "#38bdf8") + Ci(180, 192, 2.5, "#38bdf8") +
+
+           // Ball Shadow & Ping Pong Ball
+           '<ellipse id="tt-ball-shadow" cx="180" cy="161" rx="2.5" ry="1.2" fill="rgba(0,0,0,0.45)"/>' +
+           '<circle id="tt-ball" cx="180" cy="150" r="2.8" fill="#ffffff" style="filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 8px #fb923c)"/>' +
+
+           // Player 1 (Left TT Player in Orange Jersey)
+           '<g id="tt-p1-wrap" transform="translate(44 104)">' +
+             '<g transform="scale(0.50)">' + person({s:"#dfa76a",h:"#141416",o:"#ea580c",a:"#f97316",st:0}, true) + '</g>' +
+           '</g>' +
+           // Player 1 Red Paddle
+           '<g id="tt-paddle-left" transform="translate(88 158)">' +
+             '<line x1="-8" y1="0" x2="-2" y2="0" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>' +
+             '<ellipse cx="4" cy="0" rx="6" ry="8" fill="#ef4444" stroke="#7f1d1d" stroke-width="1.2" style="filter:drop-shadow(0 0 4px #ef4444)"/>' +
+           '</g>' +
+
+           // Player 2 (Right TT Player in Cyan Jersey - facing left)
+           '<g id="tt-p2-wrap" transform="translate(316 104)">' +
+             '<g transform="scale(-0.50 0.50)">' + person({s:"#c88b48",h:"#2b221e",o:"#0284c7",a:"#38bdf8",st:1}, true) + '</g>' +
+           '</g>' +
+           // Player 2 Black Paddle
+           '<g id="tt-paddle-right" transform="translate(272 158)">' +
+             '<line x1="8" y1="0" x2="2" y2="0" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>' +
+             '<ellipse cx="-4" cy="0" rx="6" ry="8" fill="#1e293b" stroke="#020617" stroke-width="1.2" style="filter:drop-shadow(0 0 4px #38bdf8)"/>' +
+           '</g>' +
+
+           // Bottom Lounge Relaxation Sofa
+           sofa(120, 208, 120, '#451a03');
   }
 
   g += body;
@@ -2509,6 +2555,7 @@ addEventListener("resize", function(){
 function initChipAnimation() {
   function tick(now) {
     if (state === "office") {
+      // 1. Collectables Idle Bouncing & Glowing Animation
       var chips = svg.querySelectorAll('.chip:not(.got)');
       for (var i = 0; i < chips.length; i++) {
         var chip = chips[i];
@@ -2551,6 +2598,97 @@ function initChipAnimation() {
           var op = 0.35 * (1 - 0.55 * (h / 18));
           shadow.setAttribute('rx', rx.toFixed(2));
           shadow.setAttribute('opacity', op.toFixed(2));
+        }
+      }
+
+      // 2. Studio Lounge: Interactive Table Tennis & Arcade Animations
+      var ttBall = svg.querySelector('#tt-ball');
+      var ttShadow = svg.querySelector('#tt-ball-shadow');
+      var p1Paddle = svg.querySelector('#tt-paddle-left');
+      var p2Paddle = svg.querySelector('#tt-paddle-right');
+      var p1Wrap = svg.querySelector('#tt-p1-wrap');
+      var p2Wrap = svg.querySelector('#tt-p2-wrap');
+      var arcPlayer = svg.querySelector('#arcade-player');
+      var arcDot1 = svg.querySelector('#arcade-dot-1');
+      var arcDot2 = svg.querySelector('#arcade-dot-2');
+
+      if (ttBall) {
+        var tRally = (now * 0.001) % 1.35;
+        var bx = 180, by = 158, sy = 161, srx = 2.5, sop = 0.45;
+        var p1Swing = 0, p2Swing = 0;
+
+        if (tRally < 0.675) {
+          // Half 1: Left player hits across net to right player
+          var u = tRally / 0.675;
+          bx = 88 + 184 * u;
+          if (u < 0.72) {
+            var p = u / 0.72;
+            by = 158 + (164 - 158) * p - Math.sin(p * Math.PI) * 22;
+            srx = 2.8 * (1 - Math.sin(p * Math.PI) * 0.35);
+            sop = 0.45 * (1 - Math.sin(p * Math.PI) * 0.4);
+          } else {
+            var p = (u - 0.72) / 0.28;
+            by = 164 + (158 - 164) * p - Math.sin(p * Math.PI) * 11;
+            srx = 2.5 * (1 - Math.sin(p * Math.PI) * 0.25);
+            sop = 0.45 * (1 - Math.sin(p * Math.PI) * 0.3);
+          }
+          if (tRally < 0.16) {
+            p1Swing = Math.sin((tRally / 0.16) * Math.PI) * 9;
+          }
+        } else {
+          // Half 2: Right player returns ball back to left player
+          var u = (tRally - 0.675) / 0.675;
+          bx = 272 - 184 * u;
+          if (u < 0.72) {
+            var p = u / 0.72;
+            by = 158 + (164 - 158) * p - Math.sin(p * Math.PI) * 22;
+            srx = 2.8 * (1 - Math.sin(p * Math.PI) * 0.35);
+            sop = 0.45 * (1 - Math.sin(p * Math.PI) * 0.4);
+          } else {
+            var p = (u - 0.72) / 0.28;
+            by = 164 + (158 - 164) * p - Math.sin(p * Math.PI) * 11;
+            srx = 2.5 * (1 - Math.sin(p * Math.PI) * 0.25);
+            sop = 0.45 * (1 - Math.sin(p * Math.PI) * 0.3);
+          }
+          var tRel = tRally - 0.675;
+          if (tRel < 0.16) {
+            p2Swing = Math.sin((tRel / 0.16) * Math.PI) * 9;
+          }
+        }
+
+        ttBall.setAttribute('cx', bx.toFixed(2));
+        ttBall.setAttribute('cy', by.toFixed(2));
+        if (ttShadow) {
+          ttShadow.setAttribute('cx', bx.toFixed(2));
+          ttShadow.setAttribute('cy', sy);
+          ttShadow.setAttribute('rx', srx.toFixed(2));
+          ttShadow.setAttribute('opacity', sop.toFixed(2));
+        }
+        if (p1Paddle) {
+          p1Paddle.setAttribute('transform', 'translate(' + (88 + p1Swing) + ' ' + (158 - p1Swing * 0.35) + ') rotate(' + (-p1Swing * 2.2) + ')');
+        }
+        if (p2Paddle) {
+          p2Paddle.setAttribute('transform', 'translate(' + (272 - p2Swing) + ' ' + (158 - p2Swing * 0.35) + ') rotate(' + (p2Swing * 2.2) + ')');
+        }
+        if (p1Wrap) {
+          var p1Sway = Math.sin(now * 0.005) * 1.5;
+          p1Wrap.setAttribute('transform', 'translate(' + (44 + p1Swing * 0.3) + ' ' + (104 + p1Sway) + ')');
+        }
+        if (p2Wrap) {
+          var p2Sway = Math.cos(now * 0.005) * 1.5;
+          p2Wrap.setAttribute('transform', 'translate(' + (316 - p2Swing * 0.3) + ' ' + (104 + p2Sway) + ')');
+        }
+        if (arcPlayer) {
+          var arcSway = Math.sin(now * 0.006) * 1.2;
+          arcPlayer.setAttribute('transform', 'translate(' + (48 + arcSway) + ' 38) scale(0.44)');
+        }
+        if (arcDot1) {
+          arcDot1.setAttribute('cx', (24 + 21 + Math.sin(now * 0.008) * 5).toFixed(1));
+          arcDot1.setAttribute('cy', (20 + 39 + Math.cos(now * 0.010) * 4).toFixed(1));
+        }
+        if (arcDot2) {
+          arcDot2.setAttribute('cx', (70 + 21 + Math.cos(now * 0.009) * 5).toFixed(1));
+          arcDot2.setAttribute('cy', (20 + 39 + Math.sin(now * 0.011) * 4).toFixed(1));
         }
       }
     }

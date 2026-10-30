@@ -1408,8 +1408,8 @@ var CONFIG={
   {n:"Vision Chip",zone:"ceo",p:[286,60],c:"#f59e0b",g:"★",fact:"Cube Sort 3D is live on Google Play and the App Store! Built with creativity, code, and lots of brainpower. Go play it — just one more level, right?"},
   {n:"Game World Chip",zone:null,p:[405,595],c:"#38bdf8",g:"◆",fact:"We don’t just wish, we celebrate! At Virtualize, every festival is another reason to bring the team together."},
   {n:"Creative Spark Chip",zone:"a3",p:[60,95],c:"#f97316",g:"✦",fact:"From 3D art to immersive AR/VR experiences, we turn creative ideas into digital realities. Imagination is our favourite superpower!"},
-  {n:"Code Core Chip",zone:"dev",p:[180,62],c:"#60a5fa",g:"★",fact:"[Placeholder] Add a fact about game engines, code or game mechanics."},
-  {n:"Bug Hunter Chip",zone:"qa",p:[44,92],c:"#10b981",g:"✱",fact:"Developers call it a glitch, testers call it a bug, and gamers call it a plot twist. At Virtualize, teamwork saves the day!"},
+  {n:"Code Core Chip",zone:"dev",anim:"bounce",p:[180,62],c:"#60a5fa",g:"★",fact:"[Placeholder] Add a fact about game engines, code or game mechanics."},
+  {n:"Bug Hunter Chip",zone:"qa",anim:"bounce",p:[44,92],c:"#10b981",g:"✱",fact:"Developers call it a glitch, testers call it a bug, and gamers call it a plot twist. At Virtualize, teamwork saves the day!"},
   {n:"People Power Chip",zone:"hr",p:[320,112],c:"#14b8a6",g:"♥",fact:"We play, laugh, compete, and create memories together. Because every great squad deserves some fun between missions!"}],
  jobs:[
   {title:"Unity Developer",dept:"Development",exp:"3–4 years",type:"Full-time",loc:"Mohali, Punjab",desc:"Design, build, optimise and maintain games and interactive products in Unity and C#, with ownership of features on our own products.",skills:["Unity","C#","Mobile (Android/iOS)","REST APIs & SDKs","Git","Optimization"],url:"https://forms.gle/opRbivrkQTpctETe7",
@@ -2787,52 +2787,139 @@ addEventListener("resize", function(){
   }
 });
 
+// Dynamic Collectable Animation System (Firefly Floating & Bouncing)
+function getChipAnimType(c) {
+  if (c.anim) return c.anim;
+  if (c.zone === 'dev' || c.zone === 'qa') return 'bounce';
+  return 'firefly';
+}
+
+function getChipBounds(c) {
+  var padX = 42;
+  var padYTop = 46;
+  var padYBottom = 38;
+
+  if (c.zone) {
+    var z = CONFIG.zones.find(function(q){ return q.id === c.zone; });
+    if (z) {
+      var minX = padX;
+      var maxX = z.w - padX;
+      var minY = padYTop;
+      var maxY = z.h - padYBottom;
+
+      var spawnX = c.p[0];
+      var spawnY = c.p[1];
+
+      var minDx = minX - spawnX;
+      var maxDx = maxX - spawnX;
+      var minDy = minY - spawnY;
+      var maxDy = maxY - spawnY;
+
+      return {
+        centerX: (minDx + maxDx) * 0.5,
+        centerY: (minDy + maxDy) * 0.5,
+        radiusX: Math.max(18, (maxDx - minDx) * 0.5),
+        radiusY: Math.max(14, (maxDy - minDy) * 0.5)
+      };
+    }
+  }
+
+  // Corridor or non-zoned collectables (e.g. Game World Chip in central crossroads)
+  return {
+    centerX: 0,
+    centerY: 0,
+    radiusX: 36,
+    radiusY: 30
+  };
+}
+
 function initChipAnimation() {
   function tick(now) {
     if (state === "office") {
-      // 1. Collectables Idle Bouncing & Glowing Animation
+      // 1. Collectables Dynamic Animation (Firefly Wandering vs Bouncing)
       var chips = svg.querySelectorAll('.chip:not(.got)');
       for (var i = 0; i < chips.length; i++) {
         var chip = chips[i];
         if (chip.matches(':hover')) continue;
         var idx = +chip.dataset.c;
+        var c = CONFIG.chips[idx];
+        if (!c) continue;
         var body = chip.querySelector('.chip-body');
         var shadow = chip.querySelector('.chip-shadow');
         if (!body) continue;
 
-        var t = ((now * 0.001) + idx * 0.4) % 2.5;
-        var h = 0, sx = 1, sy = 1;
+        var animType = getChipAnimType(c);
 
-        if (t < 0.26) {
-          var u = t / 0.26;
-          var s = Math.sin(u * Math.PI);
-          h = s * 12;
-          sx = 1 - 0.10 * s;
-          sy = 1 + 0.15 * s;
-        } else if (t < 0.58) {
-          var u = (t - 0.26) / 0.32;
-          var s = Math.sin(u * Math.PI);
-          h = s * 18;
-          sx = 1 - 0.14 * s;
-          sy = 1 + 0.22 * s;
-        } else if (t < 0.84) {
-          var u = (t - 0.58) / 0.26;
-          var s = Math.sin(u * Math.PI);
-          h = s * 8;
-          sx = 1 - 0.06 * s;
-          sy = 1 + 0.10 * s;
+        if (animType === 'bounce') {
+          // Classic 3-hop bounce idle animation (Dev Zone & QA Arena)
+          chip.setAttribute('transform', 'translate(0 0)');
+          var t = ((now * 0.001) + idx * 0.4) % 2.5;
+          var h = 0, sx = 1, sy = 1;
+
+          if (t < 0.26) {
+            var u = t / 0.26;
+            var s = Math.sin(u * Math.PI);
+            h = s * 12;
+            sx = 1 - 0.10 * s;
+            sy = 1 + 0.15 * s;
+          } else if (t < 0.58) {
+            var u = (t - 0.26) / 0.32;
+            var s = Math.sin(u * Math.PI);
+            h = s * 18;
+            sx = 1 - 0.14 * s;
+            sy = 1 + 0.22 * s;
+          } else if (t < 0.84) {
+            var u = (t - 0.58) / 0.26;
+            var s = Math.sin(u * Math.PI);
+            h = s * 8;
+            sx = 1 - 0.06 * s;
+            sy = 1 + 0.10 * s;
+          }
+
+          body.setAttribute('transform', 'translate(0, ' + (-h.toFixed(2)) + ') scale(' + sx.toFixed(3) + ' ' + sy.toFixed(3) + ')');
+          if (shadow) {
+            var rx = 14 * (1 - 0.38 * (h / 18));
+            var op = 0.35 * (1 - 0.55 * (h / 18));
+            shadow.setAttribute('rx', rx.toFixed(2));
+            shadow.setAttribute('opacity', op.toFixed(2));
+          }
         } else {
-          h = 0;
-          sx = 1;
-          sy = 1;
-        }
+          // Dynamic Firefly Randomly Floating Animation (Strictly Contained within Room Bounds)
+          var b = getChipBounds(c);
+          var seed = idx * 1.731 + 0.5;
+          var sec = now * 0.001;
 
-        body.setAttribute('transform', 'translate(0, ' + (-h.toFixed(2)) + ') scale(' + sx.toFixed(3) + ' ' + sy.toFixed(3) + ')');
-        if (shadow) {
-          var rx = 14 * (1 - 0.38 * (h / 18));
-          var op = 0.35 * (1 - 0.55 * (h / 18));
-          shadow.setAttribute('rx', rx.toFixed(2));
-          shadow.setAttribute('opacity', op.toFixed(2));
+          // Multi-frequency organic wandering (coefficients sum to <= 0.90 for guaranteed containment)
+          var wx = 0.46 * Math.sin(sec * 0.55 + seed * 1.618) +
+                   0.28 * Math.cos(sec * 1.15 + seed * 2.718) +
+                   0.16 * Math.sin(sec * 2.35 + seed * 3.141);
+
+          var wy = 0.44 * Math.cos(sec * 0.48 + seed * 2.718) +
+                   0.30 * Math.sin(sec * 1.05 + seed * 3.141) +
+                   0.16 * Math.cos(sec * 2.15 + seed * 1.618);
+
+          // Micro air flutter
+          var fx = Math.sin(sec * 5.2 + seed) * 2.0;
+          var fy = Math.cos(sec * 6.1 + seed) * 2.2;
+
+          var dx = b.centerX + b.radiusX * wx + fx;
+          var dy = b.centerY + b.radiusY * wy + fy;
+
+          // Translate entire chip group so hitbox, shadow, and star move smoothly together
+          chip.setAttribute('transform', 'translate(' + dx.toFixed(2) + ' ' + dy.toFixed(2) + ')');
+
+          // Firefly breathing luminescence & flight tilt
+          var pulse = 0.92 + 0.15 * Math.sin(sec * 3.2 + seed * 2.0);
+          var tilt = (Math.cos(sec * 0.55 + seed * 1.618) * -7 + Math.sin(sec * 5.2 + seed) * 2.5).toFixed(1);
+
+          body.setAttribute('transform', 'scale(' + pulse.toFixed(3) + ') rotate(' + tilt + ')');
+
+          if (shadow) {
+            var srx = (14 * (0.85 + 0.20 * pulse)).toFixed(1);
+            var sop = (0.35 * pulse).toFixed(2);
+            shadow.setAttribute('rx', srx);
+            shadow.setAttribute('opacity', sop);
+          }
         }
       }
 

@@ -696,8 +696,10 @@ input[type=text]:focus {
   padding: 20px;
   background: rgba(8, 11, 17, 0.78);
   backdrop-filter: blur(12px);
+  cursor: pointer;
 }
 .card {
+  cursor: default;
   background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: 18px;
@@ -817,9 +819,32 @@ input[type=text]:focus {
 }
 .mp .bk {
   width: 100%;
-  margin-top: 18px;
-  background: var(--surface-elevated);
-  border: 1px solid var(--border-strong);
+  margin-top: 20px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  border: 2px solid #f97316;
+  border-radius: 10px;
+  padding: 12px 24px;
+  background: rgba(22, 14, 8, 0.94);
+  color: #ffedd5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.5), inset 0 0 10px rgba(249, 115, 22, 0.25);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mp .bk:hover {
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  border-color: #fed7aa;
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(249, 115, 22, 0.9);
+}
+.mp .bk:active {
+  transform: translateY(0);
 }
 
 @media (min-width: 860px) {
@@ -3010,6 +3035,9 @@ $("exp").onclick = openCareers;
 $("nOv").onclick = close;
 $("nTeam").onclick = team;
 $("nJobs").onclick = openCareers;
+$("modal").addEventListener("click", function(e){
+  if (e.target === this || !e.target.closest(".card")) close();
+});
 $("nSnd").onclick = function(){
   snd = !snd;
   this.textContent = "Sound: " + (snd ? "on" : "off");

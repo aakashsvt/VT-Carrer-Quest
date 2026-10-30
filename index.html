@@ -591,44 +591,46 @@ input[type=text]:focus {
 #hud .bar {
   max-width: 680px;
   margin: 0 auto;
-  background: var(--surface-glass);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--border-strong);
-  border-radius: 12px;
-  padding: 8px 18px;
+  background: rgba(9, 14, 24, 0.94);
+  backdrop-filter: blur(20px);
+  border: 2px solid #00f0ff;
+  border-radius: 14px;
+  padding: 10px 22px;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 13px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  font-size: 14px;
+  box-shadow: 0 0 26px rgba(0, 240, 255, 0.45), inset 0 0 14px rgba(0, 240, 255, 0.15);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 7px;
 }
 #mt {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 12px;
-  color: var(--ink);
-  letter-spacing: 0.05em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
 }
 .track {
-  height: 5px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
   overflow: hidden;
   position: relative;
 }
 #xpb {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #3b82f6, #38bdf8, #f59e0b);
-  border-radius: 4px;
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+  border-radius: 6px;
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.85);
   transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 #xpt {
-  color: var(--ink);
+  color: #94a3b8;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
   font-weight: 600;
+  font-size: 12px;
 }
 
 /* Bottom Navigation Dock */
@@ -817,14 +819,38 @@ input[type=text]:focus {
   }
 }
 
-/* Careers Overlay & Job Postings */
+/* Careers Overlay & Job Postings - Fully Scrollable */
 #careers {
+  position: fixed;
+  inset: 0;
+  width: 100dvw;
+  height: 100dvh;
   background: var(--bg);
-  justify-content: flex-start;
   z-index: 7;
   display: none;
-  padding: clamp(24px, 5vh, 60px) 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: clamp(24px, 4dvh, 48px) clamp(16px, 3dvw, 32px);
   text-align: left;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+#careers::-webkit-scrollbar {
+  width: 8px;
+}
+#careers::-webkit-scrollbar-track {
+  background: rgba(10, 14, 24, 0.8);
+}
+#careers::-webkit-scrollbar-thumb {
+  background: #f97316;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.7);
+}
+#careers::-webkit-scrollbar-thumb:hover {
+  background: #ea580c;
 }
 .careers-container {
   width: min(960px, 100%);
@@ -832,6 +858,7 @@ input[type=text]:focus {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding-bottom: clamp(60px, 10dvh, 100px);
 }
 .careers-header {
   border-bottom: 1px solid var(--border);
@@ -958,28 +985,27 @@ input[type=text]:focus {
 }
 .chip {
   cursor: pointer;
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;
+  outline: none;
 }
-.chip:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.15);
+.chip-shadow {
+  transition: opacity 0.15s;
+}
+.chip-body {
+  transition: filter 0.2s;
+}
+.chip:hover .chip-body {
+  filter: brightness(1.3) drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 22px #ffffff) !important;
 }
 .chip.got {
   pointer-events: none;
   animation: chipGone 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+.chip.got .chip-body,
+.chip.got .chip-shadow {
+  display: none;
+}
 @keyframes chipGone {
   to { transform: translateY(-30px) scale(1.4); opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
 }
 </style>
 </head>
@@ -1365,7 +1391,7 @@ input[type=text]:focus {
 var CONFIG={
  APPLY_URL:"https://forms.gle/opRbivrkQTpctETe7",
  zones:[
-  {id:"ceo",n:"CEO Cabin",x:400,y:305,w:400,h:290,c:"#f59e0b",wall:"#1f182c",floor:"#181324"},
+  {id:"ceo",n:"CEO Cabin",x:420,y:320,w:360,h:260,c:"#f59e0b",wall:"#1f182c",floor:"#181324"},
   {id:"a2",n:"2D Art Studio",x:30,y:30,w:360,h:260,c:"#a855f7",wall:"#1c162e",floor:"#161226"},
   {id:"hr",n:"HR Cabin",x:420,y:30,w:360,h:260,c:"#14b8a6",wall:"#132427",floor:"#0f1d20"},
   {id:"sales",n:"Sales Department",x:810,y:30,w:360,h:260,c:"#f43f5e",wall:"#291522",floor:"#1e101a"},
@@ -1379,10 +1405,10 @@ var CONFIG={
   {zone:"dev",name:"Harshdeep Singh",role:"Developer"},{zone:"dev",name:"Pankaj soni",role:"Developer"},
   {zone:"a2",name:"Abhishek",role:"2D Artist"},{zone:"a3",name:"Tarique",role:"3D Artist"},{zone:"qa",name:"Hitesh",role:"QA Tester"}],
  chips:[
-  {n:"Vision Chip",zone:"ceo",p:[335,92],c:"#f59e0b",g:"★",fact:"Cube Sort 3D is live on Google Play and the App Store! Built with creativity, code, and lots of brainpower. Go play it — just one more level, right?"},
-  {n:"Game World Chip",zone:null,p:[405,600],c:"#38bdf8",g:"◆",fact:"We don’t just wish, we celebrate! At Virtualize, every festival is another reason to bring the team together."},
+  {n:"Vision Chip",zone:"ceo",p:[286,60],c:"#f59e0b",g:"★",fact:"Cube Sort 3D is live on Google Play and the App Store! Built with creativity, code, and lots of brainpower. Go play it — just one more level, right?"},
+  {n:"Game World Chip",zone:null,p:[405,595],c:"#38bdf8",g:"◆",fact:"We don’t just wish, we celebrate! At Virtualize, every festival is another reason to bring the team together."},
   {n:"Creative Spark Chip",zone:"a3",p:[60,95],c:"#f97316",g:"✦",fact:"From 3D art to immersive AR/VR experiences, we turn creative ideas into digital realities. Imagination is our favourite superpower!"},
-  {n:"Code Core Chip",zone:"dev",p:[180,62],c:"#60a5fa",g:"</>",fact:"[Placeholder] Add a fact about game engines, code or game mechanics."},
+  {n:"Code Core Chip",zone:"dev",p:[180,62],c:"#60a5fa",g:"★",fact:"[Placeholder] Add a fact about game engines, code or game mechanics."},
   {n:"Bug Hunter Chip",zone:"qa",p:[44,92],c:"#10b981",g:"✱",fact:"Developers call it a glitch, testers call it a bug, and gamers call it a plot twist. At Virtualize, teamwork saves the day!"},
   {n:"People Power Chip",zone:"hr",p:[320,112],c:"#14b8a6",g:"♥",fact:"We play, laugh, compete, and create memories together. Because every great squad deserves some fun between missions!"}],
  jobs:[
@@ -1461,7 +1487,11 @@ function R(x, y, w, h, f, r, e){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'"
 function Ci(x, y, r, f, e){ return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+f+'"'+(e||'')+'/>'; }
 function Pa(d, f, e){ return '<path d="'+d+'" fill="' + f + '"' + (e || '') + '/>'; }
 function St(d, c, w, e){ return '<path d="'+d+'" fill="none" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round"'+(e||'')+'/>'; }
-function Tx(x, y, t, sz, f, e){ return '<text x="'+x+'" y="'+y+'" font-family="Space Grotesk,Plus Jakarta Sans,sans-serif" font-size="'+sz+'" font-weight="600" fill="'+f+'" text-anchor="middle"'+(e||'')+'>'+t+'</text>'; }
+function Tx(x, y, t, sz, f, fw, e){
+  var weight = (typeof fw === 'number' || (typeof fw === 'string' && /^\d+$/.test(fw))) ? fw : '700';
+  var extra = (typeof fw === 'string' && !/^\d+$/.test(fw)) ? fw : (e || '');
+  return '<text x="'+x+'" y="'+y+'" font-family="Space Grotesk,Plus Jakarta Sans,sans-serif" font-size="'+sz+'" font-weight="'+weight+'" fill="'+f+'" text-anchor="middle"'+(extra ? ' ' + extra : '')+'>'+t+'</text>';
+}
 
 /* Character Illustration */
 function person(L, full) {
@@ -1860,9 +1890,10 @@ function skyW(x, y, w, h) {
 }
 
 function tagpill(x, y, t, c) {
-  var pw = Math.max(90, t.length * 8 + 20);
-  return '<g><rect x="'+(x - pw / 2)+'" y="'+y+'" width="'+pw+'" height="22" rx="5" fill="#0b101b" stroke="'+c+'" stroke-width="1.2"/>'+
-         Tx(x, y + 15, esc(t), 10.5, "#ffffff")+'</g>';
+  var pw = Math.max(90, t.length * 7.5 + 22);
+  return '<g style="filter:drop-shadow(0 0 7px '+c+')">'+
+         '<rect x="'+(x - pw / 2)+'" y="'+y+'" width="'+pw+'" height="26" rx="7" fill="#070b14" stroke="'+c+'" stroke-width="2"/>'+
+         Tx(x, y + 17.5, esc(t), 12, "#ffffff", 800)+'</g>';
 }
 
 function PP(pi, x, y, s, deskY) {
@@ -1878,12 +1909,18 @@ function PP(pi, x, y, s, deskY) {
 
 function chipG(c, x, y) {
   var idx = CONFIG.chips.indexOf(c);
+  var icon = (c.g === '★' || c.g === '</>' || !c.g)
+    ? '<polygon points="0,-7 2.1,-2.3 7.3,-1.6 3.5,2.1 4.5,7.2 0,4.6 -4.5,7.2 -3.5,2.1 -7.3,-1.6 -2.1,-2.3" fill="#ffffff" style="filter:drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 8px '+c.c+')"/>'
+    : Tx(0, 5, esc(c.g), c.g.length > 2 ? 10 : 13, "#ffffff", 800);
   return '<g transform="translate('+x+' '+y+')">'+
          '<g class="chip" data-c="'+idx+'" tabindex="0" role="button" aria-label="'+c.n+'">'+
-         '<ellipse cx="0" cy="18" rx="14" ry="4" fill="rgba(0,0,0,0.35)"/>'+
-         '<circle cx="0" cy="0" r="16" fill="#090e18" stroke="'+c.c+'" stroke-width="2"/>'+
-         '<circle cx="0" cy="0" r="12" fill="none" stroke="'+c.c+'" stroke-width="0.8" opacity="0.6"/>'+
-         Tx(0, 4.5, c.g, c.g.length > 2 ? 8.5 : 12, "#ffffff")+
+         '<ellipse class="chip-shadow" cx="0" cy="18" rx="14" ry="4" fill="rgba(0,0,0,0.45)"/>'+
+         '<g class="chip-body" style="filter:drop-shadow(0 0 8px '+c.c+') drop-shadow(0 0 16px '+c.c+') drop-shadow(0 0 24px '+c.c+')">'+
+         '<circle cx="0" cy="0" r="22" fill="'+c.c+'" opacity="0.22" style="filter:blur(3px)"/>'+
+         '<circle cx="0" cy="0" r="17" fill="#080e18" stroke="'+c.c+'" stroke-width="2.8"/>'+
+         '<circle cx="0" cy="0" r="12.5" fill="none" stroke="'+c.c+'" stroke-width="1.2" opacity="0.85"/>'+
+         icon +
+         '</g>'+
          '</g></g>';
 }
 
@@ -1893,7 +1930,7 @@ function room(z) {
   var pp = function(nm){ return CONFIG.people.findIndex(function(p){ return p.name === nm; }); };
 
   g += R(0, 0, w, h, 'url(#f'+id+')', 14);
-  var wallH = (id === 'ceo' ? 116 : 100);
+  var wallH = 100;
   g += R(0, 0, w, wallH, 'url(#w'+id+')', 14);
   g += R(0, wallH - 1, w, 8, mix(z.wall, -0.4));
   g += R(0, wallH - 1, w, 2, z.c, 0, ' opacity="0.7"');
@@ -1904,20 +1941,20 @@ function room(z) {
 
   var body = '';
   if (id === 'ceo') {
-    body = skyW(24, 20, 140, 78) +
-           R(172, 20, 96, 32, '#0f172a', 6, ' stroke="#f59e0b" stroke-width="1.8"') +
-           Tx(220, 36, "VIRTUALIZE", 11, "#f59e0b") +
-           Tx(220, 46, "TECHNOLOGIES", 6.5, "#94a3b8") +
-           shelf(278, 20, 108, 2) +
-           sofa(70, 200, 110, '#4a2c1b') +
-           plant(42, 195, 1.15, 0) +
-           plant(358, 195, 1.15, 0) +
-           chairb(172, 94, '#1e293b') +
-           PP(pp("Himanshu Bansal"), 200, 78, 0.76, 154) +
-           desk(88, 154, 224, '#261b17') +
-           deskMat(200, 156, 44, 'keys') +
-           mon(108, 122, 60, 'chart') +
-           mon(232, 122, 60, 'code');
+    body = skyW(24, 20, 100, 66) +
+           R(134, 20, 92, 32, '#0f172a', 6, ' stroke="#f59e0b" stroke-width="1.8"') +
+           Tx(180, 36, "VIRTUALIZE", 10.5, "#f59e0b") +
+           Tx(180, 46, "TECHNOLOGIES", 6.5, "#94a3b8") +
+           shelf(236, 20, 100, 2) +
+           plant(36, 188, 1.1, 0) +
+           plant(324, 188, 1.1, 0) +
+           sofa(128, 204, 104, '#4a2c1b') +
+           chairb(152, 92, '#1e293b') +
+           PP(pp("Himanshu Bansal"), 180, 78, 0.70, 152) +
+           desk(72, 152, 216, '#261b17') +
+           deskMat(180, 154, 40, 'keys') +
+           mon(92, 118, 56, 'chart') +
+           mon(212, 118, 56, 'code');
   } else if (id === 'a2') {
     body = R(34, 20, 84, 64, '#1c1630', 4, ' stroke="#a855f7" stroke-width="1.2"') +
            Tx(76, 42, "CONCEPT", 9, "#c084fc") +
@@ -1981,17 +2018,17 @@ function room(z) {
            R(302, 86, 40, 12, '#0f172a', 2) + Ci(308, 92, 1.5, '#38bdf8') + Ci(314, 92, 1.5, '#10b981') + Ci(320, 92, 1.5, '#10b981') +
            R(302, 102, 40, 12, '#0f172a', 2) + Ci(308, 108, 1.5, '#10b981') + Ci(314, 108, 1.5, '#10b981') +
            R(302, 118, 40, 12, '#0f172a', 2) + Ci(308, 124, 1.5, '#10b981') + Ci(314, 124, 1.5, '#38bdf8') + Ci(320, 124, 1.5, '#10b981') +
-           chairb(64, 92, '#1e3a8a') +
-           chairb(198, 92, '#312e81') +
-           PP(pp("Harshdeep Singh"), 92, 78, 0.68, 152) +
-           PP(pp("Pankaj soni"), 226, 78, 0.68, 152) +
+           chairb(84, 92, '#1e3a8a') +
+           chairb(218, 92, '#312e81') +
+           PP(pp("Harshdeep Singh"), 112, 78, 0.68, 152) +
+           PP(pp("Pankaj soni"), 246, 78, 0.68, 152) +
            desk(24, 152, 270, '#132238') +
-           deskMat(92, 154, 38, 'keys') +
-           deskMat(226, 154, 38, 'keys') +
-           mon(30, 118, 44, 'code') +
-           mon(112, 118, 44, 'code') +
-           mon(164, 118, 44, 'code') +
-           mon(246, 118, 44, 'code');
+           deskMat(112, 154, 38, 'keys') +
+           deskMat(246, 154, 38, 'keys') +
+           mon(40, 118, 44, 'code') +
+           mon(128, 118, 44, 'code') +
+           mon(188, 118, 44, 'code') +
+           mon(264, 118, 44, 'code');
   } else if (id === 'qa') {
     body = R(30, 20, 150, 66, '#0f241c', 5, ' stroke="#10b981" stroke-width="1.2"') +
            Tx(105, 42, "VERIFICATION LAB", 10, "#34d399") +
@@ -2014,18 +2051,19 @@ function room(z) {
            Tx(125, 42, "VIRTUALIZE", 12, "#f59e0b") +
            Tx(125, 56, "TECHNOLOGIES", 7.5, "#94a3b8") +
            '<g class="hit" data-portal="1" tabindex="0" role="button" aria-label="Open positions">'+
-           '<rect x="210" y="74" width="115" height="120" rx="10" fill="#0c121e" stroke="#f59e0b" stroke-width="1.8"/>'+
-           '<rect x="216" y="80" width="103" height="108" rx="8" fill="#141a29"/>'+
-           '<line x1="267" y1="80" x2="267" y2="188" stroke="#f59e0b" stroke-width="1" opacity="0.3"/>'+
-           '<line x1="216" y1="134" x2="319" y2="134" stroke="#f59e0b" stroke-width="1" opacity="0.2"/>'+
-           '<circle cx="267" cy="116" r="20" fill="#1a2336" stroke="#f59e0b" stroke-width="1.5"/>'+
-           Tx(267, 113, "OPEN", 10, "#ffffff") +
-           Tx(267, 125, "POSITIONS", 7, "#f59e0b") +
-           tagpill(267, 210, "OPEN POSITIONS", "#f59e0b") +
+           '<circle cx="267" cy="120" r="50" fill="url(#portal-sunburst)"/>'+
+           '<circle cx="267" cy="120" r="34" fill="url(#portal-sunburst)" opacity="0.85"/>'+
+           '<rect x="208" y="72" width="118" height="122" rx="12" fill="#080d16" stroke="#fbbf24" stroke-width="2.5" style="filter:drop-shadow(0 0 16px #f59e0b)"/>'+
+           '<rect x="214" y="78" width="106" height="110" rx="9" fill="#141a29"/>'+
+           '<line x1="267" y1="78" x2="267" y2="188" stroke="#f59e0b" stroke-width="1.2" opacity="0.4"/>'+
+           '<line x1="214" y1="133" x2="320" y2="133" stroke="#f59e0b" stroke-width="1.2" opacity="0.3"/>'+
+           '<circle cx="267" cy="116" r="24" fill="#1e180d" stroke="#fde047" stroke-width="2" style="filter:drop-shadow(0 0 10px #f59e0b)"/>'+
+           Tx(267, 112, "OPEN", 13.5, "#ffffff", 800) +
+           Tx(267, 128, "POSITIONS", 9.5, "#fbbf24", 800) +
+           tagpill(267, 212, "OPEN POSITIONS", "#fbbf24") +
            '</g>' +
            sofa(72, 198, 108, '#2d2217') +
-           plant(36, 188, 1.1, 1) +
-           plant(324, 188, 1.1, 1);
+           plant(36, 188, 1.1, 1);
   } else if (id === 'lounge') {
     body = arcade(30, 30, '#f97316') +
            arcade(82, 30, '#ec4899') +
@@ -2039,11 +2077,16 @@ function room(z) {
   }
 
   g += body;
-  g += R(0, 0, w, h, 'none', 14, ' stroke="'+z.c+'" stroke-width="1.8" opacity="0.8"');
+  // Authentic Neon Tube Glow Outline
+  g += R(0, 0, w, h, 'none', 14, ' stroke="'+z.c+'" stroke-width="8" opacity="0.25" filter="url(#blur-glow)"');
+  g += R(0, 0, w, h, 'none', 14, ' stroke="'+z.c+'" stroke-width="4.5" opacity="0.55"');
+  g += R(0, 0, w, h, 'none', 14, ' stroke="'+z.c+'" stroke-width="2.2" opacity="1" style="filter:drop-shadow(0 0 8px '+z.c+')"');
 
-  var lw = z.n.length * 9.5 + 44;
-  g += '<g><rect x="'+(w/2 - lw/2)+'" y="-12" width="'+lw+'" height="24" rx="6" fill="#090d16" stroke="'+z.c+'" stroke-width="1.8"/>'+
-       Tx(w/2, 4, z.n.toUpperCase(), 11, z.c)+
+  // Big, Bold Glowing Header Pill
+  var lw = Math.max(130, z.n.length * 10 + 36);
+  g += '<g style="filter:drop-shadow(0 0 10px '+z.c+')">'+
+       '<rect x="'+(w/2 - lw/2)+'" y="-16" width="'+lw+'" height="30" rx="8" fill="#070b14" stroke="'+z.c+'" stroke-width="2.2"/>'+
+       Tx(w/2, 4.5, z.n.toUpperCase(), 13.5, z.c, 800)+
        '</g>';
   return g + '</g>';
 }
@@ -2060,6 +2103,16 @@ function buildGame() {
       '<stop offset="0.5" stop-color="#f59e0b" stop-opacity="0.4"/>'+
       '<stop offset="1" stop-color="#141926" stop-opacity="0.9"/>'+
     '</radialGradient>'+
+    '<radialGradient id="portal-sunburst" cx="50%" cy="50%" r="50%">'+
+      '<stop offset="0%" stop-color="#fef08a" stop-opacity="0.95"/>'+
+      '<stop offset="40%" stop-color="#f59e0b" stop-opacity="0.75"/>'+
+      '<stop offset="70%" stop-color="#f59e0b" stop-opacity="0.3"/>'+
+      '<stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>'+
+    '</radialGradient>'+
+    '<filter id="blur-glow" x="-20%" y="-20%" width="140%" height="140%">'+
+      '<feGaussianBlur stdDeviation="5" result="blur"/>'+
+      '<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>'+
+    '</filter>'+
     '<linearGradient id="fl" x1="0" y1="0" x2="0" y2="1">'+
       '<stop offset="0" stop-color="#151b29"/>'+
       '<stop offset="1" stop-color="#0d121c"/>'+
@@ -2453,8 +2506,62 @@ addEventListener("resize", function(){
   }
 });
 
+function initChipAnimation() {
+  function tick(now) {
+    if (state === "office") {
+      var chips = svg.querySelectorAll('.chip:not(.got)');
+      for (var i = 0; i < chips.length; i++) {
+        var chip = chips[i];
+        if (chip.matches(':hover')) continue;
+        var idx = +chip.dataset.c;
+        var body = chip.querySelector('.chip-body');
+        var shadow = chip.querySelector('.chip-shadow');
+        if (!body) continue;
+
+        var t = ((now * 0.001) + idx * 0.4) % 2.5;
+        var h = 0, sx = 1, sy = 1;
+
+        if (t < 0.26) {
+          var u = t / 0.26;
+          var s = Math.sin(u * Math.PI);
+          h = s * 12;
+          sx = 1 - 0.10 * s;
+          sy = 1 + 0.15 * s;
+        } else if (t < 0.58) {
+          var u = (t - 0.26) / 0.32;
+          var s = Math.sin(u * Math.PI);
+          h = s * 18;
+          sx = 1 - 0.14 * s;
+          sy = 1 + 0.22 * s;
+        } else if (t < 0.84) {
+          var u = (t - 0.58) / 0.26;
+          var s = Math.sin(u * Math.PI);
+          h = s * 8;
+          sx = 1 - 0.06 * s;
+          sy = 1 + 0.10 * s;
+        } else {
+          h = 0;
+          sx = 1;
+          sy = 1;
+        }
+
+        body.setAttribute('transform', 'translate(0, ' + (-h.toFixed(2)) + ') scale(' + sx.toFixed(3) + ' ' + sy.toFixed(3) + ')');
+        if (shadow) {
+          var rx = 14 * (1 - 0.38 * (h / 18));
+          var op = 0.35 * (1 - 0.55 * (h / 18));
+          shadow.setAttribute('rx', rx.toFixed(2));
+          shadow.setAttribute('opacity', op.toFixed(2));
+        }
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
 hq();
 buildGame();
+initChipAnimation();
 if (location.search.indexOf('office') !== -1) enter();
 if (location.search.indexOf('create2') !== -1) { state = "create"; show("welcome", false); show("create", true); step(2); }
 else if (location.search.indexOf('create3') !== -1) { state = "create"; show("welcome", false); show("create", true); step(3); }

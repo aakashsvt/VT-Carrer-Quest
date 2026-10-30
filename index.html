@@ -1622,6 +1622,194 @@ function person(L, full) {
 function svgP(L, full, vb, cls){ return '<svg viewBox="'+vb+'" aria-hidden="true"'+(cls?' class="'+cls+'"':'')+'>'+person(L, full)+'</svg>'; }
 function bust(L){ return svgP(L, false, "2 0 96 128"); }
 
+/* Character Back View (Gamer Playing Arcade Machine) */
+function personBack(L) {
+  var s = L.s, h = L.h, o = L.o, a = L.a || '#38bdf8';
+  var sh = mix(o, -0.32), sk = mix(s, -0.22), lt = mix(o, 0.18), hl = mix(h, 0.35);
+  var g = '';
+
+  // Floor Shadow under feet
+  g += '<ellipse cx="50" cy="158" rx="26" ry="5.5" fill="rgba(0,0,0,0.45)"/>';
+
+  // 1. Trousers / Legs (Back View)
+  g += R(33, 112, 15, 42, "#151b28", 3);
+  g += R(52, 112, 15, 42, "#151b28", 3);
+  g += St('M50 112v26', '#090d16', 1.8);
+  g += St('M40 114v38', 'rgba(255,255,255,0.04)', 1);
+  g += St('M60 114v38', 'rgba(255,255,255,0.04)', 1);
+
+  // 2. Sneakers (Heels & Pull Tabs)
+  // Left shoe heel
+  g += Pa('M29 150h20c1.5 0 2.5 1 2.5 2.5v4c0 1.5-1 2-2.5 2H28c-2 0-3.5-1.5-3.5-3.5v-2.5c0-1.5 1.8-2.5 4.5-2.5z', '#e2e8f0');
+  g += R(25.5, 157, 26, 3, a, 1.5);
+  g += R(37, 146, 4, 6, a, 1);
+
+  // Right shoe heel
+  g += Pa('M51 150h20c2.7 0 4.5 1 4.5 2.5v4c0 1.5-1.5 2.5-3.5 2.5H48.5c-1.5 0-2.5-.5-2.5-2v-4.5c0-1.5 1-2.5 2.5-2.5z', '#e2e8f0');
+  g += R(48.5, 157, 26, 3, a, 1.5);
+  g += R(59, 146, 4, 6, a, 1);
+
+  // 3. Torso / Jacket (Back View)
+  // Main back body
+  g += Pa('M26 68C36 62 64 62 74 68L81 120H19L26 68Z', o);
+  // Shading / depth
+  g += Pa('M26 68C36 62 50 62 50 68L50 120H19L26 68Z', 'rgba(255,255,255,0.06)');
+  g += Pa('M50 68C50 62 64 62 74 68L81 120H50L50 68Z', 'rgba(0,0,0,0.14)');
+  // Center spine seam
+  g += St('M50 69L50 120', 'rgba(0,0,0,0.28)', 1.5);
+  // Shoulder yoke seam
+  g += Pa('M28 78C42 83 58 83 72 78', 'none', ' stroke="rgba(0,0,0,0.22)" stroke-width="1.3"');
+  // Waist hem band
+  g += R(20, 117, 60, 4, mix(o, -0.22), 2);
+
+  // 4. Arms & Hands (Bent forward to arcade control panel at Y=88)
+  // Left arm (shoulder -> bent elbow -> hand on joystick)
+  g += Pa('M26 70C18 76 14 86 14 96C14 102 18 104 23 100C27 96 30 88 34 78Z', sh);
+  g += Pa('M15 94C15 101 22 95 28 85L32 87C27 99 20 106 15 94Z', o);
+  g += Pa('M18 97C19 90 24 85 27 82C29 80 33 80 34 83C32 89 24 97 19 101Z', o);
+  g += Ci(28, 88, 4.5, s);       // Left hand on joystick
+  g += St('M28 85v4', '#64748b', 1.5); // joystick shaft
+  g += Ci(28, 83, 2.8, '#ef4444');  // Arcade joystick knob
+
+  // Right arm (shoulder -> bent elbow -> hand tapping buttons)
+  g += Pa('M74 70C82 76 86 86 86 96C86 102 82 104 77 100C73 96 70 88 66 78Z', sh);
+  g += Pa('M85 94C85 101 78 95 72 85L68 87C73 99 80 106 85 94Z', o);
+  g += Pa('M82 97C81 90 76 85 73 82C71 80 67 80 66 83C68 89 76 97 81 101Z', o);
+  g += Ci(72, 88, 4.5, s);       // Right hand pressing buttons
+
+  // Hoodie collar / hood resting on upper back
+  g += Pa('M34 64C42 74 58 74 66 64C63 76 37 76 34 64Z', sh);
+  g += St('M35 64C43 71 57 71 65 64', a, 1.4);
+
+  // 5. Back of Neck
+  g += R(44, 48, 12, 18, sk, 3);
+
+  // 6. Back of Ears
+  g += Pa('M31 36C27 38 27 45 31 47Z', s);
+  g += Pa('M69 36C73 38 73 45 69 47Z', s);
+
+  // 7. Back of Head & Hair (FULL BACK VIEW - NO FACE, NO EYES!)
+  // Full skull silhouette
+  g += Pa('M31 38C30 16 40 10 50 10C60 10 70 16 69 38C69 50 64 57 59 58C54 59 46 59 41 58C36 57 31 50 31 38Z', h);
+  // Hair sheen & texture curves
+  g += St('M37 26C43 20 57 20 63 26', hl, 2);
+  g += St('M41 36C45 32 55 32 59 36', hl, 1.4);
+  // Clean barber taper at back of neck
+  g += Pa('M40 52C44 55 56 55 60 52L60 57C56 60 44 60 40 57Z', hl, ' opacity="0.4"');
+
+  // Top knot / gamer bun (matches character hairstyle st:3)
+  g += Ci(50, 7, 6.5, h);
+  g += Ci(50, 11, 3.2, a); // bun hair-tie
+
+  return g;
+}
+function person(L, full) {
+  var s = L.s, h = L.h, o = L.o, a = L.a, st = L.st;
+  var sh = mix(o, -0.32), sk = mix(s, -0.22), lt = mix(o, 0.18), hl = mix(h, 0.35);
+  var g = '';
+
+  if (full) {
+    g += R(33, 114, 15, 40, "#151b28", 3);
+    g += R(52, 114, 15, 40, "#151b28", 3);
+    g += St('M40 114v38', 'rgba(0,0,0,0.3)', 1);
+    g += St('M60 114v38', 'rgba(0,0,0,0.3)', 1);
+    g += Pa('M29 152h20c1.5 0 2.5 1 2.5 2.5v3.5c0 1.5-1 2-2.5 2H28c-2 0-3.5-1.5-3.5-3.5v-1.5c0-1.8 1.8-3 4.5-3z', '#e2e8f0');
+    g += Pa('M51 152h20c2.7 0 4.5 1.2 4.5 3v1.5c0 2-1.5 3.5-3.5 3.5H48.5c-1.5 0-2.5-.5-2.5-2v-3.5c0-1.5 1-2.5 2.5-2.5z', '#e2e8f0');
+    g += R(24.5, 158, 27, 3, a, 1.5);
+    g += R(48.5, 158, 27, 3, a, 1.5);
+  }
+
+  g += Pa('M24 74C18 78 12 90 12 110C12 120 18 124 23 124C28 124 30 116 30 108L32 78Z', sh);
+  g += Pa('M76 74C82 78 88 90 88 110C88 120 82 124 77 124C72 124 70 116 70 108L68 78Z', sh);
+  g += Ci(20, 122, 6.5, s);
+  g += Ci(80, 122, 6.5, s);
+  g += R(14, 117, 12, 3, '#0f172a', 1);
+  g += Ci(20, 118.5, 2.5, '#38bdf8');
+
+  g += Pa('M28 72C36 65 64 65 72 72L81 122H19L28 72Z', o);
+  g += Pa('M28 72C40 68 50 67 50 72L50 122H19L28 72Z', 'rgba(255,255,255,0.06)');
+  g += Pa('M50 72C50 67 60 68 72 72L81 122H50L50 72Z', 'rgba(0,0,0,0.12)');
+  g += Pa('M41 62C45 61 55 61 59 62L54 94C53 96 47 96 46 94Z', '#f1f5f9');
+  g += Pa('M43 62L50 82L57 62Z', lt);
+
+  // Studio Lanyard
+  g += St('M44 65L38 98', a, 1.8);
+  g += St('M56 65L62 98', a, 1.8);
+  g += R(34, 98, 12, 16, '#0f172a', 2, ' stroke="'+a+'" stroke-width="1"');
+  g += R(36, 100, 8, 4, a, 1);
+  g += R(36, 106, 8, 1.5, '#f8fafc');
+
+  g += St('M41 66L48 122', sh, 1.5);
+  g += St('M59 66L52 122', sh, 1.5);
+  g += Pa('M43 52h14v16c0 4-3 6-7 6s-7-2-7-6V52z', sk);
+  g += Pa('M45 52h10v12c0 2-2 3-5 3s-5-1-5-3V52z', s);
+
+  if (st === 2) {
+    g += Pa('M25 42C20 62 18 85 24 100C27 108 36 104 35 90L37 60Z', h);
+    g += Pa('M75 42C80 62 82 85 76 100C73 108 64 104 65 90L63 60Z', h);
+  }
+
+  g += Pa('M32 38C32 23 40 16 50 16C60 16 68 23 68 38C68 53 61 63 50 63C39 63 32 53 32 38Z', s);
+  g += Pa('M34 44C34 56 42 63 50 63C50 63 43 60 41 50C40 45 40 41 40 40Z', 'rgba(0,0,0,0.08)');
+  g += Pa('M29 38c-3 0-5 2-5 6s2 7 5 6c1 0 1-12 0-12z', s);
+  g += Pa('M71 38c3 0 5 2 5 6s-2 7-5 6c-1 0-1-12 0-12z', s);
+
+  g += St('M37 32c3-1.5 7-1.5 9 0', h, 2);
+  g += St('M63 32c-3-1.5-7-1.5-9 0', h, 2);
+
+  [41, 59].forEach(function(x) {
+    g += Pa('M'+(x-5.5)+' 39.5c1.5-2.5 7.5-2.5 9.5 0c-1.5 2.5-7.5 2.5-9.5 0z', '#ffffff');
+    g += Ci(x + 0.2, 39.5, 3.2, '#1e293b');
+    g += Ci(x + 0.2, 39.5, 2, '#090d16');
+    g += Ci(x + 1.2, 38.4, 0.9, '#ffffff');
+    g += St('M'+(x-6.2)+' 39.2c2.5-3 8-3 10.8 0', '#090d16', 1.5);
+  });
+
+  g += St('M50 36v8c0 1.2-1 2.2-2 2.2', sk, 1.4);
+  g += Pa('M45 52c2-1 6-1 10 0c-2 2-6 2-10 0z', mix(s, -0.28));
+  g += St('M45.5 52c2-.6 5.5-.6 9 0', mix(s, -0.45), 1.2);
+
+  if (st === 0) {
+    g += Pa('M28 36C28 17 40 11 50 11C60 11 72 17 72 36C72 37 68 28 62 27C55 26 52 23 47 24C41 25 36 29 28 36Z', h);
+    g += St('M40 18c6-3 14-2 20 2', hl, 1.4);
+  } else if (st === 1) {
+    g += Pa('M28 37C27 15 42 9 52 10C64 11 73 19 72 38C68 28 62 25 54 26C45 27 36 30 28 37Z', h);
+    g += St('M38 18c8-2 18 1 24 6', hl, 1.5);
+  } else if (st === 2) {
+    g += Pa('M27 38C26 15 42 10 50 11C58 10 74 15 73 38C68 25 61 22 50 25C39 22 32 25 27 38Z', h);
+    g += Pa('M33 22C41 15 50 18 50 25C44 20 38 20 33 22Z', hl);
+  } else if (st === 3) {
+    g += Pa('M28 36C28 18 40 13 50 13C60 13 72 18 72 36C70 27 62 25 50 25C38 25 30 27 28 36Z', h);
+    g += Ci(50, 8, 7, h);
+    g += St('M46 11c2-3 6-3 8 0', a, 1.8);
+  } else if (st === 4) {
+    g += Pa('M28 36C27 16 41 10 51 10C63 10 73 17 72 36C68 26 59 23 49 24C39 25 32 28 28 36Z', h);
+    g += St('M36 17c8-3 18-2 26 4', hl, 1.6);
+  }
+
+  if (st === 2 || st === 1) {
+    g += Pa('M35 36h12c1.5 0 2.5 1 2.5 2.5v7c0 1.5-1 2.5-2.5 2.5H35c-1.5 0-2.5-1-2.5-2.5v-7c0-1.5 1-2.5 2.5-2.5z', 'none', ' stroke="#38bdf8" stroke-width="1.6"');
+    g += Pa('M53 36h12c1.5 0 2.5 1 2.5 2.5v7c0 1.5-1 2.5-2.5 2.5H53c-1.5 0-2.5-1-2.5-2.5v-7c0-1.5 1-2.5 2.5-2.5z', 'none', ' stroke="#38bdf8" stroke-width="1.6"');
+    g += St('M47 40h6', '#38bdf8', 1.6);
+  }
+
+  if (st === 0) {
+    g += Pa('M22 74C20 64 35 60 50 60C65 60 80 64 78 74', 'none', ' stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"');
+    g += Pa('M22 74C20 64 35 60 50 60C65 60 80 64 78 74', 'none', ' stroke="'+a+'" stroke-width="1.5" stroke-linecap="round"');
+    g += Pa('M19 72h7c2 0 3 1.5 3 3.5v9c0 2-1 3.5-3 3.5h-7c-2 0-3-1.5-3-3.5v-9c0-2 1-3.5 3-3.5z', '#1e293b');
+    g += Pa('M74 72h7c2 0 3 1.5 3 3.5v9c0 2-1 3.5-3 3.5h-7c-2 0-3-1.5-3-3.5v-9c0-2 1-3.5 3-3.5z', '#1e293b');
+    g += Ci(22.5, 80, 2.5, a);
+    g += Ci(77.5, 80, 2.5, a);
+  }
+  return g;
+}
+
+function svgP(L, full, vb, cls){ return '<svg viewBox="'+vb+'" aria-hidden="true"'+(cls?' class="'+cls+'"':'')+'>'+person(L, full)+'</svg>'; }
+function bust(L){ return svgP(L, false, "2 0 96 128"); }
+
+
+
+
 /* Architectural Studio Furniture */
 function desk(x, y, w, wood) {
   var topColor = wood || '#1a2232', edgeColor = mix(topColor, -0.32), hlColor = mix(topColor, 0.22);
@@ -2326,9 +2514,9 @@ function room(z) {
   } else if (id === 'lounge') {
     body = arcade(24, 20, '#f97316', 'arcade-dot-1') +
            arcade(70, 20, '#ec4899', 'arcade-dot-2') +
-           // Person playing arcade machine
-           '<g id="arcade-player" transform="translate(48 38) scale(0.44)">' +
-             person({s:"#dfa76a",h:"#141416",o:"#475569",a:"#38bdf8",st:3}, true) +
+           // Person playing arcade machine (facing machine, back visible)
+           '<g id="arcade-player" transform="translate(48 40) scale(0.44)">' +
+             personBack({s:"#dfa76a",h:"#141416",o:"#475569",a:"#38bdf8",st:3}) +
            '</g>' +
            // Studio Lounge Top Wall Signage & Neon TT Scoreboard
            Tx(250, 40, "STUDIO LOUNGE", 12, "#fb923c", 800) +
@@ -3080,8 +3268,9 @@ function initChipAnimation() {
           p2Wrap.setAttribute('transform', 'translate(' + (316 - p2Swing * 0.3) + ' ' + (104 + p2Sway) + ')');
         }
         if (arcPlayer) {
-          var arcSway = Math.sin(now * 0.006) * 1.2;
-          arcPlayer.setAttribute('transform', 'translate(' + (48 + arcSway) + ' 38) scale(0.44)');
+          var arcSwayX = Math.sin(now * 0.007) * 1.2;
+          var arcSwayY = Math.abs(Math.sin(now * 0.014)) * 0.8;
+          arcPlayer.setAttribute('transform', 'translate(' + (48 + arcSwayX) + ' ' + (40 - arcSwayY) + ') scale(0.44)');
         }
         if (arcDot1) {
           arcDot1.setAttribute('cx', (24 + 21 + Math.sin(now * 0.008) * 5).toFixed(1));

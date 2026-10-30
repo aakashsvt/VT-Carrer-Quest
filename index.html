@@ -798,7 +798,8 @@ input[type=text]:focus {
   font-size: 14px;
   line-height: 1.6;
 }
-.mp .x {
+.mp .x,
+.arcade-modal .x {
   position: absolute;
   right: 14px;
   top: 14px;
@@ -813,9 +814,13 @@ input[type=text]:focus {
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
+  z-index: 5;
 }
-.mp .x:hover {
-  background: rgba(255, 255, 255, 0.15);
+.mp .x:hover,
+.arcade-modal .x:hover {
+  background: rgba(251, 146, 60, 0.2);
+  border-color: #fb923c;
+  color: #fff;
 }
 .mp .bk {
   width: 100%;
@@ -863,6 +868,200 @@ input[type=text]:focus {
     overflow-y: auto;
     flex: 1;
   }
+}
+
+
+/* Studio Lounge Arcade Mini-Games Modal */
+.arcade-modal {
+  width: min(520px, 94vw);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: rgba(10, 15, 26, 0.96);
+  border: 2px solid #fb923c;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 0 40px rgba(251, 146, 60, 0.35), 0 20px 50px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  position: relative;
+  box-sizing: border-box;
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.arcade-header {
+  text-align: center;
+  position: relative;
+  padding: 4px 0 0;
+}
+.arcade-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(251, 146, 60, 0.15);
+  border: 1px solid #fb923c;
+  color: #fed7aa;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.arcade-header h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+.arcade-header p {
+  color: #94a3b8;
+  font-size: 13.5px;
+  margin: 0;
+}
+.arcade-games-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 4px 0;
+}
+.game-card-select {
+  background: rgba(18, 26, 44, 0.85);
+  border: 1.5px solid rgba(251, 146, 60, 0.35);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.game-card-select:hover {
+  background: rgba(28, 38, 62, 0.95);
+  border-color: #fb923c;
+  transform: translateY(-2px);
+  box-shadow: 0 0 22px rgba(251, 146, 60, 0.4);
+}
+.game-card-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: rgba(251, 146, 60, 0.15);
+  border: 1.5px solid #fb923c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px rgba(251, 146, 60, 0.25);
+}
+.game-card-icon.blaster {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+}
+.game-card-details {
+  flex: 1;
+}
+.game-card-details h3 {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 3px;
+}
+.game-card-details p {
+  color: #94a3b8;
+  font-size: 12px;
+  margin: 0 0 5px;
+  line-height: 1.35;
+}
+.game-card-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #fb923c;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.game-card-meta.cyan {
+  color: #38bdf8;
+}
+.game-card-action {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fed7aa;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.arcade-game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.arcade-game-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+.arcade-game-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.arcade-sub-btn {
+  padding: 5px 12px !important;
+  font-size: 11.5px !important;
+  border-radius: 8px !important;
+}
+.game-hud-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 6px 12px;
+  background: rgba(14, 20, 34, 0.9);
+  border: 1px solid rgba(251, 146, 60, 0.3);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+.arcade-canvas-wrap {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.35);
+  position: relative;
+  background: #060913;
+}
+.arcade-canvas-wrap.orange-border {
+  border-color: #fb923c;
+  box-shadow: 0 0 24px rgba(251, 146, 60, 0.35);
+}
+.arcade-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  cursor: crosshair;
+}
+.game-controls-hint {
+  font-size: 11.5px;
+  color: #94a3b8;
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+  margin-top: 2px;
 }
 
 /* Careers Overlay & Job Postings - Fully Scrollable */
@@ -2163,7 +2362,9 @@ function chipG(c, x, y) {
 
 /* Studio Room Generator */
 function room(z) {
-  var w = z.w, h = z.h, id = z.id, g = '<g transform="translate('+z.x+' '+z.y+')">';
+  var w = z.w, h = z.h, id = z.id;
+  var isLounge = (id === 'lounge');
+  var g = '<g ' + (isLounge ? 'data-lounge="1" class="hit hit-lounge" tabindex="0" role="button" aria-label="Studio Lounge - Play Mini-Games" style="cursor:pointer;" ' : '') + 'transform="translate('+z.x+' '+z.y+')">';
   var pp = function(nm){ return CONFIG.people.findIndex(function(p){ return p.name === nm; }); };
 
   g += R(0, 0, w, h, 'url(#f'+id+')', 14);
@@ -2548,6 +2749,11 @@ function room(z) {
            Tx(250, 54, "TABLE TENNIS & ARCADE", 7.5, "#94a3b8") +
            R(202, 64, 96, 24, "#070b14", 4, ' stroke="#fb923c" stroke-width="1.4" style="filter:drop-shadow(0 0 6px #fb923c)"') +
            Tx(250, 80, "TT MATCH: 11 - 9", 9.5, "#facc15", 800) +
+           // Interactive "PLAY MINI-GAMES" Badge
+           '<g style="filter:drop-shadow(0 0 8px rgba(251,146,60,0.65))">'+
+           R(194, 94, 112, 19, "rgba(22,14,8,0.92)", 9, ' stroke="#fb923c" stroke-width="1.6"')+
+           Tx(250, 106.5, "\uD83C\uDFAE PLAY MINI-GAMES", 8, "#ffedd5", 800)+
+           '</g>' +
 
            // Table Tennis Floor Shadow
            R(114, 185, 132, 14, "rgba(0,0,0,0.38)", 7) +
@@ -2860,6 +3066,7 @@ function card(h){
 
 var sel = null;
 function close(){
+  stopActiveGame();
   $("modal").style.display = "none";
   if (sel) { sel.classList.remove("sel"); sel = null; }
   if (state === "office") goVB(ovVB());
@@ -2968,6 +3175,600 @@ function jd(j){
          '</details>';
 }
 
+
+/* ===== STUDIO LOUNGE MINI-GAMES SYSTEM ===== */
+var activeGameLoop = null, gameCleanup = null;
+
+function stopActiveGame() {
+  if (activeGameLoop) {
+    cancelAnimationFrame(activeGameLoop);
+    activeGameLoop = null;
+  }
+  if (typeof gameCleanup === "function") {
+    gameCleanup();
+    gameCleanup = null;
+  }
+}
+
+function openLounge() {
+  var z = zoneOf('lounge');
+  goVB(fitZ(z, true));
+  stopActiveGame();
+
+  var m = $("modal");
+  m.innerHTML = '<div class="card arcade-modal" role="dialog" aria-label="Studio Lounge Arcade">' +
+    '<button class="x" id="xx" aria-label="Close">&times;</button>' +
+    '<div class="arcade-header">' +
+      '<span class="arcade-badge">RECREATION ZONE</span>' +
+      '<h2>Studio Lounge Arcade</h2>' +
+      '<p>Take a quick break and play one of our studio mini-games:</p>' +
+    '</div>' +
+    '<div class="arcade-games-grid">' +
+      // Game 1: Table Tennis
+      '<div class="game-card-select" id="play-tt-card">' +
+        '<div class="game-card-icon">🏓</div>' +
+        '<div class="game-card-details">' +
+          '<h3>Neon Table Tennis</h3>' +
+          '<p>Grab your paddle and rally against the studio bot. First to 3 points wins!</p>' +
+          '<div class="game-card-meta">▶ 1 VS 1 · FAST REFLEXES</div>' +
+        '</div>' +
+        '<div class="game-card-action">Play &rarr;</div>' +
+      '</div>' +
+      // Game 2: Arcade Blaster
+      '<div class="game-card-select" id="play-blaster-card">' +
+        '<div class="game-card-icon blaster">👾</div>' +
+        '<div class="game-card-details">' +
+          '<h3>Cyber Arcade Blaster</h3>' +
+          '<p>Blast descending cyber bugs & catch golden XP chips for high scores!</p>' +
+          '<div class="game-card-meta cyan">▶ RETRO ARCADE · BLITZ</div>' +
+        '</div>' +
+        '<div class="game-card-action">Play &rarr;</div>' +
+      '</div>' +
+    '</div>' +
+    '<button class="btn bk" id="bk">&larr; Back to Office</button>' +
+  '</div>';
+
+  m.style.display = "flex";
+  $("xx").onclick = $("bk").onclick = close;
+  $("play-tt-card").onclick = startTTGame;
+  $("play-blaster-card").onclick = startBlasterGame;
+}
+
+/* --- Mini-Game 1: Neon Table Tennis --- */
+function startTTGame() {
+  stopActiveGame();
+  var m = $("modal");
+  m.innerHTML = '<div class="card arcade-modal" role="dialog" aria-label="Neon Table Tennis">' +
+    '<div class="arcade-game-container">' +
+      '<div class="arcade-game-top">' +
+        '<div class="arcade-game-title">🏓 Neon Table Tennis</div>' +
+        '<button class="btn alt arcade-sub-btn" id="tt-back-btn">&larr; Games Menu</button>' +
+      '</div>' +
+      '<div class="game-hud-bar">' +
+        '<span style="color:#f97316">YOU: <span id="tt-p1-score">0</span></span>' +
+        '<span style="color:#facc15" id="tt-status">FIRST TO 3 WINS</span>' +
+        '<span style="color:#38bdf8">BOT: <span id="tt-p2-score">0</span></span>' +
+      '</div>' +
+      '<div class="arcade-canvas-wrap">' +
+        '<canvas id="tt-canvas" width="460" height="260"></canvas>' +
+      '</div>' +
+      '<div class="game-controls-hint">Move paddle with mouse / touch or ↑ ↓ / W S keys</div>' +
+    '</div>' +
+  '</div>';
+
+  $("tt-back-btn").onclick = openLounge;
+
+  var canvas = $("tt-canvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var W = 460, H = 260;
+
+  var p1 = { y: 105, h: 52, w: 9, score: 0 };
+  var p2 = { y: 105, h: 52, w: 9, score: 0 };
+  var ball = { x: W / 2, y: H / 2, vx: 3.8, vy: 1.8, r: 5, trail: [] };
+  var gameOver = false, winner = null;
+  var keys = {};
+
+  function resetBall(dir) {
+    ball.x = W / 2;
+    ball.y = H / 2;
+    ball.vx = (dir || 1) * 3.8;
+    ball.vy = (Math.random() * 2 - 1) * 2.2;
+    ball.trail = [];
+  }
+
+  function onMouseMove(e) {
+    var rect = canvas.getBoundingClientRect();
+    var scaleY = H / rect.height;
+    var clientY = (e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0));
+    var my = (clientY - rect.top) * scaleY;
+    p1.y = Math.max(4, Math.min(H - p1.h - 4, my - p1.h / 2));
+  }
+
+  function onKeyDown(e) { keys[e.key] = true; }
+  function onKeyUp(e) { keys[e.key] = false; }
+
+  canvas.addEventListener("mousemove", onMouseMove);
+  canvas.addEventListener("touchmove", onMouseMove, { passive: true });
+  window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("keyup", onKeyUp);
+
+  gameCleanup = function() {
+    canvas.removeEventListener("mousemove", onMouseMove);
+    canvas.removeEventListener("touchmove", onMouseMove);
+    window.removeEventListener("keydown", onKeyDown);
+    window.removeEventListener("keyup", onKeyUp);
+  };
+
+  canvas.addEventListener("click", function() {
+    if (gameOver) {
+      p1.score = 0; p2.score = 0; gameOver = false; winner = null;
+      $("tt-p1-score").textContent = "0";
+      $("tt-p2-score").textContent = "0";
+      $("tt-status").textContent = "FIRST TO 3 WINS";
+      resetBall(1);
+    }
+  });
+
+  function loop() {
+    if (!gameOver) {
+      if (keys["ArrowUp"] || keys["w"] || keys["W"]) p1.y = Math.max(4, p1.y - 5);
+      if (keys["ArrowDown"] || keys["s"] || keys["S"]) p1.y = Math.min(H - p1.h - 4, p1.y + 5);
+
+      var targetY = ball.y - p2.h / 2;
+      var botSpeed = 3.2;
+      if (ball.vx > 0) {
+        if (p2.y < targetY - 4) p2.y += Math.min(botSpeed, targetY - p2.y);
+        else if (p2.y > targetY + 4) p2.y -= Math.min(botSpeed, p2.y - targetY);
+      } else {
+        var cy = H / 2 - p2.h / 2;
+        p2.y += (cy - p2.y) * 0.04;
+      }
+      p2.y = Math.max(4, Math.min(H - p2.h - 4, p2.y));
+
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+
+      ball.trail.push({ x: ball.x, y: ball.y });
+      if (ball.trail.length > 6) ball.trail.shift();
+
+      if (ball.y - ball.r <= 4) {
+        ball.y = 4 + ball.r;
+        ball.vy = Math.abs(ball.vy);
+        beep(240);
+      } else if (ball.y + ball.r >= H - 4) {
+        ball.y = H - 4 - ball.r;
+        ball.vy = -Math.abs(ball.vy);
+        beep(240);
+      }
+
+      var p1Left = 18, p1Right = 18 + p1.w;
+      if (ball.vx < 0 && ball.x - ball.r <= p1Right && ball.x + ball.r >= p1Left && ball.y >= p1.y - 4 && ball.y <= p1.y + p1.h + 4) {
+        ball.x = p1Right + ball.r;
+        var hitOffset = (ball.y - (p1.y + p1.h / 2)) / (p1.h / 2);
+        ball.vx = Math.min(7.2, Math.abs(ball.vx) * 1.06 + 0.15);
+        ball.vy = hitOffset * 4.2;
+        beep(480);
+      }
+
+      var p2Left = W - 18 - p2.w, p2Right = W - 18;
+      if (ball.vx > 0 && ball.x + ball.r >= p2Left && ball.x - ball.r <= p2Right && ball.y >= p2.y - 4 && ball.y <= p2.y + p2.h + 4) {
+        ball.x = p2Left - ball.r;
+        var hitOffset2 = (ball.y - (p2.y + p2.h / 2)) / (p2.h / 2);
+        ball.vx = -Math.min(7.2, Math.abs(ball.vx) * 1.06 + 0.15);
+        ball.vy = hitOffset2 * 4.2;
+        beep(420);
+      }
+
+      if (ball.x < -10) {
+        p2.score++;
+        $("tt-p2-score").textContent = p2.score;
+        beep(300);
+        if (p2.score >= 3) {
+          gameOver = true; winner = 'Studio Bot';
+          $("tt-status").textContent = "BOT WINS MATCH";
+        } else {
+          resetBall(1);
+        }
+      } else if (ball.x > W + 10) {
+        p1.score++;
+        $("tt-p1-score").textContent = p1.score;
+        beep(740);
+        if (p1.score >= 3) {
+          gameOver = true; winner = 'Player';
+          $("tt-status").textContent = "YOU WON MATCH!";
+          beep(920);
+        } else {
+          resetBall(-1);
+        }
+      }
+    }
+
+    ctx.fillStyle = "#0c1527";
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.strokeStyle = "#1d4ed8";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(4, 4, W - 8, H - 8);
+
+    ctx.strokeStyle = "rgba(255,255,255,0.04)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(4, H / 2); ctx.lineTo(W - 4, H / 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(255,255,255,0.35)";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 6]);
+    ctx.beginPath();
+    ctx.moveTo(W / 2, 4); ctx.lineTo(W / 2, H - 4);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (var i = 0; i < ball.trail.length; i++) {
+      var tr = ball.trail[i];
+      var op = (i + 1) / ball.trail.length * 0.4;
+      ctx.fillStyle = "rgba(56, 189, 248, " + op + ")";
+      ctx.beginPath();
+      ctx.arc(tr.x, tr.y, ball.r * (0.6 + 0.4 * i / ball.trail.length), 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.shadowColor = "#38bdf8";
+    ctx.shadowBlur = 12;
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.shadowColor = "#f97316";
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = "#f97316";
+    ctx.beginPath();
+    ctx.roundRect(18, p1.y, p1.w, p1.h, 4);
+    ctx.fill();
+
+    ctx.shadowColor = "#38bdf8";
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = "#38bdf8";
+    ctx.beginPath();
+    ctx.roundRect(W - 18 - p2.w, p2.y, p2.w, p2.h, 4);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    if (gameOver) {
+      ctx.fillStyle = "rgba(8, 12, 22, 0.82)";
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.font = "800 22px 'Space Grotesk', sans-serif";
+      ctx.textAlign = "center";
+      if (winner === 'Player') {
+        ctx.fillStyle = "#facc15";
+        ctx.fillText("🏆 MATCH WON! AWESOME RALLY!", W / 2, H / 2 - 12);
+      } else {
+        ctx.fillStyle = "#38bdf8";
+        ctx.fillText("BOT WON THIS ROUND!", W / 2, H / 2 - 12);
+      }
+      ctx.font = "700 13px 'JetBrains Mono', monospace";
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillText("▶ CLICK ANYWHERE TO PLAY AGAIN", W / 2, H / 2 + 18);
+    }
+
+    activeGameLoop = requestAnimationFrame(loop);
+  }
+
+  activeGameLoop = requestAnimationFrame(loop);
+}
+
+/* --- Mini-Game 2: Cyber Arcade Blaster --- */
+function startBlasterGame() {
+  stopActiveGame();
+  var m = $("modal");
+  m.innerHTML = '<div class="card arcade-modal" role="dialog" aria-label="Cyber Arcade Blaster">' +
+    '<div class="arcade-game-container">' +
+      '<div class="arcade-game-top">' +
+        '<div class="arcade-game-title">👾 Cyber Arcade Blaster</div>' +
+        '<button class="btn alt arcade-sub-btn" id="blaster-back-btn">&larr; Games Menu</button>' +
+      '</div>' +
+      '<div class="game-hud-bar">' +
+        '<span style="color:#38bdf8">SCORE: <span id="bl-score">0</span></span>' +
+        '<span style="color:#f43f5e" id="bl-lives">❤❤❤</span>' +
+        '<span style="color:#facc15">TARGET: 100 PTS</span>' +
+      '</div>' +
+      '<div class="arcade-canvas-wrap orange-border">' +
+        '<canvas id="blaster-canvas" width="460" height="260"></canvas>' +
+      '</div>' +
+      '<div class="game-controls-hint">Move with mouse / touch or ← → / A D keys · Auto-Firing!</div>' +
+    '</div>' +
+  '</div>';
+
+  $("blaster-back-btn").onclick = openLounge;
+
+  var canvas = $("blaster-canvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var W = 460, H = 260;
+
+  var ship = { x: W / 2, y: H - 32, w: 24, h: 22 };
+  var bullets = [];
+  var enemies = [];
+  var chips = [];
+  var particles = [];
+  var stars = [];
+  var score = 0, lives = 3, gameOver = false, won = false;
+  var lastShot = 0, lastSpawn = 0, lastChipSpawn = 0;
+  var keys = {};
+
+  for (var i = 0; i < 40; i++) {
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      speed: 0.5 + Math.random() * 1.5,
+      size: Math.random() * 1.5 + 0.8
+    });
+  }
+
+  function onMouseMove(e) {
+    var rect = canvas.getBoundingClientRect();
+    var scaleX = W / rect.width;
+    var clientX = (e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0));
+    var mx = (clientX - rect.left) * scaleX;
+    ship.x = Math.max(16, Math.min(W - 16, mx));
+  }
+
+  function onKeyDown(e) { keys[e.key] = true; }
+  function onKeyUp(e) { keys[e.key] = false; }
+
+  canvas.addEventListener("mousemove", onMouseMove);
+  canvas.addEventListener("touchmove", onMouseMove, { passive: true });
+  window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("keyup", onKeyUp);
+
+  gameCleanup = function() {
+    canvas.removeEventListener("mousemove", onMouseMove);
+    canvas.removeEventListener("touchmove", onMouseMove);
+    window.removeEventListener("keydown", onKeyDown);
+    window.removeEventListener("keyup", onKeyUp);
+  };
+
+  canvas.addEventListener("click", function() {
+    if (gameOver) {
+      score = 0; lives = 3; gameOver = false; won = false;
+      bullets = []; enemies = []; chips = []; particles = [];
+      $("bl-score").textContent = "0";
+      $("bl-lives").textContent = "❤❤❤";
+    }
+  });
+
+  function loop(now) {
+    for (var s = 0; s < stars.length; s++) {
+      stars[s].y += stars[s].speed;
+      if (stars[s].y > H) { stars[s].y = 0; stars[s].x = Math.random() * W; }
+    }
+
+    if (!gameOver) {
+      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) ship.x = Math.max(16, ship.x - 5);
+      if (keys["ArrowRight"] || keys["d"] || keys["D"]) ship.x = Math.min(W - 16, ship.x + 5);
+
+      if (!lastShot || now - lastShot > 220) {
+        lastShot = now;
+        bullets.push({ x: ship.x - 7, y: ship.y, vy: -6 });
+        bullets.push({ x: ship.x + 7, y: ship.y, vy: -6 });
+        beep(560);
+      }
+
+      if (!lastSpawn || now - lastSpawn > 800) {
+        lastSpawn = now;
+        enemies.push({
+          x: 20 + Math.random() * (W - 40),
+          y: -15,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: 1.2 + Math.random() * 0.9,
+          r: 10,
+          hp: 1,
+          color: (Math.random() > 0.5 ? '#f43f5e' : '#a855f7')
+        });
+      }
+
+      if (!lastChipSpawn || now - lastChipSpawn > 3200) {
+        lastChipSpawn = now;
+        chips.push({
+          x: 30 + Math.random() * (W - 60),
+          y: -15,
+          vy: 1.1,
+          r: 8
+        });
+      }
+
+      for (var b = bullets.length - 1; b >= 0; b--) {
+        bullets[b].y += bullets[b].vy;
+        if (bullets[b].y < -10) bullets.splice(b, 1);
+      }
+
+      for (var e = enemies.length - 1; e >= 0; e--) {
+        var en = enemies[e];
+        en.y += en.vy;
+        en.x += Math.sin(now * 0.005 + e) * 0.8;
+
+        for (var bi = bullets.length - 1; bi >= 0; bi--) {
+          var bu = bullets[bi];
+          var dist = Math.hypot(bu.x - en.x, bu.y - en.y);
+          if (dist < en.r + 4) {
+            bullets.splice(bi, 1);
+            en.hp--;
+            if (en.hp <= 0) {
+              for (var p = 0; p < 8; p++) {
+                particles.push({
+                  x: en.x, y: en.y,
+                  vx: (Math.random() - 0.5) * 4,
+                  vy: (Math.random() - 0.5) * 4,
+                  life: 20, maxLife: 20,
+                  color: en.color
+                });
+              }
+              enemies.splice(e, 1);
+              score += 10;
+              $("bl-score").textContent = score;
+              beep(340);
+              if (score >= 100) {
+                won = true; gameOver = true; beep(960);
+              }
+              break;
+            }
+          }
+        }
+
+        if (en) {
+          if (Math.hypot(en.x - ship.x, en.y - ship.y) < en.r + 10 || en.y > H + 10) {
+            enemies.splice(e, 1);
+            lives--;
+            beep(200);
+            var hearts = "";
+            for (var h = 0; h < lives; h++) hearts += "❤";
+            $("bl-lives").textContent = hearts || "GAME OVER";
+            if (lives <= 0) {
+              gameOver = true; won = false;
+            }
+          }
+        }
+      }
+
+      for (var c = chips.length - 1; c >= 0; c--) {
+        var ch = chips[c];
+        ch.y += ch.vy;
+        if (Math.hypot(ch.x - ship.x, ch.y - ship.y) < ch.r + 14) {
+          chips.splice(c, 1);
+          score += 25;
+          $("bl-score").textContent = score;
+          beep(880);
+          for (var p = 0; p < 6; p++) {
+            particles.push({
+              x: ship.x, y: ship.y,
+              vx: (Math.random() - 0.5) * 3,
+              vy: -Math.random() * 3,
+              life: 18, maxLife: 18,
+              color: '#facc15'
+            });
+          }
+          if (score >= 100) {
+            won = true; gameOver = true; beep(960);
+          }
+        } else if (ch.y > H + 15) {
+          chips.splice(c, 1);
+        }
+      }
+
+      for (var pi = particles.length - 1; pi >= 0; pi--) {
+        var pt = particles[pi];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.life--;
+        if (pt.life <= 0) particles.splice(pi, 1);
+      }
+    }
+
+    ctx.fillStyle = "#080c17";
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
+    for (var s = 0; s < stars.length; s++) {
+      ctx.fillRect(stars[s].x, stars[s].y, stars[s].size, stars[s].size);
+    }
+
+    ctx.shadowColor = "#38bdf8";
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = "#38bdf8";
+    for (var b = 0; b < bullets.length; b++) {
+      ctx.fillRect(bullets[b].x - 1.5, bullets[b].y - 5, 3, 10);
+    }
+
+    for (var e = 0; e < enemies.length; e++) {
+      var en = enemies[e];
+      ctx.shadowColor = en.color;
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = en.color;
+      ctx.beginPath();
+      ctx.arc(en.x, en.y, en.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(en.x - 4, en.y - 2, 2.5, 3);
+      ctx.fillRect(en.x + 1.5, en.y - 2, 2.5, 3);
+    }
+
+    ctx.shadowColor = "#facc15";
+    ctx.shadowBlur = 12;
+    ctx.fillStyle = "#facc15";
+    for (var c = 0; c < chips.length; c++) {
+      var ch = chips[c];
+      ctx.beginPath();
+      ctx.arc(ch.x, ch.y, ch.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 10px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("★", ch.x, ch.y + 3.5);
+      ctx.fillStyle = "#facc15";
+    }
+
+    for (var pi = 0; pi < particles.length; pi++) {
+      var pt = particles[pi];
+      ctx.shadowColor = pt.color;
+      ctx.shadowBlur = 6;
+      ctx.fillStyle = pt.color;
+      ctx.globalAlpha = pt.life / pt.maxLife;
+      ctx.fillRect(pt.x - 1.5, pt.y - 1.5, 3, 3);
+    }
+    ctx.globalAlpha = 1.0;
+
+    ctx.shadowColor = "#f97316";
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = "#fb923c";
+    ctx.beginPath();
+    ctx.moveTo(ship.x - 5, ship.y + ship.h / 2);
+    ctx.lineTo(ship.x + 5, ship.y + ship.h / 2);
+    ctx.lineTo(ship.x, ship.y + ship.h / 2 + 7 + Math.random() * 4);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "#38bdf8";
+    ctx.beginPath();
+    ctx.moveTo(ship.x, ship.y - ship.h / 2);
+    ctx.lineTo(ship.x + ship.w / 2, ship.y + ship.h / 2);
+    ctx.lineTo(ship.x, ship.y + ship.h / 4);
+    ctx.lineTo(ship.x - ship.w / 2, ship.y + ship.h / 2);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(ship.x, ship.y, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    if (gameOver) {
+      ctx.fillStyle = "rgba(8, 12, 22, 0.85)";
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.font = "800 22px 'Space Grotesk', sans-serif";
+      ctx.textAlign = "center";
+      if (won) {
+        ctx.fillStyle = "#facc15";
+        ctx.fillText("🏆 HIGH SCORE! MISSION CLEARED!", W / 2, H / 2 - 12);
+      } else {
+        ctx.fillStyle = "#f43f5e";
+        ctx.fillText("SYSTEM OVERLOAD! (GAME OVER)", W / 2, H / 2 - 12);
+      }
+      ctx.font = "700 13px 'JetBrains Mono', monospace";
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillText("▶ CLICK ANYWHERE TO PLAY AGAIN", W / 2, H / 2 + 18);
+    }
+
+    activeGameLoop = requestAnimationFrame(loop);
+  }
+
+  activeGameLoop = requestAnimationFrame(loop);
+}
+
 function openCareers(){
   $("modal").style.display = "none";
   var el = $("careers");
@@ -3011,10 +3812,11 @@ function openCareers(){
 
 /* Event Routing */
 function act(t){
-  var p = t.closest("[data-p]"), c = t.closest("[data-c]"), q = t.closest("[data-portal]");
+  var p = t.closest("[data-p]"), c = t.closest("[data-c]"), q = t.closest("[data-portal]"), l = t.closest("[data-lounge]");
   if (c) collect(+c.dataset.c);
   else if (p) openEmp(+p.dataset.p, p);
   else if (q) openCareers();
+  else if (l) openLounge();
 }
 
 svg.addEventListener("click", function(e){ if (state === "office") act(e.target); });

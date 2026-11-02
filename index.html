@@ -2357,13 +2357,12 @@ input[type=text].input-invalid {
   <!-- Hero Box -->
   <div class="hero-box">
     <h1>Your next adventure starts here.</h1>
-    <p id="welcome-sub"><b>Welcome to Virtualize: Career Quest</b><br>Enter the World. Discover the People. Unlock Your Next Level.</p>
+    <p><b>Welcome to Virtualize: Career Quest</b><br>Enter the World. Discover the People. Unlock Your Next Level.</p>
   </div>
 
   <!-- Action Buttons (In a Row Across All Devices) -->
   <div class="btn-group">
     <button class="btn press" id="start">Press start</button>
-    <button class="btn" id="welcome-new" style="display:none;">Create new profile</button>
     <button class="btn" id="exp">Explore careers</button>
   </div>
 </div>
@@ -2481,7 +2480,6 @@ function saveProfile() {
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       hasSavedProfile = true;
-      syncWelcomeUI();
     }
   } catch (e) {
     console.warn("Unable to save profile to localStorage", e);
@@ -2510,35 +2508,6 @@ function loadProfile() {
     console.warn("Unable to load profile from localStorage", e);
   }
   return false;
-}
-
-function syncWelcomeUI() {
-  var startBtn = $("start");
-  var newBtn = $("welcome-new");
-  var welcomeSub = $("welcome-sub");
-  if (isReturningUser && P.name && P.name !== "Player") {
-    if (startBtn) {
-      startBtn.textContent = "Continue as " + P.name;
-      startBtn.setAttribute("aria-label", "Continue as " + P.name);
-    }
-    if (newBtn) {
-      newBtn.style.display = "inline-flex";
-    }
-    if (welcomeSub) {
-      welcomeSub.innerHTML = '<b>Welcome back, ' + esc(P.name) + '!</b><br>Enter the World. Discover the People. Unlock Your Next Level.';
-    }
-  } else {
-    if (startBtn) {
-      startBtn.textContent = "Press start";
-      startBtn.setAttribute("aria-label", "Press start");
-    }
-    if (newBtn) {
-      newBtn.style.display = "none";
-    }
-    if (welcomeSub) {
-      welcomeSub.innerHTML = '<b>Welcome to Virtualize: Career Quest</b><br>Enter the World. Discover the People. Unlock Your Next Level.';
-    }
-  }
 }
 
 hasSavedProfile = loadProfile();
@@ -5818,23 +5787,6 @@ $("start").onclick = function(){
     step(1);
   }
 };
-var wNew = $("welcome-new");
-if (wNew) {
-  wNew.onclick = function(){
-    beep(380);
-    isCreatingNew = true;
-    isReturningUser = false;
-    P.name = "";
-    P.av = 0;
-    P.col = 1;
-    P.id = "VQ-" + (1000 + Math.floor(Math.random() * 9000));
-    state = "create";
-    show("welcome", false);
-    show("create", true);
-    step(1);
-  };
-}
-syncWelcomeUI();
 $("exp").onclick = openCareers;
 $("nOv").onclick = function(){
   close();

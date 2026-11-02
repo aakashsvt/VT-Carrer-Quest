@@ -465,6 +465,34 @@ input[type=text]:focus {
   border-color: #38bdf8;
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
 }
+@keyframes inputShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+input[type=text].input-invalid {
+  border-color: #f87171 !important;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.35) !important;
+  animation: inputShake 0.35s ease;
+}
+.name-error-msg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #f87171;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-top: -10px;
+  margin-bottom: -4px;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.01em;
+}
+.name-error-msg svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
 
 .avs {
   display: grid;
@@ -3473,7 +3501,11 @@ function step(s){
   var el = $("create"), h = "";
   if (s === 1) {
     h = '<div class="step-card"><h2>First, what should we call you?</h2>'+
-        '<input type="text" id="nm" maxlength="16" aria-label="Display name" placeholder="Your name" value="'+(P.name === "Player" ? "" : esc(P.name))+'">'+
+        '<input type="text" id="nm" maxlength="16" aria-label="Display name" placeholder="Your name (min. 2 letters)" value="'+(P.name === "Player" ? "" : esc(P.name))+'" autocomplete="off">'+
+        '<div id="nm-err" class="name-error-msg" role="alert" style="display:none;">'+
+          '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>'+
+          '<span>Please enter a name with at least 2 letters</span>'+
+        '</div>'+
         '<button class="btn primary" id="nx">Next</button></div>';
   } else if (s === 2) {
     h = '<div class="step-card"><h2>Choose your avatar</h2><div class="avs">' +
@@ -3515,11 +3547,47 @@ function step(s){
     };
   });
   nx.onclick = function(){
-    if (s === 1) P.name = $("nm").value.trim() || "Player";
+    if (s === 1) {
+      var inp = $("nm");
+      var val = (inp ? inp.value : "").trim();
+      var letters = 0;
+      try { letters = (val.match(/\p{L}/gu) || []).length; } catch (e) { letters = (val.match(/[a-zA-Z]/g) || []).length; }
+      if (letters < 2) {
+        var err = $("nm-err");
+        if (inp) {
+          inp.classList.remove("input-invalid");
+          void inp.offsetWidth;
+          inp.classList.add("input-invalid");
+          inp.focus();
+        }
+        if (err) err.style.display = "flex";
+        beep(240);
+        return;
+      }
+      P.name = val;
+    }
     if (s < 4) step(s + 1); else enter();
   };
   if (s === 1) {
-    $("nm").onkeydown = function(e){ if (e.key === "Enter") nx.click(); };
+    var inp = $("nm");
+    var err = $("nm-err");
+    if (inp) {
+      inp.oninput = function(){
+        var val = inp.value.trim();
+        var letters = 0;
+        try { letters = (val.match(/\p{L}/gu) || []).length; } catch (e) { letters = (val.match(/[a-zA-Z]/g) || []).length; }
+        if (letters >= 2) {
+          inp.classList.remove("input-invalid");
+          if (err) err.style.display = "none";
+        }
+      };
+      inp.onkeydown = function(e){
+        if (e.key === "Enter") {
+          e.preventDefault();
+          nx.click();
+        }
+      };
+    }
   }
 }
 

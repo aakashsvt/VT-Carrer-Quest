@@ -348,7 +348,8 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
   .hero-box {
     margin: auto auto clamp(10px, 1.5dvh, 14px) auto !important;
     padding: 10px 14px;
-    width: 92dvw;
+    width: 86dvw;
+    max-width: 86dvw;
     transform: none !important;
   }
   #welcome h1 {
@@ -366,13 +367,13 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
     margin: 0;
   }
   .btn.press {
-    padding: 12px 24px;
-    font-size: 15px;
+    padding: 11px 20px;
+    font-size: 14.5px;
     border-radius: 10px;
   }
   #exp {
-    padding: 12px 22px;
-    font-size: 14.5px;
+    padding: 11px 18px;
+    font-size: 14px;
     border-radius: 10px;
   }
 }
@@ -528,8 +529,11 @@ input[type=text]:focus {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
 }
 @media (max-width: 600px) {
+  #create {
+    padding: 22px;
+  }
   .step-card {
-    padding: 20px 14px;
+    padding: 18px 14px;
   }
   .avs {
     grid-template-columns: repeat(2, 1fr);
@@ -613,7 +617,7 @@ input[type=text]:focus {
   touch-action: manipulation;
   scrollbar-width: thin;
   scrollbar-color: #f97316 transparent;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
 .floor-scroll #game {
   position: relative;
@@ -756,24 +760,23 @@ input[type=text]:focus {
 }
 
 /* Tablets and phones: bar docks to the top edge and the floor scrolls beneath it */
+/* --inset-l and --inset-r come from syncTopBar so the bar lines up with the room edges */
 .floor-scroll #top-bar {
   top: 0;
   left: 0;
   right: 0;
   gap: 8px 10px;
-  padding: max(8px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) 8px max(10px, env(safe-area-inset-left, 0px));
-  background: rgba(6, 9, 18, 0.92);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(0, 240, 255, 0.25);
-  pointer-events: auto;
+  padding: max(14px, env(safe-area-inset-top, 0px)) var(--inset-r, 20px) 18px var(--inset-l, 20px);
+  background: linear-gradient(180deg, rgba(5, 8, 16, 0.97) 0%, rgba(5, 8, 16, 0.94) 72%, rgba(5, 8, 16, 0) 100%);
+  pointer-events: none;
 }
 .floor-scroll #nav {
   gap: 8px;
 }
 .floor-scroll #nav .btn {
-  height: 44px;
+  height: 42px;
   padding: 0 14px;
-  font-size: 14px;
+  font-size: 13.5px;
 }
 .floor-scroll #hud {
   flex: 1 1 0;
@@ -782,18 +785,18 @@ input[type=text]:focus {
 .floor-scroll #hud .bar {
   width: 100%;
   min-width: 0;
-  height: 44px;
+  height: 42px;
   padding: 5px 14px 6px;
   gap: 5px;
 }
 .floor-scroll .track {
-  height: 7px;
+  height: 6px;
 }
 .floor-scroll #mt {
-  font-size: 13px;
+  font-size: 12.5px;
 }
 .floor-scroll #xpt {
-  font-size: 12px;
+  font-size: 11.5px;
 }
 .floor-scroll .mt-long {
   display: none;
@@ -820,7 +823,34 @@ input[type=text]:focus {
   .floor-scroll .lbl-long { display: none; }
   .floor-scroll .lbl-short { display: inline; }
 }
-/* Smallest phones: trim the padding, never the text size */
+/* Phones: a slimmer bar so the screen doesn't feel crowded */
+@media (max-width: 600px), (max-height: 500px) {
+  .floor-scroll #nav .btn {
+    height: 38px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+  .floor-scroll #hud .bar {
+    height: 40px;
+    padding: 4px 12px 5px;
+  }
+  .floor-scroll #mt {
+    font-size: 12px;
+  }
+  .floor-scroll #xpt {
+    font-size: 11px;
+  }
+}
+@media (max-height: 500px) {
+  .floor-scroll #top-bar {
+    padding-top: max(8px, env(safe-area-inset-top, 0px));
+    padding-bottom: 14px;
+  }
+  .floor-scroll #nav .btn {
+    padding: 0 11px;
+  }
+}
+/* Smallest phones: trim the padding, not the text */
 @media (max-width: 350px) {
   .floor-scroll #nav {
     gap: 6px;
@@ -828,6 +858,46 @@ input[type=text]:focus {
   .floor-scroll #nav .btn {
     padding: 0 5px;
   }
+}
+
+/* Collected chip flying up to the XP bar */
+#fx {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  overflow: hidden;
+  pointer-events: none;
+}
+.reward-chip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  will-change: transform;
+}
+.reward-chip svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.reward-spark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+}
+.reward-float {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fde047;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.9), 0 2px 4px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
 }
 
 /* Modals & Dialogs */
@@ -1027,10 +1097,10 @@ input[type=text]:focus {
 }
 @media (max-width: 859px) {
   #modal {
-    padding: 12px;
+    padding: 20px;
   }
   .card {
-    max-height: 90dvh;
+    max-height: 86dvh;
   }
   .mp {
     display: flex;
@@ -1045,6 +1115,40 @@ input[type=text]:focus {
     min-height: 0;
     overflow-y: auto;
     padding: 18px;
+  }
+}
+@media (max-width: 600px) {
+  .card {
+    padding: 20px;
+  }
+  .card h2 {
+    font-size: 20px;
+  }
+  .card p,
+  .fact,
+  .mp p {
+    font-size: 13.5px;
+  }
+  .mp {
+    padding: 0;
+  }
+  .mp .pt {
+    height: clamp(100px, 21dvh, 190px);
+  }
+  .mp .pi {
+    padding: 16px;
+  }
+  .mp h2 {
+    font-size: 20px;
+  }
+  .mp .bk {
+    margin-top: 14px;
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+  .card .btn.primary {
+    padding: 11px 20px;
+    font-size: 14.5px;
   }
 }
 
@@ -1244,11 +1348,27 @@ input[type=text]:focus {
 }
 @media (max-width: 600px) {
   #modal:has(.arcade-modal) {
-    padding: 8px;
+    padding: 16px;
   }
   .arcade-modal {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
+    gap: 12px;
+  }
+  .arcade-header h2 {
+    font-size: 19px;
+  }
+  .game-card-select {
+    padding: 11px 12px;
+    gap: 10px;
+  }
+  .game-card-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+  }
+  .game-card-action {
+    font-size: 12px;
   }
 }
 /* Landscape phones: size the table from the height so the whole game stays on screen */
@@ -1846,6 +1966,7 @@ input[type=text]:focus {
 
 <div id="modal"></div>
 <div class="ov" id="careers"></div>
+<div id="fx" aria-hidden="true"></div>
 <div id="toast" role="status"></div>
 
 <script>
@@ -1921,7 +2042,7 @@ var MSG=["FIRST DISCOVERY UNLOCKED!","NICE FIND!","LEVEL-UP ENERGY!","HALFWAY TH
 
 (function(){
 var $ = function(i){ return document.getElementById(i); }, RM = matchMedia("(prefers-reduced-motion:reduce)").matches;
-var P = {name: "Player", av: 0, col: 1, id: "VQ-" + (1000 + Math.floor(Math.random() * 9000))}, state = "welcome", got = {}, n = 0, xp = 0, snd = false, actx;
+var P = {name: "Player", av: 0, col: 1, id: "VQ-" + (1000 + Math.floor(Math.random() * 9000))}, state = "welcome", got = {}, n = 0, shownN = 0, shownXp = 0, rewardChip = null, xpCount = 0, snd = false, actx;
 
 function esc(s){ return String(s).replace(/[&<>"]/g, function(m){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]; }); }
 function mix(h, a){
@@ -2674,20 +2795,24 @@ function PP(pi, x, y, s, deskY) {
          '</g>';
 }
 
-function chipG(c, x, y) {
-  var idx = CONFIG.chips.indexOf(c);
+function chipFace(c) {
   var icon = (c.g === '★' || c.g === '</>' || !c.g)
     ? '<polygon points="0,-7 2.1,-2.3 7.3,-1.6 3.5,2.1 4.5,7.2 0,4.6 -4.5,7.2 -3.5,2.1 -7.3,-1.6 -2.1,-2.3" fill="#ffffff" style="filter:drop-shadow(0 0 2.5px #ffffff) drop-shadow(0 0 5px '+c.c+')"/>'
     : Tx(0, 5, esc(c.g), c.g.length > 2 ? 10 : 13, "#ffffff", 800);
-  return '<g transform="translate('+x+' '+y+')">'+
-         '<g class="chip" data-c="'+idx+'" tabindex="0" role="button" aria-label="'+c.n+'">'+
-         '<ellipse class="chip-shadow" cx="0" cy="18" rx="14" ry="4" fill="rgba(0,0,0,0.45)"/>'+
-         '<g class="chip-body" style="filter:drop-shadow(0 0 5px '+c.c+') drop-shadow(0 0 10px '+c.c+') drop-shadow(0 0 14px '+c.c+')">'+
+  return '<g class="chip-body" style="filter:drop-shadow(0 0 5px '+c.c+') drop-shadow(0 0 10px '+c.c+') drop-shadow(0 0 14px '+c.c+')">'+
          '<circle cx="0" cy="0" r="19" fill="'+c.c+'" opacity="0.18" style="filter:blur(2px)"/>'+
          '<circle cx="0" cy="0" r="17" fill="#080e18" stroke="'+c.c+'" stroke-width="2.8"/>'+
          '<circle cx="0" cy="0" r="12.5" fill="none" stroke="'+c.c+'" stroke-width="1.2" opacity="0.85"/>'+
          icon +
-         '</g>'+
+         '</g>';
+}
+
+function chipG(c, x, y) {
+  var idx = CONFIG.chips.indexOf(c);
+  return '<g transform="translate('+x+' '+y+')">'+
+         '<g class="chip" data-c="'+idx+'" tabindex="0" role="button" aria-label="'+c.n+'">'+
+         '<ellipse class="chip-shadow" cx="0" cy="18" rx="14" ry="4" fill="rgba(0,0,0,0.45)"/>'+
+         chipFace(c)+
          '</g></g>';
 }
 
@@ -3191,12 +3316,17 @@ function buildGame() {
 
   CONFIG.zones.forEach(function(z) { s += room(z); });
   CONFIG.chips.forEach(function(c) {
-    var z = c.zone ? CONFIG.zones.filter(function(q){ return q.id === c.zone; })[0] : {x: 0, y: 0};
-    var p = (!c.zone && FLOOR.hub) || c.p;
-    s += chipG(c, z.x + p[0], z.y + p[1]);
+    var home = chipHome(c);
+    s += chipG(c, home[0], home[1]);
   });
 
   $("game").innerHTML = s;
+}
+
+function chipHome(c) {
+  var z = c.zone ? zoneOf(c.zone) : {x: 0, y: 0};
+  var p = (!c.zone && FLOOR.hub) || c.p;
+  return [z.x + p[0], z.y + p[1]];
 }
 
 /* Redraw after a layout change without losing the player's progress */
@@ -3276,10 +3406,11 @@ function layoutFloor(cols){
     return;
   }
 
-  var rw = 360, rh = 260, padX = 10, top = 30, gapX = 30, gapY = 48, step = rh + gapY;
+  var rw = 360, rh = 260, padX = cols === 1 ? 24 : 28, top = 22, gapX = 30, gapY = 48, step = rh + gapY;
   var rows = 1 + Math.ceil((CONFIG.zones.length - 1) / cols);
+  FLOOR.padX = padX;
   FLOOR.w = cols * rw + (cols - 1) * gapX + padX * 2;
-  FLOOR.h = top + rows * step - gapY + 24;
+  FLOOR.h = top + rows * step - gapY + 36;
   // First room (CEO Cabin) gets its own centred row, the other eight fill the columns
   CONFIG.zones.forEach(function(z, i){
     var col = i === 0 ? (cols - 1) / 2 : (i - 1) % cols;
@@ -3408,7 +3539,10 @@ function syncTopBar(){
   if (FLOOR.cols < 3) {
     tb.style.left = tb.style.width = tb.style.top = "";
     nav.style.width = hudBar.style.width = "";
-    floor.style.paddingTop = tb.offsetHeight + "px";
+    var fr = svg.getBoundingClientRect(), pad = FLOOR.padX * fr.width / FLOOR.w;
+    tb.style.setProperty("--inset-l", (fr.left + pad) + "px");
+    tb.style.setProperty("--inset-r", (innerWidth - fr.right + pad) + "px");
+    floor.style.paddingTop = (tb.offsetHeight - 10) + "px";
     return;
   }
   floor.style.paddingTop = "";
@@ -3458,10 +3592,128 @@ function enter(){
 }
 
 function hud(){
-  $("mt").innerHTML = '<span class="mt-long">DISCOVERY </span>MISSION: ' + n + '/6 <span class="mt-long">XP </span>CHIPS';
-  $("xpb").style.width = (n / 6 * 100) + "%";
-  $("xpt").textContent = xp + " XP · " + P.name;
+  $("mt").innerHTML = '<span class="mt-long">DISCOVERY </span>MISSION: <span id="mt-n" style="display:inline-block">' + shownN + '/6</span> <span class="mt-long">XP </span>CHIPS';
+  $("xpb").style.width = (shownN / 6 * 100) + "%";
+  $("xpt").textContent = shownXp + " XP · " + P.name;
   syncTopBar();
+}
+
+/* Chip Reward: the XP bar waits until the player closes the chip card, then the chip flies up and fills it */
+function sparkle(x, y, color, size, dx, dy, ms) {
+  var el = document.createElement("div");
+  el.className = "reward-spark";
+  el.style.width = el.style.height = size + "px";
+  el.style.margin = (-size / 2) + "px 0 0 " + (-size / 2) + "px";
+  el.style.background = color;
+  el.style.boxShadow = "0 0 " + (size * 2) + "px " + color;
+  $("fx").appendChild(el);
+  el.animate([
+    {transform: "translate(" + x + "px," + y + "px) scale(1)", opacity: 1},
+    {transform: "translate(" + (x + dx) + "px," + (y + dy) + "px) scale(0.2)", opacity: 0}
+  ], {duration: ms, easing: "cubic-bezier(0.16, 1, 0.3, 1)"}).onfinish = function(){ el.remove(); };
+}
+
+// Where the filled part of the XP bar currently ends
+function xpTip() {
+  var r = document.querySelector("#hud .track").getBoundingClientRect();
+  return {x: r.left + Math.max(6, r.width * shownN / 6), y: r.top + r.height / 2};
+}
+
+function countXp(from, to) {
+  var t0 = performance.now(), el = $("xpt");
+  cancelAnimationFrame(xpCount);
+  (function st(t){
+    var p = Math.min(1, (t - t0) / 600), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(from + (to - from) * e) + " XP · " + P.name;
+    if (p < 1) xpCount = requestAnimationFrame(st);
+  })(t0);
+}
+
+function sparkBurst(x, y, c, count) {
+  if (RM) return;
+  for (var i = 0; i < count; i++) {
+    var a = Math.random() * Math.PI * 2, d = 18 + Math.random() * 34;
+    sparkle(x, y, i % 2 ? c.c : "#fde047", 3 + Math.random() * 4, Math.cos(a) * d, Math.sin(a) * d, 480 + Math.random() * 220);
+  }
+}
+
+function landReward(c, at) {
+  shownN++;
+  shownXp += 100;
+  hud();
+  countXp(shownXp - 100, shownXp);
+  beep(980);
+  sparkBurst(at.x, at.y, c, 14);
+
+  var bar = document.querySelector("#hud .bar");
+  bar.animate([
+    {transform: "scale(1)"},
+    {transform: "scale(" + (RM ? 1 : 1.05) + ")", borderColor: "#fde047", boxShadow: "0 0 30px rgba(250, 204, 21, 0.95), inset 0 0 14px rgba(250, 204, 21, 0.35)", offset: 0.25},
+    {transform: "scale(1)"}
+  ], {duration: 620, easing: "ease-out"});
+  $("xpb").animate([{filter: "brightness(2.4)"}, {filter: "brightness(1)"}], {duration: 800, easing: "ease-out"});
+  $("mt-n").animate([{transform: "scale(1)", color: "#fde047"}, {transform: "scale(" + (RM ? 1 : 1.22) + ")", color: "#fde047", offset: 0.3}, {transform: "scale(1)"}], {duration: 520, easing: "ease-out"});
+
+  var label = document.createElement("div");
+  label.className = "reward-float";
+  label.textContent = "+100 XP";
+  $("fx").appendChild(label);
+  var br = bar.getBoundingClientRect(), lx = clamp(at.x - 32, br.left + 4, br.right - 76), ly = br.bottom + 4;
+  label.animate([
+    {transform: "translate(" + lx + "px," + (ly - 6) + "px) scale(0.7)", opacity: 0},
+    {transform: "translate(" + lx + "px," + (ly + 6) + "px) scale(1.1)", opacity: 1, offset: 0.2},
+    {transform: "translate(" + lx + "px," + (ly + 10) + "px) scale(1)", opacity: 1, offset: 0.7},
+    {transform: "translate(" + lx + "px," + (ly + 20) + "px) scale(1)", opacity: 0}
+  ], {duration: 1100, easing: "ease-out"}).onfinish = function(){ label.remove(); };
+}
+
+// The flight explains where the XP came from, so it always plays. With "reduce motion" on
+// (Windows "Show animations" off counts) it stays: just a straight glide without spin or sparks.
+function flyReward(c, done) {
+  var m = svg.getScreenCTM(), home = chipHome(c);
+  var sx = clamp(m.a * home[0] + m.e, 30, innerWidth - 30), sy = clamp(m.d * home[1] + m.f, 30, innerHeight - 30);
+  var startScale = clamp(m.a, 0.6, 1.2);
+  var el = document.createElement("div");
+  el.className = "reward-chip";
+  el.innerHTML = '<svg viewBox="-24 -24 48 48" aria-hidden="true">' + chipFace(c) + '</svg>';
+  $("fx").appendChild(el);
+
+  // Hold first: the card has only just closed and the eye needs a moment to find the chip
+  var POP = 480, first = xpTip(), fly = clamp(Math.hypot(first.x - sx, first.y - sy) * 1.2, 850, 1250);
+  var side = first.x < sx ? -1 : 1, t0 = performance.now(), lastSpark = t0;
+  var peak = RM ? 1.2 : 1.5, lift = RM ? 0 : 10, swing = RM ? 0 : 70;
+  beep(620);
+  sparkBurst(sx, sy, c, 10);
+  (function st(t){
+    var age = t - t0, to = xpTip(), x = sx, y = sy, s, spin = 0;
+    if (age < POP) {
+      // Pop up in place so the eye catches it before it leaves
+      var u = Math.min(1, age / (POP * 0.6));
+      s = startScale + (peak - startScale) * Math.sin(u * Math.PI / 2);
+      y = sy - lift * Math.sin(u * Math.PI / 2);
+    } else {
+      // Then swing out on a curve and accelerate into the bar
+      var p = Math.min(1, (age - POP) / fly), e = p * p * (1.6 - 0.6 * p), inv = 1 - e;
+      var bx = clamp(sx + side * swing + (to.x - sx) * 0.2, 44, innerWidth - 44), by = sy - lift + (to.y - sy) * 0.55;
+      x = inv * inv * sx + 2 * inv * e * bx + e * e * to.x;
+      y = inv * inv * (sy - lift) + 2 * inv * e * by + e * e * to.y;
+      s = peak - (peak - 0.45) * e;
+      spin = RM ? 0 : e * 540;
+      if (!RM && t - lastSpark > 26) {
+        lastSpark = t;
+        sparkle(x, y, c.c, 3 + Math.random() * 4, (Math.random() - 0.5) * 22, (Math.random() - 0.5) * 22, 420);
+      }
+      if (p >= 1) {
+        el.remove();
+        landReward(c, to);
+        // Leave time to watch the bar fill before anything else opens
+        setTimeout(done, 1200);
+        return;
+      }
+    }
+    el.style.transform = "translate(" + x + "px," + y + "px) scale(" + s + ") rotate(" + spin + "deg)";
+    requestAnimationFrame(st);
+  })(t0);
 }
 
 function card(h){
@@ -3476,6 +3728,16 @@ function close(){
   $("modal").style.display = "none";
   if (sel) { sel.classList.remove("sel"); sel = null; }
   if (state === "office") goVB(ovVB());
+  if (rewardChip) {
+    var c = rewardChip;
+    rewardChip = null;
+    flyReward(c, function(){
+      if (shownN === 6) {
+        stopActiveGame();
+        complete();
+      }
+    });
+  }
 }
 
 function zoneOf(id){
@@ -3512,8 +3774,7 @@ function collect(i){
   if (got[c.n]) return;
   got[c.n] = 1;
   n++;
-  xp += 100;
-  hud();
+  rewardChip = c;
   beep(660 + n * 80);
   var el = svg.querySelector('[data-c="'+i+'"]');
   if (el) el.classList.add("got");
@@ -3524,7 +3785,7 @@ function collect(i){
        '<div class="row" style="margin-top:12px">'+
        '<button class="btn primary" id="cn">'+(n === 6 ? "Continue" : "Keep exploring")+'</button>'+
        '</div>');
-  $("cn").onclick = function(){ if (n === 6) complete(); else close(); };
+  $("cn").onclick = close;
 }
 
 function complete(){
@@ -3583,7 +3844,27 @@ function jd(j){
 
 
 /* ===== STUDIO LOUNGE MINI-GAMES SYSTEM ===== */
-var activeGameLoop = null, gameCleanup = null;
+var activeGameLoop = null, gameCleanup = null, blasterBest = 0;
+
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+// Share of a gap to close in one step, so smoothing feels the same at any frame rate
+function ease(rate, h) { return 1 - Math.exp(-rate * h); }
+
+// Keeps a game canvas sharp at its real on-screen size; returns the current drawing scale
+function canvasScaler(canvas, W, H) {
+  var cssW = 0, scale = 1;
+  return function() {
+    var w = canvas.clientWidth;
+    if (w && w !== cssW) {
+      cssW = w;
+      var s = w / W * Math.min(window.devicePixelRatio || 1, 2.5);
+      canvas.width = Math.round(W * s);
+      canvas.height = Math.round(H * s);
+      scale = canvas.width / W;
+    }
+    return scale;
+  };
+}
 
 function stopActiveGame() {
   if (activeGameLoop) {
@@ -3689,12 +3970,9 @@ function startTTGame() {
   var phase = "serve", serveDir = 1, serveTimer = 0, serveLabel = null, serveColor = "#ffffff";
   var targetSpeed = RALLY_SPEED, rally = 0, clock = 0;
   var winner = null, ripples = [], keys = {};
-  var last = 0, canvasW = 0, scale = 1;
+  var last = 0, scale = 1, fit = canvasScaler(canvas, W, H);
 
-  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
   function clampPaddle(y) { return clamp(y, EDGE, H - PADDLE_H - EDGE); }
-  // Share of each step that closes the gap, for smoothing that ignores frame rate
-  function ease(rate, h) { return 1 - Math.exp(-rate * h); }
 
   function setStatus(text) {
     var el = $("tt-status");
@@ -3875,17 +4153,6 @@ function startTTGame() {
     else if (ball.x > W + 10) pointTo(bot);
   }
 
-  // Keep the drawing sharp at the canvas's real on-screen size
-  function fitCanvas() {
-    var cssW = canvas.clientWidth;
-    if (!cssW || cssW === canvasW) return;
-    canvasW = cssW;
-    var s = cssW / W * Math.min(window.devicePixelRatio || 1, 2.5);
-    canvas.width = Math.round(W * s);
-    canvas.height = Math.round(H * s);
-    scale = canvas.width / W;
-  }
-
   function drawPaddle(x, p, color) {
     ctx.shadowColor = color;
     ctx.shadowBlur = (14 + 20 * p.flash) * scale;
@@ -3900,7 +4167,7 @@ function startTTGame() {
   }
 
   function draw() {
-    fitCanvas();
+    scale = fit();
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
     ctx.fillStyle = "#0c1527";
@@ -4003,8 +4270,12 @@ function startTTGame() {
   activeGameLoop = requestAnimationFrame(loop);
 }
 
+/* --- Mini-Game 2: Cyber Arcade Blaster --- */
 function startBlasterGame() {
   stopActiveGame();
+  // Portrait phones get a narrow, tall arena: everything draws larger and there's more time to react
+  var tall = innerWidth <= 600 && innerHeight > innerWidth;
+  var W = tall ? 340 : 460, H = tall ? 430 : 290;
   var m = $("modal");
   m.innerHTML = '<div class="card arcade-modal" role="dialog" aria-label="Cyber Arcade Blaster">' +
     '<div class="arcade-game-container">' +
@@ -4013,14 +4284,14 @@ function startBlasterGame() {
         '<button class="btn alt arcade-sub-btn" id="blaster-back-btn">&larr; Games Menu</button>' +
       '</div>' +
       '<div class="game-hud-bar">' +
-        '<span style="color:#38bdf8">SCORE: <span id="bl-score">0</span></span>' +
+        '<span style="color:#38bdf8">SCORE: <span id="bl-score" style="display:inline-block">0</span></span>' +
         '<span style="color:#f43f5e" id="bl-lives">❤❤❤</span>' +
-        '<span style="color:#facc15">TARGET: 100 PTS</span>' +
+        '<span style="color:#facc15" id="bl-wave">WAVE 1/3</span>' +
       '</div>' +
       '<div class="arcade-canvas-wrap orange-border">' +
-        '<canvas id="blaster-canvas" width="460" height="260"></canvas>' +
+        '<canvas id="blaster-canvas" width="' + W + '" height="' + H + '" style="aspect-ratio:' + W + ' / ' + H + '"></canvas>' +
       '</div>' +
-      '<div class="game-controls-hint">Move with mouse / touch or ← → / A D keys · Auto-Firing!</div>' +
+      '<div class="game-controls-hint">Drag / mouse / ← → · Auto-fire · Gold chips = triple shot</div>' +
     '</div>' +
   '</div>';
 
@@ -4029,285 +4300,806 @@ function startBlasterGame() {
   var canvas = $("blaster-canvas");
   if (!canvas) return;
   var ctx = canvas.getContext("2d");
-  var W = 460, H = 260;
+  var fit = canvasScaler(canvas, W, H);
 
-  var ship = { x: W / 2, y: H - 32, w: 24, h: 22 };
-  var bullets = [];
-  var enemies = [];
-  var chips = [];
-  var particles = [];
+  // Speeds are pixels per second; "fall" is a share of the arena height per second,
+  // so a bug takes the same time to arrive on every screen and refresh rate
+  var MAX_STEP = 1 / 120, FIRE_RATE = 0.17, BULLET_SPEED = 560, SHIP_R = 8;
+  var COUNT_TIME = 0.6, BANNER_TIME = 1.3, WAVE_BREAK = 1.1, COMBO_TIME = 1.8, POWER_TIME = 8, INVULN_TIME = 1.6;
+  var MAX_PARTICLES = 220;
+  var KIND = {
+    scout:  { r: 11, hp: 1, pts: 10, fall: 0.24, c: "#f43f5e" },
+    darter: { r: 9, hp: 1, pts: 20, fall: 0.46, c: "#a855f7" },
+    tank:   { r: 16, hp: 5, pts: 50, fall: 0.13, c: "#10b981" },
+    boss:   { r: 34, hp: 80, pts: 500, fall: 0, c: "#f97316" }
+  };
+  var WAVE_NAMES = ["WAVE 1", "WAVE 2", "WAVE 3", "⚠ HIVE MOTHER"];
+
+  var ship = { x: W / 2, target: W / 2, y: H - 30, bank: 0, recoil: 0, muzzle: 0 };
+  var enemies, bullets, shots, chips, particles, rings, floats, events;
+  var phase, wave, waveT, breakT, countT, finaleT, overT, won, boss, banner;
+  var score, lives, combo, comboT, powerT, invuln, fireT, isBest;
+  var clock = 0, slowT = 0, shake = 0, shakeX = 0, shakeY = 0, hurtFlash = 0, warp = 0;
+  var last = 0, keys = {}, touchX = null, glowCache = {}, bg = null;
+
   var stars = [];
-  var score = 0, lives = 3, gameOver = false, won = false;
-  var lastShot = 0, lastSpawn = 0, lastChipSpawn = 0;
-  var keys = {};
-
-  for (var i = 0; i < 40; i++) {
-    stars.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      speed: 0.5 + Math.random() * 1.5,
-      size: Math.random() * 1.5 + 0.8
-    });
+  for (var i = 0; i < 54; i++) {
+    var layer = i % 3;
+    stars.push({ x: Math.random() * W, y: Math.random() * H, speed: 16 + layer * 26, size: 0.8 + layer * 0.5, a: 0.3 + layer * 0.25 });
   }
 
-  function onMouseMove(e) {
+  function setLives() { $("bl-lives").textContent = "❤❤❤".slice(0, Math.max(0, lives)) || "–"; }
+  function setWave(text) { $("bl-wave").textContent = text; }
+  function setScore(pop) {
+    var el = $("bl-score");
+    el.textContent = score;
+    if (pop && !RM) el.animate([{ transform: "scale(1.4)", color: "#ffffff" }, { transform: "scale(1)" }], { duration: 200, easing: "ease-out" });
+  }
+
+  function newGame() {
+    enemies = []; bullets = []; shots = []; chips = []; particles = []; rings = []; floats = []; events = [];
+    phase = "count"; wave = -1; waveT = 0; breakT = 0; countT = COUNT_TIME * 3; finaleT = 0; overT = 0;
+    won = false; boss = null; banner = null; isBest = false;
+    score = 0; lives = 3; combo = 0; comboT = 0; powerT = 0; invuln = 0; fireT = 0;
+    setScore(); setLives(); setWave("WAVE 1/3");
+  }
+
+  /* Spawning */
+  function spawn(kind, x, y) {
+    var k = KIND[kind], margin = k.r + 34;
+    var en = {
+      kind: kind, r: k.r, hp: k.hp, maxHp: k.hp, pts: k.pts, fall: k.fall, c: k.c,
+      x: x, baseX: clamp(x, margin, W - margin), y: y === undefined ? -k.r - 6 : y,
+      t: 0, phase: 0, vx: 0, flash: 0, fireT: 1 + Math.random() * 1.2, adds: 2, dead: false
+    };
+    enemies.push(en);
+    return en;
+  }
+
+  function waveEvents(w) {
+    var ev = [];
+    function at(t, fn) { ev.push({ t: t, fn: fn }); }
+    function row(t, kind, count) {
+      at(t, function() {
+        var phase0 = Math.random() * 6;
+        for (var i = 0; i < count; i++) spawn(kind, 56 + (W - 112) * i / (count - 1)).phase = phase0;
+      });
+    }
+    function vee(t, kind, count) {
+      at(t, function() {
+        var mid = (count - 1) / 2, cx = 110 + Math.random() * (W - 220), phase0 = Math.random() * 6;
+        for (var i = 0; i < count; i++) spawn(kind, cx + (i - mid) * 34, -18 - Math.abs(i - mid) * 24).phase = phase0;
+      });
+    }
+    function stream(t, kind, count) {
+      var x = 70 + Math.random() * (W - 140);
+      for (var i = 0; i < count; i++) at(t + i * 0.34, function() { spawn(kind, x); });
+    }
+    function tank(t, x) { at(t, function() { spawn("tank", x); }); }
+    function chip(t) { at(t, function() { chips.push({ x: 50 + Math.random() * (W - 100), y: -12, t: 0, dead: false }); }); }
+
+    if (w === 0) {
+      row(0.4, "scout", 5); stream(3, "scout", 6); chip(4.4); vee(6, "scout", 5);
+    } else if (w === 1) {
+      vee(0.4, "scout", 5); stream(2.6, "darter", 4); row(4.8, "scout", 6); chip(5.6); tank(7, W / 2); stream(8.2, "darter", 5);
+    } else if (w === 2) {
+      tank(0.4, W * 0.28); tank(0.4, W * 0.72); row(2.4, "scout", 6); stream(4.2, "darter", 6); chip(5);
+      vee(6.4, "scout", 7); tank(8, W / 2); stream(9, "darter", 6);
+    } else {
+      at(0.2, function() { boss = spawn("boss", W / 2, -50); });
+      chip(6); chip(14);
+    }
+    ev.sort(function(a, b) { return a.t - b.t; });
+    return ev;
+  }
+
+  function startWave(w) {
+    wave = w;
+    waveT = 0;
+    breakT = 0;
+    events = waveEvents(w);
+    banner = { text: WAVE_NAMES[w], age: 0, c: w === 3 ? "#f97316" : "#38bdf8" };
+    warp = 1;
+    setWave(w === 3 ? "BOSS" : "WAVE " + (w + 1) + "/3");
+    beep(w === 3 ? 220 : 500);
+    // A spare life before the boss keeps the finale fair for newer players
+    if (w === 3 && lives < 3) {
+      lives++;
+      setLives();
+      floatText(W / 2, H * 0.55, "+1 LIFE", "#fda4af", 16);
+    }
+  }
+
+  /* Effects */
+  function burst(x, y, color, count, speed, life) {
+    for (var i = 0; i < count && particles.length < MAX_PARTICLES; i++) {
+      var a = Math.random() * Math.PI * 2, v = speed * (0.3 + Math.random() * 0.7), t = (life || 0.5) * (0.6 + Math.random() * 0.6);
+      particles.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: t, max: t, c: color, size: 1.4 + Math.random() * 2 });
+    }
+  }
+  function ring(x, y, color, radius, time) { rings.push({ x: x, y: y, c: color, r: radius, age: 0, max: time }); }
+  function floatText(x, y, text, color, size) { floats.push({ x: clamp(x, 34, W - 34), y: y, text: text, c: color, size: size || 12, age: 0 }); }
+  function addShake(v) { if (!RM) shake = Math.max(shake, v); }
+
+  function addScore(pts, x, y, color, size) {
+    score += pts;
+    setScore(true);
+    floatText(x, y, "+" + pts, color, size);
+  }
+
+  /* Combat */
+  function fire() {
+    bullets.push({ x: ship.x - 7, y: ship.y - 8, vx: 0 });
+    bullets.push({ x: ship.x + 7, y: ship.y - 8, vx: 0 });
+    if (powerT > 0) {
+      bullets.push({ x: ship.x - 10, y: ship.y - 4, vx: -80 });
+      bullets.push({ x: ship.x + 10, y: ship.y - 4, vx: 80 });
+    }
+    ship.recoil = 1;
+    ship.muzzle = 1;
+  }
+
+  function enemyShot(x, y, angle, speed) {
+    shots.push({ x: x, y: y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, dead: false });
+  }
+
+  function hitEnemy(en, bx, by) {
+    en.hp--;
+    en.flash = 1;
+    burst(bx, by, "#7dd3fc", en.kind === "boss" ? 2 : 3, 90, 0.25);
+    if (en.hp <= 0) killEnemy(en);
+    else if (en.kind === "boss" && en.adds > 0 && en.hp / en.maxHp < (en.adds === 2 ? 0.62 : 0.3)) {
+      // The boss calls for help as it weakens
+      en.adds--;
+      for (var i = 0; i < 4; i++) spawn("scout", 70 + (W - 140) * i / 3).phase = clock;
+      floatText(W / 2, en.y + 52, "REINFORCEMENTS!", "#fda4af", 12);
+    }
+  }
+
+  function killEnemy(en) {
+    en.dead = true;
+    combo++;
+    comboT = COMBO_TIME;
+    var mult = comboMult();
+    var kind = en.kind;
+    burst(en.x, en.y, en.c, kind === "boss" ? 70 : kind === "tank" ? 26 : 14, kind === "boss" ? 260 : 150, kind === "boss" ? 1 : 0.55);
+    burst(en.x, en.y, "#ffffff", kind === "boss" ? 20 : 5, 110, 0.3);
+    ring(en.x, en.y, en.c, kind === "boss" ? 110 : en.r * 2.6, kind === "boss" ? 0.7 : 0.34);
+    addScore(en.pts * mult, en.x, en.y - 6, mult > 1 ? "#fde047" : "#ffffff", kind === "scout" ? 12 : 15);
+    beep(300 + mult * 70);
+
+    if (kind === "tank") addShake(4);
+    if (kind === "boss") {
+      addShake(10);
+      slowT = 0.45;
+      boss = null;
+      won = true;
+      phase = "finale";
+      finaleT = 1.5;
+      shots = [];
+      enemies.forEach(function(o) {
+        if (!o.dead) { o.dead = true; burst(o.x, o.y, o.c, 12, 140); }
+      });
+      beep(960);
+    }
+  }
+
+  function comboMult() { return Math.min(5, 1 + Math.floor(combo / 3)); }
+
+  function hurtShip() {
+    if (invuln > 0 || phase !== "play") return;
+    lives--;
+    combo = 0;
+    comboT = 0;
+    setLives();
+    burst(ship.x, ship.y, "#38bdf8", 22, 170, 0.6);
+    addShake(7);
+    slowT = 0.14;
+    if (!RM) hurtFlash = 1;
+    beep(170);
+    shots = [];
+    if (lives <= 0) {
+      burst(ship.x, ship.y, "#f97316", 50, 230, 0.9);
+      ring(ship.x, ship.y, "#f97316", 80, 0.6);
+      endGame(false);
+    } else {
+      invuln = INVULN_TIME;
+      ring(ship.x, ship.y, "#f43f5e", 44, 0.4);
+    }
+  }
+
+  function endGame(didWin) {
+    phase = "over";
+    won = didWin;
+    overT = 0;
+    if (didWin) {
+      score += lives * 100;
+      setScore(true);
+      setWave("CLEARED!");
+    } else {
+      setWave("GAME OVER");
+    }
+    if (score > blasterBest) {
+      isBest = blasterBest > 0;
+      blasterBest = score;
+    }
+  }
+
+  /* Input */
+  function setTarget(x) { ship.target = clamp(x, 18, W - 18); }
+
+  function onPointerMove(e) {
     var rect = canvas.getBoundingClientRect();
-    var scaleX = W / rect.width;
-    var clientX = (e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0));
-    var mx = (clientX - rect.left) * scaleX;
-    ship.x = Math.max(16, Math.min(W - 16, mx));
+    if (!rect.width) return;
+    if (e.pointerType === "touch") {
+      // Touch drags relative to the finger, so the finger never covers the ship
+      if (touchX === null) return;
+      setTarget(ship.target + (e.clientX - touchX) * W / rect.width);
+      touchX = e.clientX;
+    } else {
+      setTarget((e.clientX - rect.left) * W / rect.width);
+    }
   }
-
-  function onKeyDown(e) { keys[e.key] = true; }
+  function onPointerDown(e) {
+    if (e.pointerType === "touch") touchX = e.clientX;
+    else onPointerMove(e);
+  }
+  function onPointerUp() { touchX = null; }
+  function onKeyDown(e) {
+    keys[e.key] = true;
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") e.preventDefault();
+  }
   function onKeyUp(e) { keys[e.key] = false; }
 
-  canvas.addEventListener("mousemove", onMouseMove);
-  canvas.addEventListener("touchmove", onMouseMove, { passive: true });
+  canvas.addEventListener("pointerdown", onPointerDown);
+  window.addEventListener("pointermove", onPointerMove);
+  window.addEventListener("pointerup", onPointerUp);
+  window.addEventListener("pointercancel", onPointerUp);
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("keyup", onKeyUp);
 
   gameCleanup = function() {
-    canvas.removeEventListener("mousemove", onMouseMove);
-    canvas.removeEventListener("touchmove", onMouseMove);
+    window.removeEventListener("pointermove", onPointerMove);
+    window.removeEventListener("pointerup", onPointerUp);
+    window.removeEventListener("pointercancel", onPointerUp);
     window.removeEventListener("keydown", onKeyDown);
     window.removeEventListener("keyup", onKeyUp);
   };
 
   canvas.addEventListener("click", function() {
-    if (gameOver) {
-      score = 0; lives = 3; gameOver = false; won = false;
-      bullets = []; enemies = []; chips = []; particles = [];
-      $("bl-score").textContent = "0";
-      $("bl-lives").textContent = "❤❤❤";
-    }
+    // The short wait stops a tap from the heat of the moment skipping the result
+    if (phase === "over" && overT > 0.7) newGame();
   });
 
-  function loop(now) {
+  /* Simulation */
+  function updateEnemy(en, h) {
+    en.t += h;
+    en.flash = Math.max(0, en.flash - h * 7);
+
+    if (en.kind === "boss") {
+      en.y += (H * 0.2 - en.y) * ease(1.6, h);
+      en.x = W / 2 + Math.sin(en.t * 0.75) * (W / 2 - 62);
+      en.fireT -= h;
+      if (en.fireT <= 0 && en.t > 2) {
+        var enraged = en.hp / en.maxHp < 0.5;
+        en.fireT = enraged ? 1.5 : 2;
+        var count = enraged ? 6 : 5, speed = H * 0.44;
+        for (var i = 0; i < count; i++) enemyShot(en.x, en.y + 22, Math.PI / 2 + (i - (count - 1) / 2) * 0.21, speed);
+        ring(en.x, en.y + 22, "#fb7185", 26, 0.25);
+        beep(240);
+      }
+      return;
+    }
+
+    en.y += en.fall * H * h;
+    if (en.kind === "scout") {
+      en.x = en.baseX + Math.sin(en.t * 2.1 + en.phase) * 26;
+    } else if (en.kind === "darter") {
+      // Curves toward the ship until it gets close, so a late dodge still works
+      if (en.y < H * 0.6) en.vx += clamp(ship.x - en.x, -1, 1) * 260 * h;
+      en.vx *= 1 - ease(1.2, h);
+      en.x = clamp(en.x + en.vx * h, en.r, W - en.r);
+    } else if (en.kind === "tank") {
+      en.x = en.baseX + Math.sin(en.t * 1.1) * 14;
+      en.fireT -= h;
+      if (en.fireT <= 0 && en.y > 0 && en.y < H * 0.68) {
+        en.fireT = 2.1;
+        enemyShot(en.x, en.y + en.r, Math.atan2(ship.y - en.y, ship.x - en.x), H * 0.5);
+        beep(260);
+      }
+    }
+
+    if (en.y > H + en.r + 8) {
+      en.dead = true;
+      // A bug that slips past only costs the combo, not a life
+      if (phase === "play") { combo = 0; comboT = 0; }
+    }
+  }
+
+  function update(h) {
+    clock += h;
+    warp = Math.max(0, warp - h * 1.1);
     for (var s = 0; s < stars.length; s++) {
-      stars[s].y += stars[s].speed;
-      if (stars[s].y > H) { stars[s].y = 0; stars[s].x = Math.random() * W; }
+      var st = stars[s];
+      st.y += st.speed * (1 + warp * 7) * h;
+      if (st.y > H + 6) { st.y = -6; st.x = Math.random() * W; }
     }
 
-    if (!gameOver) {
-      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) ship.x = Math.max(16, ship.x - 5);
-      if (keys["ArrowRight"] || keys["d"] || keys["D"]) ship.x = Math.min(W - 16, ship.x + 5);
+    shake = Math.max(0, shake - h * 22);
+    shakeX = shake ? (Math.random() - 0.5) * shake : 0;
+    shakeY = shake ? (Math.random() - 0.5) * shake : 0;
+    hurtFlash = Math.max(0, hurtFlash - h * 3);
+    invuln = Math.max(0, invuln - h);
+    powerT = Math.max(0, powerT - h);
+    ship.recoil = Math.max(0, ship.recoil - h * 12);
+    ship.muzzle = Math.max(0, ship.muzzle - h * 18);
+    if (comboT > 0) {
+      comboT -= h;
+      if (comboT <= 0) combo = 0;
+    }
 
-      if (!lastShot || now - lastShot > 220) {
-        lastShot = now;
-        bullets.push({ x: ship.x - 7, y: ship.y, vy: -6 });
-        bullets.push({ x: ship.x + 7, y: ship.y, vy: -6 });
-        beep(560);
-      }
+    var shipAlive = !(phase === "over" && !won);
+    if (shipAlive) {
+      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) setTarget(ship.target - 440 * h);
+      if (keys["ArrowRight"] || keys["d"] || keys["D"]) setTarget(ship.target + 440 * h);
+      var prevX = ship.x;
+      ship.x += (ship.target - ship.x) * ease(24, h);
+      var lean = h > 0 ? clamp((ship.x - prevX) / h / 520, -1, 1) : 0;
+      ship.bank += (lean - ship.bank) * ease(14, h);
+    }
 
-      if (!lastSpawn || now - lastSpawn > 800) {
-        lastSpawn = now;
-        enemies.push({
-          x: 20 + Math.random() * (W - 40),
-          y: -15,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: 1.2 + Math.random() * 0.9,
-          r: 10,
-          hp: 1,
-          color: (Math.random() > 0.5 ? '#f43f5e' : '#a855f7')
-        });
-      }
-
-      if (!lastChipSpawn || now - lastChipSpawn > 3200) {
-        lastChipSpawn = now;
-        chips.push({
-          x: 30 + Math.random() * (W - 60),
-          y: -15,
-          vy: 1.1,
-          r: 8
-        });
-      }
-
-      for (var b = bullets.length - 1; b >= 0; b--) {
-        bullets[b].y += bullets[b].vy;
-        if (bullets[b].y < -10) bullets.splice(b, 1);
-      }
-
-      for (var e = enemies.length - 1; e >= 0; e--) {
-        var en = enemies[e];
-        en.y += en.vy;
-        en.x += Math.sin(now * 0.005 + e) * 0.8;
-
-        for (var bi = bullets.length - 1; bi >= 0; bi--) {
-          var bu = bullets[bi];
-          var dist = Math.hypot(bu.x - en.x, bu.y - en.y);
-          if (dist < en.r + 4) {
-            bullets.splice(bi, 1);
-            en.hp--;
-            if (en.hp <= 0) {
-              for (var p = 0; p < 8; p++) {
-                particles.push({
-                  x: en.x, y: en.y,
-                  vx: (Math.random() - 0.5) * 4,
-                  vy: (Math.random() - 0.5) * 4,
-                  life: 20, maxLife: 20,
-                  color: en.color
-                });
-              }
-              enemies.splice(e, 1);
-              score += 10;
-              $("bl-score").textContent = score;
-              beep(340);
-              if (score >= 100) {
-                won = true; gameOver = true; beep(960);
-              }
-              break;
-            }
-          }
+    if (phase === "count") {
+      countT -= h;
+      if (countT <= 0) { phase = "play"; startWave(0); }
+    } else if (phase === "play") {
+      waveT += h;
+      while (events.length && events[0].t <= waveT) events.shift().fn();
+      if (!events.length && !enemies.length && wave < 3) {
+        if (breakT === 0) {
+          score += 50;
+          setScore(true);
+          floatText(W / 2, H * 0.42, "WAVE CLEAR +50", "#86efac", 15);
+          beep(760);
         }
-
-        if (en) {
-          if (Math.hypot(en.x - ship.x, en.y - ship.y) < en.r + 10 || en.y > H + 10) {
-            enemies.splice(e, 1);
-            lives--;
-            beep(200);
-            var hearts = "";
-            for (var h = 0; h < lives; h++) hearts += "❤";
-            $("bl-lives").textContent = hearts || "GAME OVER";
-            if (lives <= 0) {
-              gameOver = true; won = false;
-            }
-          }
-        }
+        breakT += h;
+        if (breakT >= WAVE_BREAK) startWave(wave + 1);
       }
-
-      for (var c = chips.length - 1; c >= 0; c--) {
-        var ch = chips[c];
-        ch.y += ch.vy;
-        if (Math.hypot(ch.x - ship.x, ch.y - ship.y) < ch.r + 14) {
-          chips.splice(c, 1);
-          score += 25;
-          $("bl-score").textContent = score;
-          beep(880);
-          for (var p = 0; p < 6; p++) {
-            particles.push({
-              x: ship.x, y: ship.y,
-              vx: (Math.random() - 0.5) * 3,
-              vy: -Math.random() * 3,
-              life: 18, maxLife: 18,
-              color: '#facc15'
-            });
-          }
-          if (score >= 100) {
-            won = true; gameOver = true; beep(960);
-          }
-        } else if (ch.y > H + 15) {
-          chips.splice(c, 1);
-        }
+      fireT -= h;
+      if (fireT <= 0) {
+        fireT += FIRE_RATE;
+        fire();
       }
-
-      for (var pi = particles.length - 1; pi >= 0; pi--) {
-        var pt = particles[pi];
-        pt.x += pt.vx;
-        pt.y += pt.vy;
-        pt.life--;
-        if (pt.life <= 0) particles.splice(pi, 1);
+    } else if (phase === "finale") {
+      finaleT -= h;
+      if (Math.random() < h * 16) {
+        var bx = Math.random() * W, by = Math.random() * H * 0.6;
+        burst(bx, by, ["#f97316", "#fde047", "#f43f5e"][Math.floor(Math.random() * 3)], 12, 150, 0.6);
+        ring(bx, by, "#fde047", 26, 0.3);
       }
+      if (finaleT <= 0) {
+        endGame(true);
+      }
+    } else if (phase === "over") {
+      overT += h;
     }
 
-    ctx.fillStyle = "#080c17";
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.fillStyle = "rgba(255,255,255,0.7)";
-    for (var s = 0; s < stars.length; s++) {
-      ctx.fillRect(stars[s].x, stars[s].y, stars[s].size, stars[s].size);
+    if (banner) {
+      banner.age += h;
+      if (banner.age > BANNER_TIME) banner = null;
     }
 
-    ctx.shadowColor = "#38bdf8";
-    ctx.shadowBlur = 8;
-    ctx.fillStyle = "#38bdf8";
-    for (var b = 0; b < bullets.length; b++) {
-      ctx.fillRect(bullets[b].x - 1.5, bullets[b].y - 5, 3, 10);
+    for (var b = bullets.length - 1; b >= 0; b--) {
+      var bu = bullets[b];
+      bu.y -= BULLET_SPEED * h;
+      bu.x += bu.vx * h;
+      if (bu.y < -12 || bu.x < -12 || bu.x > W + 12) bullets.splice(b, 1);
     }
 
-    for (var e = 0; e < enemies.length; e++) {
-      var en = enemies[e];
-      ctx.shadowColor = en.color;
-      ctx.shadowBlur = 10;
-      ctx.fillStyle = en.color;
-      ctx.beginPath();
-      ctx.arc(en.x, en.y, en.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(en.x - 4, en.y - 2, 2.5, 3);
-      ctx.fillRect(en.x + 1.5, en.y - 2, 2.5, 3);
+    for (var e = 0; e < enemies.length; e++) updateEnemy(enemies[e], h);
+
+    for (var q = shots.length - 1; q >= 0; q--) {
+      var sh = shots[q];
+      sh.x += sh.vx * h;
+      sh.y += sh.vy * h;
+      if (sh.y > H + 10 || sh.y < -10 || sh.x < -10 || sh.x > W + 10) shots.splice(q, 1);
     }
 
-    ctx.shadowColor = "#facc15";
-    ctx.shadowBlur = 12;
-    ctx.fillStyle = "#facc15";
-    for (var c = 0; c < chips.length; c++) {
+    for (var c = chips.length - 1; c >= 0; c--) {
       var ch = chips[c];
-      ctx.beginPath();
-      ctx.arc(ch.x, ch.y, ch.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "800 10px monospace";
-      ctx.textAlign = "center";
-      ctx.fillText("★", ch.x, ch.y + 3.5);
-      ctx.fillStyle = "#facc15";
+      ch.t += h;
+      ch.y += H * 0.2 * h;
+      // Close chips pull toward the ship so near-misses still count
+      var cdx = ship.x - ch.x, cdy = ship.y - ch.y, cd = Math.hypot(cdx, cdy);
+      if (cd < 70 && shipAlive) {
+        var pull = (1 - cd / 70) * 340 * h;
+        ch.x += cdx / (cd || 1) * pull;
+        ch.y += cdy / (cd || 1) * pull;
+      }
+      if (cd < 22 && shipAlive) {
+        chips.splice(c, 1);
+        powerT = POWER_TIME;
+        addScore(50, ship.x, ship.y - 22, "#fde047", 15);
+        floatText(ship.x, ship.y - 38, "TRIPLE SHOT!", "#fde047", 12);
+        burst(ship.x, ship.y, "#facc15", 18, 150, 0.5);
+        ring(ship.x, ship.y, "#facc15", 36, 0.35);
+        beep(880);
+      } else if (ch.y > H + 16) {
+        chips.splice(c, 1);
+      }
     }
 
-    for (var pi = 0; pi < particles.length; pi++) {
+    if (phase === "play") {
+      for (var bi = bullets.length - 1; bi >= 0; bi--) {
+        var bl = bullets[bi];
+        for (var ei = 0; ei < enemies.length; ei++) {
+          var en = enemies[ei];
+          if (en.dead || en.y < -en.r) continue;
+          var rr = en.r + 3;
+          if ((bl.x - en.x) * (bl.x - en.x) + (bl.y - en.y) * (bl.y - en.y) < rr * rr) {
+            bullets.splice(bi, 1);
+            hitEnemy(en, bl.x, bl.y);
+            break;
+          }
+        }
+      }
+    }
+
+    if (phase === "play") {
+      for (var d = 0; d < enemies.length; d++) {
+        var foe = enemies[d];
+        if (!foe.dead && foe.kind !== "boss" && Math.hypot(foe.x - ship.x, foe.y - ship.y) < foe.r * 0.8 + SHIP_R) {
+          if (invuln <= 0) foe.dead = true;
+          hurtShip();
+          break;
+        }
+      }
+      for (var si = 0; si < shots.length; si++) {
+        if (Math.hypot(shots[si].x - ship.x, shots[si].y - ship.y) < 4 + SHIP_R) {
+          hurtShip();
+          break;
+        }
+      }
+    }
+
+    enemies = enemies.filter(function(o) { return !o.dead; });
+
+    for (var pi = particles.length - 1; pi >= 0; pi--) {
       var pt = particles[pi];
-      ctx.shadowColor = pt.color;
-      ctx.shadowBlur = 6;
-      ctx.fillStyle = pt.color;
-      ctx.globalAlpha = pt.life / pt.maxLife;
-      ctx.fillRect(pt.x - 1.5, pt.y - 1.5, 3, 3);
+      pt.life -= h;
+      if (pt.life <= 0) { particles.splice(pi, 1); continue; }
+      var drag = 1 - ease(2.6, h);
+      pt.vx *= drag;
+      pt.vy *= drag;
+      pt.x += pt.vx * h;
+      pt.y += pt.vy * h;
     }
-    ctx.globalAlpha = 1.0;
+    for (var r = rings.length - 1; r >= 0; r--) {
+      rings[r].age += h;
+      if (rings[r].age > rings[r].max) rings.splice(r, 1);
+    }
+    for (var f = floats.length - 1; f >= 0; f--) {
+      floats[f].age += h;
+      floats[f].y -= 26 * h;
+      if (floats[f].age > 0.9) floats.splice(f, 1);
+    }
+  }
 
-    ctx.shadowColor = "#f97316";
-    ctx.shadowBlur = 14;
-    ctx.fillStyle = "#fb923c";
+  /* Drawing: soft glows come from one small cached image each, which stays smooth on phones */
+  function glowImage(color) {
+    if (glowCache[color]) return glowCache[color];
+    var g = document.createElement("canvas");
+    g.width = g.height = 64;
+    var gx = g.getContext("2d"), grad = gx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, color);
+    grad.addColorStop(1, color + "00");
+    gx.fillStyle = grad;
+    gx.fillRect(0, 0, 64, 64);
+    glowCache[color] = g;
+    return g;
+  }
+  function drawGlow(x, y, radius, color, alpha) {
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(glowImage(color), x - radius, y - radius, radius * 2, radius * 2);
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+  }
+
+  function drawBug(en) {
+    var r = en.r, flash = en.flash > 0.35, body = flash ? "#ffffff" : en.c;
+    var look = clamp((ship.x - en.x) / 120, -1, 1) * r * 0.1;
+    drawGlow(en.x, en.y, r * 2.3, en.c, 0.55);
+    ctx.save();
+    ctx.translate(en.x, en.y);
+    ctx.scale(1 + en.flash * 0.1, 1 + en.flash * 0.1);
+
+    // Scuttling legs
+    ctx.strokeStyle = en.c;
+    ctx.lineWidth = en.kind === "boss" ? 3.4 : 1.7;
+    ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.moveTo(ship.x - 5, ship.y + ship.h / 2);
-    ctx.lineTo(ship.x + 5, ship.y + ship.h / 2);
-    ctx.lineTo(ship.x, ship.y + ship.h / 2 + 7 + Math.random() * 4);
-    ctx.closePath();
-    ctx.fill();
+    for (var i = -1; i <= 1; i++) {
+      var ly = i * r * 0.45, sway = Math.sin(en.t * 13 + i * 2) * r * 0.2;
+      ctx.moveTo(-r * 0.75, ly); ctx.lineTo(-r * 1.32, ly + sway + r * 0.12);
+      ctx.moveTo(r * 0.75, ly); ctx.lineTo(r * 1.32, ly - sway + r * 0.12);
+    }
+    ctx.stroke();
 
-    ctx.fillStyle = "#38bdf8";
+    // Shell and head
+    ctx.fillStyle = body;
     ctx.beginPath();
-    ctx.moveTo(ship.x, ship.y - ship.h / 2);
-    ctx.lineTo(ship.x + ship.w / 2, ship.y + ship.h / 2);
-    ctx.lineTo(ship.x, ship.y + ship.h / 4);
-    ctx.lineTo(ship.x - ship.w / 2, ship.y + ship.h / 2);
-    ctx.closePath();
+    ctx.ellipse(0, 0, r, r * 0.9, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.28)";
+    ctx.lineWidth = en.kind === "boss" ? 2 : 1.1;
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.05, r * 0.68, r * 0.62, 0, Math.PI, 0);
+    ctx.stroke();
+    if (en.kind === "tank" || en.kind === "boss") {
+      ctx.strokeStyle = "rgba(0,0,0,0.3)";
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.92, r * 0.24); ctx.lineTo(r * 0.92, r * 0.24);
+      ctx.moveTo(-r * 0.72, r * 0.56); ctx.lineTo(r * 0.72, r * 0.56);
+      ctx.stroke();
+    }
 
+    // Eyes that follow the ship
+    var ex = r * 0.38, ey = -r * 0.14, er = r * 0.27;
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.arc(ship.x, ship.y, 3, 0, Math.PI * 2);
+    ctx.arc(-ex, ey, er, 0, Math.PI * 2);
+    ctx.arc(ex, ey, er, 0, Math.PI * 2);
     ctx.fill();
-    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#0b1020";
+    ctx.beginPath();
+    ctx.arc(-ex + look, ey + er * 0.25, er * 0.55, 0, Math.PI * 2);
+    ctx.arc(ex + look, ey + er * 0.25, er * 0.55, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
 
-    if (gameOver) {
-      ctx.fillStyle = "rgba(8, 12, 22, 0.85)";
-      ctx.fillRect(0, 0, W, H);
+    // Damage pips on tanks
+    if (en.kind === "tank" && en.hp < en.maxHp) {
+      ctx.fillStyle = "rgba(0,0,0,0.5)";
+      ctx.fillRect(en.x - r, en.y - r - 7, r * 2, 3);
+      ctx.fillStyle = "#86efac";
+      ctx.fillRect(en.x - r, en.y - r - 7, r * 2 * en.hp / en.maxHp, 3);
+    }
+  }
 
-      ctx.font = "800 22px 'Space Grotesk', sans-serif";
-      ctx.textAlign = "center";
-      if (won) {
-        ctx.fillStyle = "#facc15";
-        ctx.fillText("🏆 HIGH SCORE! MISSION CLEARED!", W / 2, H / 2 - 12);
-      } else {
-        ctx.fillStyle = "#f43f5e";
-        ctx.fillText("SYSTEM OVERLOAD! (GAME OVER)", W / 2, H / 2 - 12);
-      }
-      ctx.font = "700 13px 'JetBrains Mono', monospace";
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillText("▶ CLICK ANYWHERE TO PLAY AGAIN", W / 2, H / 2 + 18);
+  function drawChip(ch) {
+    var spin = Math.cos(ch.t * 4.5);
+    drawGlow(ch.x, ch.y, 24, "#facc15", 0.7);
+    ctx.save();
+    ctx.translate(ch.x, ch.y);
+    ctx.scale(Math.max(0.18, Math.abs(spin)), 1);
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.arc(0, 0, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#fef3c7";
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    for (var i = 0; i < 10; i++) {
+      var a = -Math.PI / 2 + i * Math.PI / 5, rad = i % 2 ? 2.4 : 5.6;
+      ctx.lineTo(Math.cos(a) * rad, Math.sin(a) * rad);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawShip() {
+    var x = ship.x, y = ship.y + ship.recoil * 1.8;
+    if (invuln > 0 && Math.sin(clock * 30) > 0) ctx.globalAlpha = 0.3;
+    drawGlow(x, y + 13, 16 + Math.sin(clock * 40) * 2, "#f97316", 0.75);
+    if (powerT > 0) drawGlow(x, y, 30, "#facc15", 0.32);
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(ship.bank * 0.36);
+
+    // Flame stretches when the ship moves
+    var flame = 11 + Math.random() * 5 + Math.abs(ship.bank) * 5;
+    ctx.fillStyle = "#fb923c";
+    ctx.beginPath();
+    ctx.moveTo(-5, 10); ctx.lineTo(5, 10); ctx.lineTo(0, 10 + flame);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "#fef08a";
+    ctx.beginPath();
+    ctx.moveTo(-2.5, 10); ctx.lineTo(2.5, 10); ctx.lineTo(0, 10 + flame * 0.55);
+    ctx.closePath();
+    ctx.fill();
+
+    // Wings then hull; a narrower silhouette as it banks gives a sense of roll
+    var wing = 15 - Math.abs(ship.bank) * 3;
+    ctx.fillStyle = "#0ea5e9";
+    ctx.beginPath();
+    ctx.moveTo(0, -6); ctx.lineTo(wing, 11); ctx.lineTo(4, 8); ctx.lineTo(-4, 8); ctx.lineTo(-wing, 11);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "#7dd3fc";
+    ctx.beginPath();
+    ctx.moveTo(0, -15); ctx.lineTo(5.5, 7); ctx.lineTo(0, 11); ctx.lineTo(-5.5, 7);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "#0b1020";
+    ctx.beginPath();
+    ctx.ellipse(0, -2, 2.6, 4.6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#e0f2fe";
+    ctx.beginPath();
+    ctx.arc(-0.7, -3.6, 1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    ctx.globalAlpha = 1;
+
+    if (ship.muzzle > 0) {
+      drawGlow(x - 7, ship.y - 10, 10, "#7dd3fc", ship.muzzle);
+      drawGlow(x + 7, ship.y - 10, 10, "#7dd3fc", ship.muzzle);
+    }
+  }
+
+  function drawCentered(text, y, font, color, alpha) {
+    ctx.globalAlpha = alpha === undefined ? 1 : alpha;
+    ctx.font = font;
+    ctx.textAlign = "center";
+    ctx.fillStyle = color;
+    ctx.fillText(text, W / 2, y);
+    ctx.globalAlpha = 1;
+  }
+
+  function draw() {
+    var scale = fit();
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    if (shake) ctx.translate(shakeX, shakeY);
+
+    if (!bg) {
+      bg = ctx.createLinearGradient(0, 0, 0, H);
+      bg.addColorStop(0, "#050816");
+      bg.addColorStop(0.65, "#0b1022");
+      bg.addColorStop(1, "#160f2c");
+    }
+    ctx.fillStyle = bg;
+    ctx.fillRect(-12, -12, W + 24, H + 24);
+
+    for (var s = 0; s < stars.length; s++) {
+      var st = stars[s];
+      ctx.globalAlpha = st.a;
+      ctx.fillStyle = "#dbeafe";
+      ctx.fillRect(st.x, st.y, st.size, st.size + warp * st.speed * 0.3);
+    }
+    ctx.globalAlpha = 1;
+
+    for (var c = 0; c < chips.length; c++) drawChip(chips[c]);
+    for (var e = 0; e < enemies.length; e++) drawBug(enemies[e]);
+
+    // Player bullets, drawn in one pass
+    ctx.lineCap = "round";
+    ctx.strokeStyle = powerT > 0 ? "#fde047" : "#38bdf8";
+    ctx.lineWidth = 3.6;
+    ctx.beginPath();
+    for (var b = 0; b < bullets.length; b++) {
+      ctx.moveTo(bullets[b].x, bullets[b].y - 6);
+      ctx.lineTo(bullets[b].x - bullets[b].vx * 0.012, bullets[b].y + 5);
+    }
+    ctx.stroke();
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+
+    for (var q = 0; q < shots.length; q++) {
+      drawGlow(shots[q].x, shots[q].y, 12, "#f43f5e", 0.8);
+      ctx.fillStyle = "#fecdd3";
+      ctx.beginPath();
+      ctx.arc(shots[q].x, shots[q].y, 3.4, 0, Math.PI * 2);
+      ctx.fill();
     }
 
+    if (!(phase === "over" && !won)) drawShip();
+
+    for (var r = 0; r < rings.length; r++) {
+      var rg = rings[r], grow = rg.age / rg.max;
+      ctx.globalAlpha = (1 - grow) * 0.8;
+      ctx.strokeStyle = rg.c;
+      ctx.lineWidth = 2.5 * (1 - grow) + 0.5;
+      ctx.beginPath();
+      ctx.arc(rg.x, rg.y, rg.r * (1 - Math.pow(1 - grow, 3)), 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.globalCompositeOperation = "lighter";
+    for (var pi = 0; pi < particles.length; pi++) {
+      var pt = particles[pi];
+      ctx.globalAlpha = pt.life / pt.max;
+      ctx.fillStyle = pt.c;
+      ctx.fillRect(pt.x - pt.size / 2, pt.y - pt.size / 2, pt.size, pt.size);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+
+    ctx.textAlign = "center";
+    for (var f = 0; f < floats.length; f++) {
+      var fl = floats[f];
+      ctx.globalAlpha = Math.min(1, (0.9 - fl.age) * 3);
+      ctx.font = "800 " + fl.size + "px 'JetBrains Mono', monospace";
+      ctx.fillStyle = fl.c;
+      ctx.fillText(fl.text, fl.x, fl.y);
+    }
+    ctx.globalAlpha = 1;
+
+    // Boss health along the top, combo and power-up timers just below it
+    var hudY = 16;
+    if (boss) {
+      var hp = boss.hp / boss.maxHp, bw = W - 80;
+      ctx.fillStyle = "rgba(255,255,255,0.14)";
+      ctx.fillRect(40, 10, bw, 6);
+      ctx.fillStyle = hp < 0.5 ? "#f43f5e" : "#f97316";
+      ctx.fillRect(40, 10, bw * hp, 6);
+      hudY = 34;
+    }
+    if (comboMult() > 1) {
+      ctx.textAlign = "left";
+      ctx.font = "800 15px 'JetBrains Mono', monospace";
+      ctx.fillStyle = "#fde047";
+      ctx.fillText("x" + comboMult(), 12, hudY + 8);
+      ctx.fillStyle = "rgba(253,224,71,0.8)";
+      ctx.fillRect(12, hudY + 12, 34 * Math.max(0, comboT) / COMBO_TIME, 2.5);
+    }
+    if (powerT > 0) {
+      ctx.textAlign = "right";
+      ctx.font = "700 10px 'JetBrains Mono', monospace";
+      ctx.fillStyle = "#fde047";
+      ctx.fillText("TRIPLE SHOT", W - 12, hudY + 6);
+      ctx.fillStyle = "rgba(253,224,71,0.8)";
+      var pw = 68 * powerT / POWER_TIME;
+      ctx.fillRect(W - 12 - pw, hudY + 11, pw, 2.5);
+    }
+
+    if (phase === "count") {
+      drawCentered("GET READY", H / 2 - 40, "700 13px 'JetBrains Mono', monospace", "#cbd5e1");
+      drawCentered(Math.max(1, Math.ceil(countT / COUNT_TIME)), H / 2 + 6, "800 44px 'Space Grotesk', sans-serif", "#facc15");
+    }
+    if (banner) {
+      var fade = Math.min(1, banner.age * 5) * Math.min(1, (BANNER_TIME - banner.age) * 4);
+      drawCentered(banner.text, H * 0.42, "800 26px 'Space Grotesk', sans-serif", banner.c, fade);
+    }
+
+    if (hurtFlash > 0) {
+      ctx.fillStyle = "rgba(244, 63, 94, " + (hurtFlash * 0.28) + ")";
+      ctx.fillRect(-12, -12, W + 24, H + 24);
+    }
+
+    if (phase === "over") {
+      var a = Math.min(1, overT / 0.45);
+      ctx.fillStyle = "rgba(6, 9, 18, " + (a * 0.84) + ")";
+      ctx.fillRect(-12, -12, W + 24, H + 24);
+      var cy = H / 2 - 32;
+      drawCentered(won ? "🏆 HIVE DESTROYED!" : "SYSTEM OVERLOAD", cy, "800 24px 'Space Grotesk', sans-serif", won ? "#facc15" : "#f43f5e", a);
+      drawCentered("SCORE " + score, cy + 34, "800 18px 'JetBrains Mono', monospace", "#ffffff", a);
+      if (won) drawCentered("includes +" + (lives * 100) + " for lives left", cy + 54, "500 11px 'JetBrains Mono', monospace", "#94a3b8", a);
+      drawCentered(isBest ? "★ NEW BEST!" : "BEST " + blasterBest, cy + (won ? 76 : 58), "700 13px 'JetBrains Mono', monospace", isBest ? "#fde047" : "#94a3b8", a);
+      drawCentered("▶ TAP OR CLICK TO PLAY AGAIN", cy + (won ? 104 : 88), "700 12px 'JetBrains Mono', monospace", "#fed7aa", a * (0.65 + 0.35 * Math.sin(clock * 4)));
+    }
+  }
+
+  function loop(now) {
+    var dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+    last = now;
+    if (slowT > 0) {
+      // A brief slow-down sells the big moments
+      slowT -= dt;
+      dt *= 0.3;
+    }
+    var steps = Math.max(1, Math.ceil(dt / MAX_STEP)), h = dt / steps;
+    for (var i = 0; i < steps; i++) update(h);
+    draw();
     activeGameLoop = requestAnimationFrame(loop);
   }
 
+  newGame();
   activeGameLoop = requestAnimationFrame(loop);
 }
 

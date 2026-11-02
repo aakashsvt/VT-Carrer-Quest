@@ -1092,7 +1092,8 @@ input[type=text].input-invalid {
   line-height: 1.6;
 }
 .mp .x,
-.arcade-modal .x {
+.arcade-modal .x,
+.team-modal .x {
   position: absolute;
   right: 14px;
   top: 14px;
@@ -1114,14 +1115,16 @@ input[type=text].input-invalid {
   box-sizing: border-box;
 }
 .mp .x svg,
-.arcade-modal .x svg {
+.arcade-modal .x svg,
+.team-modal .x svg {
   width: 12px;
   height: 12px;
   display: block;
   pointer-events: none;
 }
 .mp .x:hover,
-.arcade-modal .x:hover {
+.arcade-modal .x:hover,
+.team-modal .x:hover {
   background: rgba(251, 146, 60, 0.2);
   border-color: #fb923c;
   color: #fff;
@@ -1230,6 +1233,187 @@ input[type=text].input-invalid {
   }
 }
 
+
+/* Meet the Team Modal */
+.team-modal {
+  width: min(840px, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: rgba(10, 15, 26, 0.96);
+  border: 1.5px solid #f97316;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 0 40px rgba(249, 115, 22, 0.25), 0 20px 50px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  position: relative;
+  box-sizing: border-box;
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.team-header {
+  text-align: center;
+  position: relative;
+  padding: 4px 34px 0;
+}
+.team-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid #f97316;
+  color: #fed7aa;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.team-header h2 {
+  font-size: clamp(22px, 3.2vw, 26px);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+.team-header p {
+  color: #94a3b8;
+  font-size: 13.5px;
+  margin: 0;
+  line-height: 1.45;
+}
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+.team-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.team-card:hover,
+.team-card:focus-visible {
+  border-color: var(--zc, #fb923c);
+  background: rgba(30, 41, 59, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 14px rgba(251, 146, 60, 0.25);
+  outline: none;
+}
+.team-avatar-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 11px;
+  background: radial-gradient(circle at 50% 30%, rgba(56, 189, 248, 0.2), transparent 70%), #0d131f;
+  border: 1.5px solid var(--zc, #38bdf8);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+.team-avatar-box svg {
+  width: 92%;
+  height: 92%;
+  transform: translateY(2px);
+}
+.team-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.team-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #f8fafc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+.team-role {
+  font-size: 12.5px;
+  color: #94a3b8;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.team-dept {
+  align-self: flex-start;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 6px;
+  margin-top: 3px;
+  border: 1px solid;
+}
+.team-arrow {
+  color: #64748b;
+  font-size: 16px;
+  font-weight: 700;
+  transition: transform 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.team-card:hover .team-arrow {
+  color: var(--zc, #fb923c);
+  transform: translateX(3px);
+}
+.team-footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+@media (max-width: 600px) {
+  #modal:has(.team-modal) {
+    padding: 10px;
+  }
+  .team-modal {
+    padding: 18px 12px;
+    width: 96vw;
+    gap: 14px;
+    border-radius: 14px;
+  }
+  .team-header {
+    padding: 0 24px;
+  }
+  .team-header h2 {
+    font-size: 20px;
+  }
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .team-card {
+    padding: 10px 12px;
+    border-radius: 11px;
+  }
+  .team-avatar-box {
+    width: 46px;
+    height: 46px;
+  }
+  .team-name {
+    font-size: 14px;
+  }
+}
 
 /* Studio Lounge Arcade Mini-Games Modal */
 .arcade-modal {
@@ -2069,7 +2253,7 @@ var CONFIG={
   {n:"Vision Chip",zone:"ceo",p:[286,60],c:"#f59e0b",g:"★",fact:"Cube Sort 3D is live on Google Play and the App Store! Built with creativity, code, and lots of brainpower. Go play it — just one more level, right?"},
   {n:"Game World Chip",zone:null,p:[405,595],c:"#38bdf8",g:"◆",fact:"We don’t just wish, we celebrate! At Virtualize, every festival is another reason to bring the team together."},
   {n:"Creative Spark Chip",zone:"a3",p:[60,95],c:"#f97316",g:"✦",fact:"From 3D art to immersive AR/VR experiences, we turn creative ideas into digital realities. Imagination is our favourite superpower!"},
-  {n:"Code Core Chip",zone:"dev",anim:"bounce",p:[180,62],c:"#60a5fa",g:"★",fact:"[Placeholder] Add a fact about game engines, code or game mechanics."},
+  {n:"Code Core Chip",zone:"dev",anim:"bounce",p:[180,62],c:"#60a5fa",g:"★",fact:"From custom physics and gameplay mechanics to 60 FPS optimization in Unity, our devs turn creative logic and C# into immersive, playable magic. Every smooth jump and thrilling gameplay loop is engineered right here!"},
   {n:"Bug Hunter Chip",zone:"qa",anim:"bounce",p:[44,92],c:"#10b981",g:"✱",fact:"Developers call it a glitch, testers call it a bug, and gamers call it a plot twist. At Virtualize, teamwork saves the day!"},
   {n:"People Power Chip",zone:"hr",p:[320,112],c:"#14b8a6",g:"♥",fact:"We play, laugh, compete, and create memories together. Because every great squad deserves some fun between missions!"}],
  jobs:[
@@ -3924,19 +4108,56 @@ function final(){
 }
 
 function team(){
-  card('<h2>Meet the team</h2>'+
-       '<div class="row">'+
-       CONFIG.people.map(function(p, i){
-         return '<button class="btn alt" data-i="'+i+'" style="text-align:left;flex:1 1 180px">'+
-                '<b>'+esc(p.name)+'</b><br><small style="color:var(--mut)">'+esc(p.role)+'</small></button>';
-       }).join("") +
-       '</div><div class="row" style="margin-top:12px"><button class="btn" id="cl">Close</button></div>');
-  $("cl").onclick = close;
-  $("modal").querySelectorAll("[data-i]").forEach(function(b){
-    b.onclick = function(){
+  var m = $("modal");
+  var html = '<div class="card team-modal" role="dialog" aria-label="Meet the Virtualize Team">' +
+    '<button class="x" id="xx" aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="10" y2="10"></line><line x1="10" y1="2" x2="2" y2="10"></line></svg></button>' +
+    '<div class="team-header">' +
+      '<span class="team-badge">VIRTUALIZE STUDIO SQUAD · 8 MEMBERS</span>' +
+      '<h2>Meet the Team</h2>' +
+      '<p>The engineers, artists, and visionaries building our games. Select any member to visit their workspace.</p>' +
+    '</div>' +
+    '<div class="team-grid">' +
+    CONFIG.people.map(function(p, i){
+      var z = zoneOf(p.zone);
+      var look = LOOK[p.name] || AVATARS[0].L;
+      return '<div class="team-card" data-i="'+i+'" tabindex="0" role="button" aria-label="Meet '+esc(p.name)+'" style="--zc:'+z.c+'">' +
+        '<div class="team-avatar-box">' + bust(look) + '</div>' +
+        '<div class="team-info">' +
+          '<div class="team-name">' + esc(p.name) + '</div>' +
+          '<div class="team-role">' + esc(p.role) + '</div>' +
+          '<span class="team-dept" style="color:'+z.c+';border-color:'+z.c+'55;background:'+z.c+'18">' + esc(z.n) + '</span>' +
+        '</div>' +
+        '<span class="team-arrow">&rarr;</span>' +
+      '</div>';
+    }).join("") +
+    '</div>' +
+    '<div class="team-footer">' +
+      '<button class="btn" id="cl">&larr; Back to Office</button>' +
+    '</div>' +
+  '</div>';
+
+  m.innerHTML = html;
+  m.style.display = "flex";
+
+  $("xx").onclick = $("cl").onclick = close;
+  m.querySelectorAll("[data-i]").forEach(function(b){
+    function visit(){
       var i = +b.dataset.i;
-      if (state !== "office") return;
+      if (state !== "office") {
+        state = "office";
+        show("welcome", false);
+        show("create", false);
+        $("game").style.display = "block";
+        syncTopBar();
+      }
       openEmp(i, svg.querySelector('[data-p="'+i+'"]'));
+    }
+    b.onclick = visit;
+    b.onkeydown = function(e){
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        visit();
+      }
     };
   });
 }

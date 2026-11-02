@@ -674,6 +674,26 @@ input[type=text].input-invalid {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
 }
+.step-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+@media (max-width: 600px) {
+  .step-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .step-actions .btn {
+    width: 100%;
+    max-width: 320px;
+  }
+}
 
 /* Office Floor: fits the screen as a 3x3 grid, scrolls as columns on tablets and phones */
 #floor {
@@ -2337,12 +2357,13 @@ input[type=text].input-invalid {
   <!-- Hero Box -->
   <div class="hero-box">
     <h1>Your next adventure starts here.</h1>
-    <p><b>Welcome to Virtualize: Career Quest</b><br>Enter the World. Discover the People. Unlock Your Next Level.</p>
+    <p id="welcome-sub"><b>Welcome to Virtualize: Career Quest</b><br>Enter the World. Discover the People. Unlock Your Next Level.</p>
   </div>
 
   <!-- Action Buttons (In a Row Across All Devices) -->
   <div class="btn-group">
     <button class="btn press" id="start">Press start</button>
+    <button class="btn" id="welcome-new" style="display:none;">Create new profile</button>
     <button class="btn" id="exp">Explore careers</button>
   </div>
 </div>
@@ -2445,7 +2466,83 @@ var MSG=["FIRST DISCOVERY UNLOCKED!","NICE FIND!","LEVEL-UP ENERGY!","HALFWAY TH
 
 (function(){
 var $ = function(i){ return document.getElementById(i); }, RM = matchMedia("(prefers-reduced-motion:reduce)").matches;
+var STORAGE_KEY = "vq_player_profile";
+var hasSavedProfile = false, isCreatingNew = false, isReturningUser = false;
 var P = {name: "Player", av: 0, col: 1, id: "VQ-" + (1000 + Math.floor(Math.random() * 9000))}, state = "welcome", got = {}, n = 0, shownN = 0, shownXp = 0, rewardChip = null, xpCount = 0, snd = true, actx;
+
+function saveProfile() {
+  try {
+    if (P && P.name && P.name.trim().length >= 2 && P.name.trim() !== "Player") {
+      var data = {
+        name: P.name.trim(),
+        av: (typeof P.av === "number" && P.av >= 0 && P.av < AVATARS.length) ? P.av : 0,
+        col: (typeof P.col === "number" && P.col >= 0 && P.col < COLORS.length) ? P.col : 1,
+        id: P.id || ("VQ-" + (1000 + Math.floor(Math.random() * 9000)))
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      hasSavedProfile = true;
+      syncWelcomeUI();
+    }
+  } catch (e) {
+    console.warn("Unable to save profile to localStorage", e);
+  }
+}
+
+function loadProfile() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    var data = JSON.parse(raw);
+    if (data && typeof data === "object" && typeof data.name === "string" && data.name.trim().length >= 2 && data.name.trim() !== "Player") {
+      P.name = data.name.trim();
+      if (typeof data.av === "number" && data.av >= 0 && data.av < AVATARS.length) {
+        P.av = data.av;
+      }
+      if (typeof data.col === "number" && data.col >= 0 && data.col < COLORS.length) {
+        P.col = data.col;
+      }
+      if (typeof data.id === "string" && data.id.trim().length > 0) {
+        P.id = data.id.trim();
+      }
+      return true;
+    }
+  } catch (e) {
+    console.warn("Unable to load profile from localStorage", e);
+  }
+  return false;
+}
+
+function syncWelcomeUI() {
+  var startBtn = $("start");
+  var newBtn = $("welcome-new");
+  var welcomeSub = $("welcome-sub");
+  if (isReturningUser && P.name && P.name !== "Player") {
+    if (startBtn) {
+      startBtn.textContent = "Continue as " + P.name;
+      startBtn.setAttribute("aria-label", "Continue as " + P.name);
+    }
+    if (newBtn) {
+      newBtn.style.display = "inline-flex";
+    }
+    if (welcomeSub) {
+      welcomeSub.innerHTML = '<b>Welcome back, ' + esc(P.name) + '!</b><br>Enter the World. Discover the People. Unlock Your Next Level.';
+    }
+  } else {
+    if (startBtn) {
+      startBtn.textContent = "Press start";
+      startBtn.setAttribute("aria-label", "Press start");
+    }
+    if (newBtn) {
+      newBtn.style.display = "none";
+    }
+    if (welcomeSub) {
+      welcomeSub.innerHTML = '<b>Welcome to Virtualize: Career Quest</b><br>Enter the World. Discover the People. Unlock Your Next Level.';
+    }
+  }
+}
+
+hasSavedProfile = loadProfile();
+isReturningUser = hasSavedProfile;
 
 function esc(s){ return String(s).replace(/[&<>"]/g, function(m){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]; }); }
 function mix(h, a){
@@ -3902,13 +3999,16 @@ function fitZ(z, sh){
 /* User Flow & Onboarding */
 function show(id, on){ $(id).style.display = on ? "flex" : "none"; }
 function idCard(){
-  var c = COLORS[P.col];
+  var c = COLORS[P.col] || COLORS[1];
+  var av = AVATARS[P.av] || AVATARS[0];
+  var isReturning = isReturningUser;
+  var statusText = isReturning ? "Returning Player" : "New Player";
   return '<div class="id" style="background:'+c[1]+';color:'+c[2]+'">'+
-         bust(AVATARS[P.av].L)+
+         bust(av.L)+
          '<div>'+
          '<h3>'+esc(P.name)+'</h3>'+
-         '<small>'+AVATARS[P.av].t+'</small>'+
-         '<small>New Player · '+P.id+'</small>'+
+         '<small>'+av.t+'</small>'+
+         '<small>'+statusText+' · '+P.id+'</small>'+
          '</div></div>';
 }
 
@@ -3939,14 +4039,37 @@ function step(s){
         }).join("") +
         '</div><button class="btn primary" id="nx">Generate my ID</button></div>';
   } else if (s === 4) {
-    h = '<div class="step-card"><h2>Player profile created.</h2>'+
+    var isReturning = isReturningUser;
+    var title = isReturning ? ("Welcome back, " + esc(P.name) + "!") : "Player profile created.";
+    var actions = isReturning
+      ? '<div class="step-actions">' +
+          '<button class="btn primary" id="nx">Enter the virtual world</button>' +
+          '<button class="btn" id="btn-new-profile">Create new profile</button>' +
+        '</div>'
+      : '<button class="btn primary" id="nx">Enter the virtual world</button>';
+
+    h = '<div class="step-card"><h2>' + title + '</h2>'+
         idCard() +
-        '<button class="btn primary" id="nx">Enter the virtual world</button></div>';
+        actions + '</div>';
   }
 
   el.innerHTML = h;
   var nx = $("nx");
   if (s === 1) $("nm").focus();
+
+  var btnNewProfile = $("btn-new-profile");
+  if (btnNewProfile) {
+    btnNewProfile.onclick = function(){
+      beep(380);
+      isCreatingNew = true;
+      isReturningUser = false;
+      P.name = "";
+      P.av = 0;
+      P.col = 1;
+      P.id = "VQ-" + (1000 + Math.floor(Math.random() * 9000));
+      step(1);
+    };
+  }
 
   el.querySelectorAll(".av").forEach(function(b){
     b.onclick = function(){
@@ -3981,7 +4104,17 @@ function step(s){
       }
       P.name = val;
     }
-    if (s < 4) step(s + 1); else enter();
+    if (s === 3) {
+      saveProfile();
+    }
+    if (s < 4) {
+      step(s + 1);
+    } else {
+      saveProfile();
+      isCreatingNew = false;
+      isReturningUser = true;
+      enter();
+    }
   };
   if (s === 1) {
     var inp = $("nm");
@@ -4052,6 +4185,7 @@ function syncTopBar(){
 }
 
 function enter(){
+  saveProfile();
   state = "office";
   show("create", false);
   show("welcome", false);
@@ -5677,8 +5811,30 @@ $("start").onclick = function(){
   state = "create";
   show("welcome", false);
   show("create", true);
-  step(1);
+  if (isReturningUser) {
+    step(4);
+  } else {
+    isReturningUser = false;
+    step(1);
+  }
 };
+var wNew = $("welcome-new");
+if (wNew) {
+  wNew.onclick = function(){
+    beep(380);
+    isCreatingNew = true;
+    isReturningUser = false;
+    P.name = "";
+    P.av = 0;
+    P.col = 1;
+    P.id = "VQ-" + (1000 + Math.floor(Math.random() * 9000));
+    state = "create";
+    show("welcome", false);
+    show("create", true);
+    step(1);
+  };
+}
+syncWelcomeUI();
 $("exp").onclick = openCareers;
 $("nOv").onclick = function(){
   close();

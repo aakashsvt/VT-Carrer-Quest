@@ -3373,14 +3373,14 @@ function startTTGame() {
         '<button class="btn alt arcade-sub-btn" id="tt-back-btn">&larr; Games Menu</button>' +
       '</div>' +
       '<div class="game-hud-bar">' +
-        '<span style="color:#f97316">YOU: <span id="tt-p1-score">0</span></span>' +
+        '<span style="color:#38bdf8">BOT: <span id="tt-bot-score">0</span></span>' +
         '<span style="color:#facc15" id="tt-status">FIRST TO 3 WINS</span>' +
-        '<span style="color:#38bdf8">BOT: <span id="tt-p2-score">0</span></span>' +
+        '<span style="color:#f97316">YOU: <span id="tt-you-score">0</span></span>' +
       '</div>' +
       '<div class="arcade-canvas-wrap">' +
         '<canvas id="tt-canvas" width="460" height="260"></canvas>' +
       '</div>' +
-      '<div class="game-controls-hint">Move paddle with mouse / touch or ↑ ↓ / W S keys</div>' +
+      '<div class="game-controls-hint">Move right paddle with mouse / touch or ↑ ↓ / W S keys</div>' +
     '</div>' +
   '</div>';
 
@@ -3391,12 +3391,15 @@ function startTTGame() {
   var ctx = canvas.getContext("2d");
   var W = 460, H = 260;
 
-  var p1 = { y: 105, h: 54, w: 9, score: 0 };
-  var p2 = { y: 105, h: 54, w: 9, score: 0 };
-  var baseSpeed = 3.6;
+  // Bot on LEFT (x = 18), User Player on RIGHT (x = W - 18 - player.w)
+  var bot = { y: 105, h: 54, w: 9, score: 0 };
+  var player = { y: 105, h: 54, w: 9, score: 0 };
+
+  // Responsive, active initial speed with purely gradual progression (+0.18 per rally hit)
+  var baseSpeed = 5.0;
   var ballSpeed = baseSpeed;
-  var maxSpeed = 5.8;
-  var ball = { x: W / 2, y: H / 2, vx: 3.6, vy: 0, r: 5, trail: [] };
+  var maxSpeed = 7.4;
+  var ball = { x: W / 2, y: H / 2, vx: 5.0, vy: 0, r: 5, trail: [] };
   var gameOver = false, winner = null;
   var keys = {};
 
@@ -3405,7 +3408,8 @@ function startTTGame() {
     ball.x = W / 2;
     ball.y = H / 2;
     var d = dir || (Math.random() < 0.5 ? 1 : -1);
-    var angle = (Math.random() * 0.4 - 0.2) * Math.PI;
+    // Controlled serve angle (±18° max) keeping horizontal motion crisp and consistent
+    var angle = (Math.random() * 0.2 - 0.1) * Math.PI;
     ball.vx = d * ballSpeed * Math.cos(angle);
     ball.vy = ballSpeed * Math.sin(angle);
     ball.trail = [];
@@ -3416,7 +3420,8 @@ function startTTGame() {
     var scaleY = H / rect.height;
     var clientY = (e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0));
     var my = (clientY - rect.top) * scaleY;
-    p1.y = Math.max(4, Math.min(H - p1.h - 4, my - p1.h / 2));
+    // Moves the USER player paddle on the RIGHT
+    player.y = Math.max(4, Math.min(H - player.h - 4, my - player.h / 2));
   }
 
   function onKeyDown(e) { keys[e.key] = true; }
@@ -3436,9 +3441,9 @@ function startTTGame() {
 
   canvas.addEventListener("click", function() {
     if (gameOver) {
-      p1.score = 0; p2.score = 0; gameOver = false; winner = null;
-      $("tt-p1-score").textContent = "0";
-      $("tt-p2-score").textContent = "0";
+      player.score = 0; bot.score = 0; gameOver = false; winner = null;
+      $("tt-you-score").textContent = "0";
+      $("tt-bot-score").textContent = "0";
       $("tt-status").textContent = "FIRST TO 3 WINS";
       resetBall(1);
     }
@@ -3446,19 +3451,21 @@ function startTTGame() {
 
   function loop() {
     if (!gameOver) {
-      if (keys["ArrowUp"] || keys["w"] || keys["W"]) p1.y = Math.max(4, p1.y - 5);
-      if (keys["ArrowDown"] || keys["s"] || keys["S"]) p1.y = Math.min(H - p1.h - 4, p1.y + 5);
+      // User controls right paddle with keys
+      if (keys["ArrowUp"] || keys["w"] || keys["W"]) player.y = Math.max(4, player.y - 5.5);
+      if (keys["ArrowDown"] || keys["s"] || keys["S"]) player.y = Math.min(H - player.h - 4, player.y + 5.5);
 
-      var targetY = ball.y - p2.h / 2;
-      var botSpeed = Math.min(3.8, ballSpeed * 0.72);
-      if (ball.vx > 0) {
-        if (p2.y < targetY - 3) p2.y += Math.min(botSpeed, targetY - p2.y);
-        else if (p2.y > targetY + 3) p2.y -= Math.min(botSpeed, p2.y - targetY);
+      // Bot controls left paddle with smooth tracking AI
+      var targetY = ball.y - bot.h / 2;
+      var botSpeed = Math.min(5.0, ballSpeed * 0.74);
+      if (ball.vx < 0) {
+        if (bot.y < targetY - 3) bot.y += Math.min(botSpeed, targetY - bot.y);
+        else if (bot.y > targetY + 3) bot.y -= Math.min(botSpeed, bot.y - targetY);
       } else {
-        var cy = H / 2 - p2.h / 2;
-        p2.y += (cy - p2.y) * 0.05;
+        var cy = H / 2 - bot.h / 2;
+        bot.y += (cy - bot.y) * 0.05;
       }
-      p2.y = Math.max(4, Math.min(H - p2.h - 4, p2.y));
+      bot.y = Math.max(4, Math.min(H - bot.h - 4, bot.y));
 
       ball.x += ball.vx;
       ball.y += ball.vy;
@@ -3466,6 +3473,7 @@ function startTTGame() {
       ball.trail.push({ x: ball.x, y: ball.y });
       if (ball.trail.length > 6) ball.trail.shift();
 
+      // Top and bottom table cushion bounce
       if (ball.y - ball.r <= 4) {
         ball.y = 4 + ball.r;
         ball.vy = Math.abs(ball.vy);
@@ -3476,50 +3484,57 @@ function startTTGame() {
         beep(240);
       }
 
-      var p1Left = 18, p1Right = 18 + p1.w;
-      if (ball.vx < 0 && ball.x - ball.r <= p1Right && ball.x + ball.r >= p1Left && ball.y >= p1.y - 4 && ball.y <= p1.y + p1.h + 4) {
-        ball.x = p1Right + ball.r;
-        ballSpeed = Math.min(maxSpeed, ballSpeed + 0.12);
-        var hitOffset = (ball.y - (p1.y + p1.h / 2)) / (p1.h / 2);
+      // Left Paddle Collision (BOT)
+      var botLeft = 18, botRight = 18 + bot.w;
+      if (ball.vx < 0 && ball.x - ball.r <= botRight && ball.x + ball.r >= botLeft && ball.y >= bot.y - 4 && ball.y <= bot.y + bot.h + 4) {
+        ball.x = botRight + ball.r;
+        // Speed increases purely gradually per rally (+0.18)
+        ballSpeed = Math.min(maxSpeed, ballSpeed + 0.18);
+        var hitOffset = (ball.y - (bot.y + bot.h / 2)) / (bot.h / 2);
         hitOffset = Math.max(-1, Math.min(1, hitOffset));
-        var bounceAngle = hitOffset * (Math.PI / 4.2);
+        var bounceAngle = hitOffset * (Math.PI / 6.5); // Controlled angle deflection (max ±27°)
         ball.vx = ballSpeed * Math.cos(bounceAngle);
         ball.vy = ballSpeed * Math.sin(bounceAngle);
-        beep(480);
-      }
-
-      var p2Left = W - 18 - p2.w, p2Right = W - 18;
-      if (ball.vx > 0 && ball.x + ball.r >= p2Left && ball.x - ball.r <= p2Right && ball.y >= p2.y - 4 && ball.y <= p2.y + p2.h + 4) {
-        ball.x = p2Left - ball.r;
-        ballSpeed = Math.min(maxSpeed, ballSpeed + 0.12);
-        var hitOffset2 = (ball.y - (p2.y + p2.h / 2)) / (p2.h / 2);
-        hitOffset2 = Math.max(-1, Math.min(1, hitOffset2));
-        var bounceAngle2 = hitOffset2 * (Math.PI / 4.2);
-        ball.vx = -ballSpeed * Math.cos(bounceAngle2);
-        ball.vy = ballSpeed * Math.sin(bounceAngle2);
         beep(420);
       }
 
+      // Right Paddle Collision (USER PLAYER)
+      var playerLeft = W - 18 - player.w, playerRight = W - 18;
+      if (ball.vx > 0 && ball.x + ball.r >= playerLeft && ball.x - ball.r <= playerRight && ball.y >= player.y - 4 && ball.y <= player.y + player.h + 4) {
+        ball.x = playerLeft - ball.r;
+        // Speed increases purely gradually per rally (+0.18)
+        ballSpeed = Math.min(maxSpeed, ballSpeed + 0.18);
+        var hitOffset2 = (ball.y - (player.y + player.h / 2)) / (player.h / 2);
+        hitOffset2 = Math.max(-1, Math.min(1, hitOffset2));
+        var bounceAngle2 = hitOffset2 * (Math.PI / 6.5); // Controlled angle deflection (max ±27°)
+        ball.vx = -ballSpeed * Math.cos(bounceAngle2);
+        ball.vy = ballSpeed * Math.sin(bounceAngle2);
+        beep(480);
+      }
+
+      // Scoring
       if (ball.x < -10) {
-        p2.score++;
-        $("tt-p2-score").textContent = p2.score;
-        beep(300);
-        if (p2.score >= 3) {
-          gameOver = true; winner = 'Studio Bot';
-          $("tt-status").textContent = "BOT WINS MATCH";
-        } else {
-          resetBall(1);
-        }
-      } else if (ball.x > W + 10) {
-        p1.score++;
-        $("tt-p1-score").textContent = p1.score;
+        // Ball passed Bot -> User Player scores!
+        player.score++;
+        $("tt-you-score").textContent = player.score;
         beep(740);
-        if (p1.score >= 3) {
+        if (player.score >= 3) {
           gameOver = true; winner = 'Player';
           $("tt-status").textContent = "YOU WON MATCH!";
           beep(920);
         } else {
-          resetBall(-1);
+          resetBall(-1); // Serve towards player
+        }
+      } else if (ball.x > W + 10) {
+        // Ball passed User Player -> Bot scores!
+        bot.score++;
+        $("tt-bot-score").textContent = bot.score;
+        beep(300);
+        if (bot.score >= 3) {
+          gameOver = true; winner = 'Studio Bot';
+          $("tt-status").textContent = "BOT WINS MATCH";
+        } else {
+          resetBall(1); // Serve towards bot
         }
       }
     }
@@ -3545,6 +3560,7 @@ function startTTGame() {
     ctx.stroke();
     ctx.setLineDash([]);
 
+    // Ball trail
     for (var i = 0; i < ball.trail.length; i++) {
       var tr = ball.trail[i];
       var op = (i + 1) / ball.trail.length * 0.4;
@@ -3554,6 +3570,7 @@ function startTTGame() {
       ctx.fill();
     }
 
+    // Ball
     ctx.shadowColor = "#38bdf8";
     ctx.shadowBlur = 12;
     ctx.fillStyle = "#ffffff";
@@ -3561,46 +3578,42 @@ function startTTGame() {
     ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.shadowColor = "#f97316";
-    ctx.shadowBlur = 14;
-    ctx.fillStyle = "#f97316";
-    ctx.beginPath();
-    ctx.roundRect(18, p1.y, p1.w, p1.h, 4);
-    ctx.fill();
-
+    // Left Paddle (BOT - Cyan)
     ctx.shadowColor = "#38bdf8";
     ctx.shadowBlur = 14;
     ctx.fillStyle = "#38bdf8";
     ctx.beginPath();
-    ctx.roundRect(W - 18 - p2.w, p2.y, p2.w, p2.h, 4);
+    ctx.roundRect(18, bot.y, bot.w, bot.h, 4);
+    ctx.fill();
+
+    // Right Paddle (USER PLAYER - Orange)
+    ctx.shadowColor = "#f97316";
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = "#f97316";
+    ctx.beginPath();
+    ctx.roundRect(W - 18 - player.w, player.y, player.w, player.h, 4);
     ctx.fill();
     ctx.shadowBlur = 0;
 
     if (gameOver) {
       ctx.fillStyle = "rgba(8, 12, 22, 0.82)";
       ctx.fillRect(0, 0, W, H);
-
-      ctx.font = "800 22px 'Space Grotesk', sans-serif";
+      ctx.font = "bold 22px 'Space Grotesk', sans-serif";
       ctx.textAlign = "center";
-      if (winner === 'Player') {
-        ctx.fillStyle = "#facc15";
-        ctx.fillText("🏆 MATCH WON! AWESOME RALLY!", W / 2, H / 2 - 12);
-      } else {
-        ctx.fillStyle = "#38bdf8";
-        ctx.fillText("BOT WON THIS ROUND!", W / 2, H / 2 - 12);
-      }
-      ctx.font = "700 13px 'JetBrains Mono', monospace";
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillText("▶ CLICK ANYWHERE TO PLAY AGAIN", W / 2, H / 2 + 18);
+      ctx.fillStyle = winner === 'Player' ? "#f97316" : "#38bdf8";
+      ctx.fillText(winner === 'Player' ? "🏆 YOU WON!" : "BOT WINS", W / 2, H / 2 - 12);
+      ctx.font = "13px 'Space Grotesk', sans-serif";
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillText("Click anywhere on table to play again", W / 2, H / 2 + 18);
     }
 
     activeGameLoop = requestAnimationFrame(loop);
   }
 
-  activeGameLoop = requestAnimationFrame(loop);
+  resetBall(1);
+  loop();
 }
 
-/* --- Mini-Game 2: Cyber Arcade Blaster --- */
 function startBlasterGame() {
   stopActiveGame();
   var m = $("modal");
@@ -4012,31 +4025,24 @@ function getChipAnimType(c) {
 }
 
 function getChipBounds(c) {
-  var padX = 42;
-  var padYTop = 46;
-  var padYBottom = 38;
+  var maxRadX = 18;
+  var maxRadY = 12;
 
   if (c.zone) {
     var z = CONFIG.zones.find(function(q){ return q.id === c.zone; });
     if (z) {
-      var minX = padX;
-      var maxX = z.w - padX;
-      var minY = padYTop;
-      var maxY = z.h - padYBottom;
-
-      var spawnX = c.p[0];
-      var spawnY = c.p[1];
-
-      var minDx = minX - spawnX;
-      var maxDx = maxX - spawnX;
-      var minDy = minY - spawnY;
-      var maxDy = maxY - spawnY;
+      var padX = 36, padYTop = 44, padYBottom = 34;
+      var spawnX = c.p[0], spawnY = c.p[1];
+      var allowLeft = Math.max(6, spawnX - padX);
+      var allowRight = Math.max(6, (z.w - padX) - spawnX);
+      var allowTop = Math.max(6, spawnY - padYTop);
+      var allowBottom = Math.max(6, (z.h - padYBottom) - spawnY);
 
       return {
-        centerX: (minDx + maxDx) * 0.5,
-        centerY: (minDy + maxDy) * 0.5,
-        radiusX: Math.max(18, (maxDx - minDx) * 0.5),
-        radiusY: Math.max(14, (maxDy - minDy) * 0.5)
+        centerX: 0,
+        centerY: 0,
+        radiusX: Math.min(maxRadX, allowLeft, allowRight),
+        radiusY: Math.min(maxRadY, allowTop, allowBottom)
       };
     }
   }
@@ -4045,8 +4051,8 @@ function getChipBounds(c) {
   return {
     centerX: 0,
     centerY: 0,
-    radiusX: 36,
-    radiusY: 30
+    radiusX: 16,
+    radiusY: 12
   };
 }
 
@@ -4122,23 +4128,23 @@ function initChipAnimation() {
             shadow.setAttribute('opacity', op.toFixed(2));
           }
         } else {
-          // Dynamic Firefly Randomly Floating Animation (Strictly Contained within Room Bounds)
+          // Dynamic Firefly Randomly Floating Animation (Gentle Speed & Tight Hover Radius)
           var b = getChipBounds(c);
           var seed = idx * 1.731 + 0.5;
-          var sec = effNow * 0.001;
+          var sec = effNow * 0.00045; // Reduced speed by >55% for smooth, calm floating
 
-          // Multi-frequency organic wandering (coefficients sum to <= 0.90 for guaranteed containment)
+          // Multi-frequency organic wandering (tight radius orbit centered at spawn point)
           var wx = 0.46 * Math.sin(sec * 0.55 + seed * 1.618) +
-                   0.28 * Math.cos(sec * 1.15 + seed * 2.718) +
+                   0.26 * Math.cos(sec * 1.15 + seed * 2.718) +
                    0.16 * Math.sin(sec * 2.35 + seed * 3.141);
 
           var wy = 0.44 * Math.cos(sec * 0.48 + seed * 2.718) +
-                   0.30 * Math.sin(sec * 1.05 + seed * 3.141) +
+                   0.28 * Math.sin(sec * 1.05 + seed * 3.141) +
                    0.16 * Math.cos(sec * 2.15 + seed * 1.618);
 
-          // Micro air flutter
-          var fx = Math.sin(sec * 5.2 + seed) * 2.0;
-          var fy = Math.cos(sec * 6.1 + seed) * 2.2;
+          // Subtle micro air flutter
+          var fx = Math.sin(sec * 3.5 + seed) * 0.75;
+          var fy = Math.cos(sec * 4.0 + seed) * 0.85;
 
           var dx = b.centerX + b.radiusX * wx + fx;
           var dy = b.centerY + b.radiusY * wy + fy;
@@ -4147,13 +4153,13 @@ function initChipAnimation() {
           chip.setAttribute('transform', 'translate(' + dx.toFixed(2) + ' ' + dy.toFixed(2) + ')');
 
           // Firefly breathing luminescence & flight tilt
-          var pulse = 0.92 + 0.15 * Math.sin(sec * 3.2 + seed * 2.0);
-          var tilt = (Math.cos(sec * 0.55 + seed * 1.618) * -7 + Math.sin(sec * 5.2 + seed) * 2.5).toFixed(1);
+          var pulse = 0.94 + 0.10 * Math.sin(sec * 2.2 + seed * 2.0);
+          var tilt = (Math.cos(sec * 0.55 + seed * 1.618) * -4 + Math.sin(sec * 3.5 + seed) * 1.5).toFixed(1);
 
           body.setAttribute('transform', 'scale(' + pulse.toFixed(3) + ') rotate(' + tilt + ')');
 
           if (shadow) {
-            var srx = (14 * (0.85 + 0.20 * pulse)).toFixed(1);
+            var srx = (14 * (0.88 + 0.16 * pulse)).toFixed(1);
             var sop = (0.35 * pulse).toFixed(2);
             shadow.setAttribute('rx', srx);
             shadow.setAttribute('opacity', sop);

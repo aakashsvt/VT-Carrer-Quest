@@ -844,7 +844,7 @@ input[type=text].input-invalid {
   left: 0;
   right: 0;
   gap: 8px 10px;
-  padding: max(14px, env(safe-area-inset-top, 0px)) var(--inset-r, 20px) 18px var(--inset-l, 20px);
+  padding: calc(env(safe-area-inset-top, 0px) + clamp(18px, 3.4dvh, 30px)) var(--inset-r, 20px) 20px var(--inset-l, 20px);
   background: linear-gradient(180deg, rgba(5, 8, 16, 0.97) 0%, rgba(5, 8, 16, 0.94) 72%, rgba(5, 8, 16, 0) 100%);
   pointer-events: none;
 }
@@ -904,37 +904,43 @@ input[type=text].input-invalid {
 /* Phones: a slimmer bar so the screen doesn't feel crowded */
 @media (max-width: 600px), (max-height: 500px) {
   .floor-scroll #nav .btn {
-    height: 38px;
-    font-size: 13px;
+    height: 36px;
+    padding: 0 6px;
+    font-size: 12.5px;
     border-radius: 8px;
   }
   .floor-scroll #hud .bar {
-    height: 40px;
-    padding: 4px 12px 5px;
+    height: 38px;
+    padding: 4px 11px 5px;
+    gap: 4px;
+  }
+  .floor-scroll .track {
+    height: 5px;
   }
   .floor-scroll #mt {
-    font-size: 12px;
+    font-size: 11.5px;
   }
   .floor-scroll #xpt {
-    font-size: 11px;
+    font-size: 10.5px;
   }
 }
 @media (max-height: 500px) {
   .floor-scroll #top-bar {
-    padding-top: max(8px, env(safe-area-inset-top, 0px));
+    padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
     padding-bottom: 14px;
   }
   .floor-scroll #nav .btn {
     padding: 0 11px;
   }
 }
-/* Smallest phones: trim the padding, not the text */
+/* Smallest phones: the rooms are narrower here, so the buttons tighten up to match */
 @media (max-width: 350px) {
   .floor-scroll #nav {
-    gap: 6px;
+    gap: 5px;
   }
   .floor-scroll #nav .btn {
-    padding: 0 5px;
+    padding: 0 4px;
+    font-size: 12px;
   }
 }
 
@@ -1199,8 +1205,12 @@ input[type=text].input-invalid {
   }
 }
 @media (max-width: 600px) {
+  #modal {
+    padding: 28px 26px;
+  }
   .card {
-    padding: 20px;
+    max-height: 82dvh;
+    padding: 18px;
   }
   .card h2 {
     font-size: 20px;
@@ -1382,36 +1392,177 @@ input[type=text].input-invalid {
   justify-content: center;
   padding-top: 4px;
 }
+/* Phones: a compact list that scrolls on its own, so Back to Office is always on screen */
 @media (max-width: 600px) {
-  #modal:has(.team-modal) {
-    padding: 10px;
-  }
   .team-modal {
-    padding: 18px 12px;
-    width: 96vw;
-    gap: 14px;
-    border-radius: 14px;
+    width: 100%;
+    max-height: 84dvh;
+    overflow: hidden;
+    padding: 14px 12px 12px;
+    gap: 10px;
+    border-radius: 16px;
+  }
+  .team-modal .x {
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
   }
   .team-header {
-    padding: 0 24px;
+    padding: 0 22px;
+  }
+  .team-badge {
+    padding: 2px 8px;
+    font-size: 8.5px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    margin-bottom: 5px;
   }
   .team-header h2 {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 3px;
+  }
+  .team-header p {
+    font-size: 11.5px;
+    line-height: 1.35;
   }
   .team-grid {
     grid-template-columns: 1fr;
+    align-content: start;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    gap: 6px;
+  }
+  .team-card {
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 10px;
+  }
+  .team-avatar-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+  .team-name {
+    font-size: 13px;
+  }
+  .team-arrow {
+    font-size: 13px;
+  }
+  .team-footer {
+    flex: none;
+    padding-top: 0;
+  }
+  .team-footer .btn {
+    padding: 8px 18px;
+    font-size: 13px;
+    border-width: 1.5px;
+  }
+}
+/* Rows keep their height so the list scrolls instead of clipping, with role and zone on one line */
+@media (max-width: 600px), (max-height: 500px) {
+  .team-grid {
+    grid-auto-rows: max-content;
+  }
+  .team-info {
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 1px 6px;
+  }
+  .team-name {
+    flex: 0 0 100%;
+  }
+  .team-role {
+    flex: none;
+    font-size: 11px;
+  }
+  .team-dept {
+    flex: 0 1 auto;
+    align-self: center;
+    min-width: 0;
+    margin: 0;
+    padding: 0 5px;
+    font-size: 8.5px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+/* Shorter phones: drop the extra header lines and tighten the rows */
+@media (max-width: 600px) and (max-height: 700px) {
+  .team-header p {
+    display: none;
+  }
+  .team-grid {
+    gap: 5px;
+  }
+  .team-card {
+    padding: 5px 10px;
+  }
+  .team-avatar-box {
+    width: 32px;
+    height: 32px;
+  }
+}
+@media (max-width: 350px) {
+  .team-badge,
+  .team-arrow {
+    display: none;
+  }
+}
+/* Landscape phones: same idea, using the wider two-column list */
+@media (max-height: 500px) {
+  #modal:has(.team-modal) {
+    padding: 14px 40px;
+  }
+  .team-modal {
+    width: 100%;
+    max-height: calc(100dvh - 28px);
+    overflow: hidden;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+  .team-modal .x {
+    top: 8px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+  }
+  .team-badge,
+  .team-header p {
+    display: none;
+  }
+  .team-header h2 {
+    font-size: 17px;
+    margin: 0;
+  }
+  .team-grid {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     gap: 8px;
   }
   .team-card {
-    padding: 10px 12px;
-    border-radius: 11px;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 10px;
   }
   .team-avatar-box {
-    width: 46px;
-    height: 46px;
+    width: 38px;
+    height: 38px;
   }
   .team-name {
-    font-size: 14px;
+    font-size: 13px;
+  }
+  .team-footer {
+    flex: none;
+    padding-top: 0;
+  }
+  .team-footer .btn {
+    padding: 6px 16px;
+    font-size: 13px;
   }
 }
 
@@ -1610,12 +1761,12 @@ input[type=text].input-invalid {
 }
 @media (max-width: 600px) {
   #modal:has(.arcade-modal) {
-    padding: 16px;
+    padding: 22px;
   }
   .arcade-modal {
     width: 100%;
-    padding: 14px;
-    gap: 12px;
+    padding: 13px;
+    gap: 11px;
   }
   .arcade-header h2 {
     font-size: 19px;
@@ -3662,11 +3813,12 @@ function layoutFloor(cols){
     return;
   }
 
-  var rw = 360, rh = 260, padX = cols === 1 ? 24 : 28, top = 22, gapX = 30, gapY = 48, step = rh + gapY;
+  // Wider side padding shrinks the rooms too, since the floor always fills the screen width
+  var rw = 360, rh = 260, padX = cols === 1 ? 38 : 40, top = 30, gapX = 30, gapY = cols === 1 ? 56 : 48, step = rh + gapY;
   var rows = 1 + Math.ceil((CONFIG.zones.length - 1) / cols);
   FLOOR.padX = padX;
   FLOOR.w = cols * rw + (cols - 1) * gapX + padX * 2;
-  FLOOR.h = top + rows * step - gapY + 36;
+  FLOOR.h = top + rows * step - gapY + 56;
   // First room (CEO Cabin) gets its own centred row, the other eight fill the columns
   CONFIG.zones.forEach(function(z, i){
     var col = i === 0 ? (cols - 1) / 2 : (i - 1) % cols;

@@ -2394,8 +2394,8 @@ var CONFIG={
   {n:"Vision Chip",zone:"ceo",p:[286,60],c:"#f59e0b",g:"★",fact:"Cube Sort 3D is live on Google Play and the App Store! Built with creativity, code, and lots of brainpower. Go play it — just one more level, right?"},
   {n:"Game World Chip",zone:null,p:[405,595],c:"#38bdf8",g:"◆",fact:"We don’t just wish, we celebrate! At Virtualize, every festival is another reason to bring the team together."},
   {n:"Creative Spark Chip",zone:"a3",p:[60,95],c:"#f97316",g:"✦",fact:"From 3D art to immersive AR/VR experiences, we turn creative ideas into digital realities. Imagination is our favourite superpower!"},
-  {n:"Code Core Chip",zone:"dev",anim:"bounce",p:[180,62],c:"#60a5fa",g:"★",fact:"From custom physics and gameplay mechanics to 60 FPS optimization in Unity, our devs turn creative logic and C# into immersive, playable magic. Every smooth jump and thrilling gameplay loop is engineered right here!"},
-  {n:"Bug Hunter Chip",zone:"qa",anim:"bounce",p:[44,92],c:"#10b981",g:"✱",fact:"Developers call it a glitch, testers call it a bug, and gamers call it a plot twist. At Virtualize, teamwork saves the day!"},
+  {n:"Code Core Chip",zone:"dev",p:[180,62],c:"#60a5fa",g:"★",fact:"From custom physics and gameplay mechanics to 60 FPS optimization in Unity, our devs turn creative logic and C# into immersive, playable magic. Every smooth jump and thrilling gameplay loop is engineered right here!"},
+  {n:"Bug Hunter Chip",zone:"qa",p:[44,92],c:"#10b981",g:"✱",fact:"Developers call it a glitch, testers call it a bug, and gamers call it a plot twist. At Virtualize, teamwork saves the day!"},
   {n:"People Power Chip",zone:"hr",p:[320,112],c:"#14b8a6",g:"♥",fact:"We play, laugh, compete, and create memories together. Because every great squad deserves some fun between missions!"}],
  jobs:[
   {title:"Unity Developer",dept:"Development",exp:"3–4 years",type:"Full-time",loc:"Mohali, Punjab",desc:"Design, build, optimise and maintain games and interactive products in Unity and C#, with ownership of features on our own products.",skills:["Unity","C#","Mobile (Android/iOS)","REST APIs & SDKs","Git","Optimization"],url:"https://forms.gle/opRbivrkQTpctETe7",
@@ -5697,9 +5697,7 @@ addEventListener("resize", function(){
 
 // Dynamic Collectable Animation System (Firefly Floating & Bouncing)
 function getChipAnimType(c) {
-  if (c.anim) return c.anim;
-  if (c.zone === 'dev' || c.zone === 'qa') return 'bounce';
-  return 'firefly';
+  return c.anim || 'firefly';
 }
 
 function getChipBounds(c) {

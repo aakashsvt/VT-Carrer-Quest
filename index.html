@@ -2437,7 +2437,7 @@ var LOOK={
   "Hitesh":          {s:"#f1c485", h:"#3d2a1d", o:"#065f46", a:"#34d399", g:"m", b:"light", st:0}
 };
 
-var AVATARS=[{t:"The Challenger",d:"Competitive, bold, ready to level up.",L:{s:"#dfa76a",h:"#141416",o:"#1e3a8a",a:"#60a5fa",st:0}},{t:"The Explorer",d:"Curious and always up for a new adventure.",L:{s:"#c88b48",h:"#3d2a1d",o:"#065f46",a:"#34d399",st:1}},{t:"The Strategist",d:"Thinks before making a move.",L:{s:"#f1c485",h:"#282320",o:"#4338ca",a:"#a5b4fc",st:2}},{t:"The Creator",d:"Loves building and imagining new worlds.",L:{s:"#965d2f",h:"#831843",o:"#6b21a8",a:"#f59e0b",st:4}}];
+var AVATARS=[{t:"The Challenger",d:"Competitive, bold, ready to level up.",L:{s:"#dfa76a",h:"#141416",o:"#1e3a8a",a:"#60a5fa",st:0}},{t:"The Explorer",d:"Curious and always up for a new adventure.",L:{s:"#c88b48",h:"#3d2a1d",o:"#065f46",a:"#34d399",st:1}},{t:"The Strategist",d:"Thinks before making a move.",L:{s:"#f1c485",h:"#282320",o:"#db2777",a:"#f472b6",st:2}},{t:"The Creator",d:"Loves building and imagining new worlds.",L:{s:"#965d2f",h:"#831843",o:"#6b21a8",a:"#f59e0b",st:4}}];
 
 var COLORS=[["Electric blue","#2f6bff","#fff"],["Purple","#8b5cf6","#fff"],["Neon green","#39ff88","#06240f"],["Orange","#ff8a1f","#2a1200"],["Pink","#ff4fa3","#2a0517"],["Cyber cyan","linear-gradient(135deg,#00f0ff,#0ea5e9)","#022c3a"]];
 
@@ -2691,44 +2691,75 @@ function person(L, full) {
 
   // Eyebrows
   if (isFemale) {
-    g += St('M37 32.5c2.5-2 6.5-2 9 -.5', h, 1.4);
-    g += St('M63 32.5c-2.5-2-6.5-2-9 -.5', h, 1.4);
+    g += St('M36.5 32c2.8-2.2 7-2.2 9.5 -.2', h, 1.5);
+    g += St('M63.5 32c-2.8-2.2-7-2.2-9.5 -.2', h, 1.5);
   } else {
-    g += St('M37 32c3-1.5 7-1.5 9 0', h, 2.3);
-    g += St('M63 32c-3-1.5-7-1.5-9 0', h, 2.3);
+    g += St('M36.5 31.8c3.2-1.8 7.5-1.8 9.5 .2', h, 2.0);
+    g += St('M63.5 31.8c-3.2-1.8-7.5-1.8-9.5 .2', h, 2.0);
   }
 
-  // Eyes
+  // Refined Eyes with Depth, Iris, Eyelashes & Twinkle
   [41, 59].forEach(function(x) {
-    g += Pa('M'+(x-5.5)+' 39.5c1.5-2.5 7.5-2.5 9.5 0c-1.5 2.5-7.5 2.5-9.5 0z', '#ffffff');
-    g += Ci(x + 0.2, 39.5, 3.2, '#1e293b');
-    g += Ci(x + 0.2, 39.5, 2, '#090d16');
-    g += Ci(x + 1.2, 38.4, 0.9, '#ffffff');
-    g += St('M'+(x-6.2)+' 39.2c2.5-3 8-3 10.8 0', '#090d16', isFemale ? 1.8 : 1.4);
+    // Sclera (eye white)
+    g += Pa('M'+(x-5.8)+' 39.6c1.6-2.8 8.0-2.8 10.2 0c-1.6 2.8-8.0 2.8-10.2 0z', '#ffffff');
+    // Iris with natural depth
+    g += Ci(x + 0.2, 39.6, 3.4, mix(h, 0.12));
+    // Pupil
+    g += Ci(x + 0.2, 39.6, 2.1, '#090d16');
+    // Iris upper shadow
+    g += Pa('M'+(x-2.8)+' 38c1.5-1.4 4.5-1.4 6 0a3.4 3.4 0 0 1 -6 0z', 'rgba(0,0,0,0.35)');
+    // Primary catchlight sparkle
+    g += Ci(x + 1.4, 38.3, 1.05, '#ffffff');
+    // Secondary micro twinkle
+    g += Ci(x - 1.2, 40.7, 0.6, 'rgba(255,255,255,0.75)');
+    // Upper eyelid lash line
+    g += St('M'+(x-6.5)+' 39.2c2.2-3.4 8.5-3.4 11.2 0', '#090d16', isFemale ? 2.1 : 1.6);
+    // Double eyelid crease
+    g += St('M'+(x-4.5)+' 35.8c2.4-1.2 6.5-1.2 8.8 0', 'rgba(15,23,42,0.22)', 1.0);
+    // Subtle lower lash definition
+    g += St('M'+(x-4.0)+' 42.4c2.2 1.0 5.8 1.0 8.0 0', 'rgba(15,23,42,0.24)', 0.9);
   });
 
-  // Eyelashes & Soft Blush for Female
+  // Eyelashes & Soft Cheek Glow
   if (isFemale) {
-    g += St('M35 39c-1.5-1.5-2.2-3.2-3.8-4', '#090d16', 1.3);
-    g += St('M65 39c1.5-1.5 2.2-3.2 3.8-4', '#090d16', 1.3);
-    g += Ci(37, 46.5, 3.8, 'rgba(244, 63, 94, 0.18)');
-    g += Ci(63, 46.5, 3.8, 'rgba(244, 63, 94, 0.18)');
-  }
-
-  // Nose
-  g += St('M50 36v8c0 1.2-1 2.2-2 2.2', sk, isFemale ? 1.2 : 1.4);
-
-  // Lips
-  if (isFemale) {
-    g += Pa('M45 52c1.5-1.4 5.5-1.4 10 0c-2 2.6-6 2.6-10 0z', '#f43f5e');
-    g += St('M45.5 52c2-.6 5.5-.6 9 0', '#be123c', 1.2);
-    g += Ci(50, 52.8, 1.2, 'rgba(255,255,255,0.45)');
+    g += St('M34.8 39c-1.6-1.5-2.4-3.2-4.0-3.8', '#090d16', 1.4);
+    g += St('M65.2 39c1.6-1.5 2.4-3.2 4.0-3.8', '#090d16', 1.4);
+    g += Ci(36.5, 45.2, 4.5, 'rgba(251, 113, 133, 0.24)');
+    g += Ci(63.5, 45.2, 4.5, 'rgba(251, 113, 133, 0.24)');
   } else {
-    g += Pa('M45 52c2-1 6-1 10 0c-2 2-6 2-10 0z', mix(s, -0.28));
-    g += St('M45.5 52c2-.6 5.5-.6 9 0', mix(s, -0.45), 1.2);
+    // Subtle male cheek warmth
+    g += Ci(36.5, 45.5, 3.8, 'rgba(225, 29, 72, 0.08)');
+    g += Ci(63.5, 45.5, 3.8, 'rgba(225, 29, 72, 0.08)');
   }
 
-  // Beards for Male characters (dark or light)
+  // Refined Nose: subtle bridge, contoured tip and soft nostril wings
+  g += St('M49.2 37.5v5.5', 'rgba(0,0,0,0.12)', 1.2);
+  g += Pa('M47.8 44.5c1.2 1.2 3.2 1.2 4.4 0', 'none', ' stroke="'+mix(s, -0.32)+'" stroke-width="1.3" stroke-linecap="round"');
+  g += St('M46.8 44.2c.6-.4 1.2-.4 1.5 0', mix(s, -0.25), 1.0);
+  g += St('M53.2 44.2c-.6-.4-1.2-.4-1.5 0', mix(s, -0.25), 1.0);
+  if (isFemale) {
+    g += Ci(50, 43.6, 0.8, 'rgba(255,255,255,0.4)');
+  }
+
+  // Refined Expressive Lips & Smile
+  if (isFemale) {
+    // Graceful rose lips with soft gloss
+    g += Pa('M44.5 51.5c1.5-1.2 3.5-.8 5.5-.2c2-.6 4-1 5.5.2c-1.5 1.8-4 2.8-5.5 2.8s-4-1-5.5-2.8z', '#fb7185');
+    g += Pa('M46 51.8c2 2.6 6 2.6 8 0c-1.5 2.4-6.5 2.4-8 0z', '#f43f5e');
+    g += St('M44.5 51.2c2.2 1.2 8.8 1.2 11 0', '#be123c', 1.2);
+    g += Ci(50, 52.8, 1.1, 'rgba(255,255,255,0.65)');
+    g += Ci(43.8, 51.0, 0.7, '#be123c');
+    g += Ci(56.2, 51.0, 0.7, '#be123c');
+  } else {
+    // Confident, clean friendly male smile
+    g += Pa('M45.5 51.2c2-.8 7-.8 9 0c-1.5 1.5-7.5 1.5-9 0z', mix(s, -0.22), ' opacity="0.6"');
+    g += St('M44.5 51.2c2.2 1.4 8.8 1.4 11 0', mix(s, -0.45), 1.4);
+    g += Pa('M46.8 54.2c1.6 1.0 4.8 1.0 6.4 0', 'none', ' stroke="'+mix(s, -0.28)+'" stroke-width="1.3" stroke-linecap="round"');
+    g += Ci(44.2, 51.0, 0.7, mix(s, -0.45));
+    g += Ci(55.8, 51.0, 0.7, mix(s, -0.45));
+  }
+
+    // Beards for Male characters (dark or light)
   if (!isFemale && beard !== 'none') {
     var isDark = beard === 'dark';
     var beardCol = isDark ? '#141118' : mix(h, -0.05);

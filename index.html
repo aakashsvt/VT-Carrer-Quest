@@ -427,8 +427,12 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
   backdrop-filter: blur(20px);
   display: none;
   z-index: 6;
+  justify-content: flex-start;
+  overflow-y: auto;
 }
 .step-card {
+  flex: none;
+  margin: auto;
   background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: 16px;
@@ -523,6 +527,18 @@ input[type=text]:focus {
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
 }
+@media (max-width: 600px) {
+  .step-card {
+    padding: 20px 14px;
+  }
+  .avs {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .av svg {
+    height: 110px;
+  }
+}
 .sw:hover {
   transform: translateY(-2px) scale(1.08);
   border-color: rgba(255, 255, 255, 0.6);
@@ -575,6 +591,34 @@ input[type=text]:focus {
   opacity: 0.9;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
+}
+
+/* Office Floor: fits the screen as a 3x3 grid, scrolls as columns on tablets and phones */
+#floor {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: none;
+  overflow: hidden;
+}
+#game {
+  width: 100%;
+  height: 100%;
+}
+.floor-scroll #floor {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
+  scrollbar-width: thin;
+  scrollbar-color: #f97316 transparent;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.floor-scroll #game {
+  position: relative;
+  inset: auto;
+  height: auto;
 }
 
 /* Top Navigation & Telemetry HUD Dock */
@@ -683,6 +727,107 @@ input[type=text]:focus {
   font-size: 11px;
   text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
   white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#mt { flex: none; }
+.lbl-short { display: none; }
+
+/* Touch screens that keep the 3x3 grid (iPad landscape, iPad Pro) */
+@media (pointer: coarse) {
+  :root:not(.floor-scroll) #nav .btn {
+    height: 44px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
+  :root:not(.floor-scroll) #hud .bar {
+    height: 44px;
+  }
+}
+@media (hover: none) {
+  #nav .btn:hover {
+    background: rgba(22, 14, 8, 0.92);
+    color: #ffedd5;
+    border-color: #f97316;
+    box-shadow: 0 0 16px rgba(249, 115, 22, 0.45);
+    transform: none;
+  }
+}
+
+/* Tablets and phones: bar docks to the top edge and the floor scrolls beneath it */
+.floor-scroll #top-bar {
+  top: 0;
+  left: 0;
+  right: 0;
+  gap: 8px 10px;
+  padding: max(8px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) 8px max(10px, env(safe-area-inset-left, 0px));
+  background: rgba(6, 9, 18, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.25);
+  pointer-events: auto;
+}
+.floor-scroll #nav {
+  gap: 8px;
+}
+.floor-scroll #nav .btn {
+  height: 44px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+.floor-scroll #hud {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.floor-scroll #hud .bar {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 5px 14px 6px;
+  gap: 5px;
+}
+.floor-scroll .track {
+  height: 7px;
+}
+.floor-scroll #mt {
+  font-size: 13px;
+}
+.floor-scroll #xpt {
+  font-size: 12px;
+}
+.floor-scroll .mt-long {
+  display: none;
+}
+/* Portrait phones and small tablets: buttons on one row, XP bar full width below */
+@media (max-width: 760px) and (min-height: 501px), (max-width: 540px) {
+  .floor-scroll #top-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .floor-scroll #nav {
+    width: 100%;
+  }
+  .floor-scroll #nav .btn {
+    flex: 1 1 auto;
+    padding: 0 8px;
+  }
+  .floor-scroll #hud {
+    flex: none;
+  }
+}
+/* Narrow phones and landscape phones: shorter button label so nothing gets shrunk */
+@media (max-width: 480px), (max-height: 500px) {
+  .floor-scroll .lbl-long { display: none; }
+  .floor-scroll .lbl-short { display: inline; }
+}
+/* Smallest phones: trim the padding, never the text size */
+@media (max-width: 350px) {
+  .floor-scroll #nav {
+    gap: 6px;
+  }
+  .floor-scroll #nav .btn {
+    padding: 0 5px;
+  }
 }
 
 /* Modals & Dialogs */
@@ -880,6 +1025,28 @@ input[type=text]:focus {
     flex: 1;
   }
 }
+@media (max-width: 859px) {
+  #modal {
+    padding: 12px;
+  }
+  .card {
+    max-height: 90dvh;
+  }
+  .mp {
+    display: flex;
+    flex-direction: column;
+  }
+  .mp .pt {
+    flex: none;
+    height: clamp(120px, 26dvh, 240px);
+  }
+  .mp .pi {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 18px;
+  }
+}
 
 
 /* Studio Lounge Arcade Mini-Games Modal */
@@ -1066,6 +1233,7 @@ input[type=text]:focus {
   height: auto;
   aspect-ratio: 16 / 9;
   cursor: crosshair;
+  touch-action: none;
 }
 .game-controls-hint {
   font-size: 11.5px;
@@ -1073,6 +1241,41 @@ input[type=text]:focus {
   text-align: center;
   font-family: 'Space Grotesk', sans-serif;
   margin-top: 2px;
+}
+@media (max-width: 600px) {
+  #modal:has(.arcade-modal) {
+    padding: 8px;
+  }
+  .arcade-modal {
+    width: 100%;
+    padding: 12px;
+  }
+}
+/* Landscape phones: size the table from the height so the whole game stays on screen */
+@media (max-height: 500px) {
+  #modal:has(.arcade-modal) {
+    padding: 6px;
+  }
+  .arcade-modal {
+    width: min(680px, 100%);
+    max-height: calc(100dvh - 12px);
+    padding: 8px 12px;
+    gap: 6px;
+  }
+  .arcade-game-container {
+    gap: 5px;
+  }
+  .arcade-canvas-wrap {
+    width: auto;
+    max-width: 100%;
+  }
+  .arcade-canvas-wrap canvas {
+    width: auto;
+    height: calc(100dvh - 118px);
+  }
+  .arcade-modal .game-controls-hint {
+    display: none;
+  }
 }
 
 /* Careers Overlay & Job Postings - Fully Scrollable */
@@ -1600,7 +1803,7 @@ input[type=text]:focus {
 <div class="layer" id="hq"></div>
 <!-- Cosmic Space Cyber-Grid & Multi-Colored Stars Background Layer -->
 
-<svg class="layer" id="game" style="display:none;width:100%;height:100%;z-index:1;" viewBox="0 0 1200 900" role="img" aria-label="Studio floor plan with the CEO cabin in the centre"></svg>
+<div id="floor"><svg class="layer" id="game" style="display:none;" viewBox="0 0 1200 900" role="img" aria-label="Studio floor plan with the CEO cabin in the centre"></svg></div>
 
 <div class="ov" id="welcome">
   <!-- Top Section: Bigger Golden Cyber Banner (Closer to room) -->
@@ -1626,7 +1829,7 @@ input[type=text]:focus {
 <div id="top-bar">
   <div id="nav">
     <button class="btn" id="nOv">Overview</button>
-    <button class="btn" id="nTeam">Meet the team</button>
+    <button class="btn" id="nTeam"><span class="lbl-long">Meet the team</span><span class="lbl-short">Team</span></button>
     <button class="btn" id="nJobs">Careers</button>
     <button class="btn" id="nSnd" aria-pressed="false">Sound: off</button>
   </div>
@@ -2978,23 +3181,36 @@ function buildGame() {
   });
   d += '</defs>';
 
-  var s = d + R(0, 0, 1200, 900, "rgba(4,7,16,0.35)") +
-          R(0, 293, 1200, 24, "url(#fl)") +
-          R(0, 583, 1200, 24, "url(#fl)") +
-          R(393, 0, 24, 900, "url(#fl)") +
-          R(783, 0, 24, 900, "url(#fl)");
+  var s = d + R(0, 0, FLOOR.w, FLOOR.h, "rgba(4,7,16,0.35)");
+  FLOOR.halls.forEach(function(l) { s += R(l[0], l[1], l[2], l[3], "url(#fl)"); });
 
-  [[0, 304, 1200, 2], [0, 594, 1200, 2], [404, 0, 2, 900], [794, 0, 2, 900]].forEach(function(l) {
-    s += R(l[0], l[1], l[2], l[3], "#334155", 0, ' opacity="0.4"');
+  FLOOR.halls.forEach(function(l) {
+    s += l[2] > l[3] ? R(l[0], l[1] + 11, l[2], 2, "#334155", 0, ' opacity="0.4"')
+                     : R(l[0] + 11, l[1], 2, l[3], "#334155", 0, ' opacity="0.4"');
   });
 
   CONFIG.zones.forEach(function(z) { s += room(z); });
   CONFIG.chips.forEach(function(c) {
     var z = c.zone ? CONFIG.zones.filter(function(q){ return q.id === c.zone; })[0] : {x: 0, y: 0};
-    s += chipG(c, z.x + c.p[0], z.y + c.p[1]);
+    var p = (!c.zone && FLOOR.hub) || c.p;
+    s += chipG(c, z.x + p[0], z.y + p[1]);
   });
 
   $("game").innerHTML = s;
+}
+
+/* Redraw after a layout change without losing the player's progress */
+function rebuildFloor(){
+  buildGame();
+  CONFIG.chips.forEach(function(c, i){
+    var el = svg.querySelector('[data-c="'+i+'"]');
+    if (el && got[c.n]) el.classList.add("got");
+  });
+  if (n === 6) svg.querySelectorAll("[data-portal] rect").forEach(function(e){ e.style.filter = "drop-shadow(0 0 16px #10b981)"; });
+  if (sel) {
+    sel = svg.querySelector('[data-p="'+sel.dataset.p+'"]');
+    if (sel) sel.classList.add("sel");
+  }
 }
 
 /* Atmospheric Studio HQ Opening Scene */
@@ -3039,6 +3255,52 @@ function hq() {
   $("hq").innerHTML = s;
 }
 
+/* Floor Layout: desktop keeps the CONFIG grid, smaller screens stack rooms in CONFIG order */
+var floor = $("floor"), FLOOR = {cols: 3, w: 1200, h: 900, hub: null, halls: []};
+CONFIG.zones.forEach(function(z){ z.gx = z.x; z.gy = z.y; });
+
+function floorCols(){
+  if (innerWidth >= 1024) return 3;
+  return innerWidth <= 600 && innerHeight > 500 ? 1 : 2;
+}
+
+function layoutFloor(cols){
+  FLOOR.cols = cols;
+  document.documentElement.classList.toggle("floor-scroll", cols < 3);
+  if (cols === 3) {
+    CONFIG.zones.forEach(function(z){ z.x = z.gx; z.y = z.gy; });
+    FLOOR.w = 1200;
+    FLOOR.h = 900;
+    FLOOR.hub = null;
+    FLOOR.halls = [[0, 293, 1200, 24], [0, 583, 1200, 24], [393, 0, 24, 900], [783, 0, 24, 900]];
+    return;
+  }
+
+  var rw = 360, rh = 260, padX = 10, top = 30, gapX = 30, gapY = 48, step = rh + gapY;
+  var rows = 1 + Math.ceil((CONFIG.zones.length - 1) / cols);
+  FLOOR.w = cols * rw + (cols - 1) * gapX + padX * 2;
+  FLOOR.h = top + rows * step - gapY + 24;
+  // First room (CEO Cabin) gets its own centred row, the other eight fill the columns
+  CONFIG.zones.forEach(function(z, i){
+    var col = i === 0 ? (cols - 1) / 2 : (i - 1) % cols;
+    z.x = padX + col * (rw + gapX);
+    z.y = top + (i === 0 ? 0 : Math.ceil(i / cols)) * step;
+  });
+
+  FLOOR.halls = [];
+  for (var r = 1; r < rows; r++) FLOOR.halls.push([0, top + r * step - gapY / 2 - 12, FLOOR.w, 24]);
+  if (cols === 2) FLOOR.halls.push([FLOOR.w / 2 - 12, FLOOR.halls[0][1], 24, FLOOR.h - FLOOR.halls[0][1]]);
+
+  // The corridor chip sits in the hallway just before the QA Testing Arena
+  FLOOR.hub = [cols === 1 ? padX + 40 : FLOOR.w / 2, top + (cols === 1 ? 6 : 3) * step - gapY / 2];
+}
+
+function focusZone(z){
+  if (FLOOR.cols === 3) { goVB(fitZ(z, true)); return; }
+  var scale = svg.getBoundingClientRect().width / FLOOR.w;
+  floor.scrollTo({top: (z.y - 24) * scale, behavior: RM ? "auto" : "smooth"});
+}
+
 /* Camera System */
 var svg = $("game"), vb = [0, 0, 1200, 900], tw = 0;
 function setVB(a){ svg.setAttribute("viewBox", a.join(" ")); }
@@ -3053,6 +3315,7 @@ function goVB(to){
   })(t0);
 }
 function ovVB(){
+  if (FLOOR.cols < 3) return [0, 0, FLOOR.w, FLOOR.h];
   var a = innerWidth / innerHeight, baseH = 1040, baseW = 1240;
   var w = baseW, h = baseH;
   if (a > w / h) w = h * a; else h = w / a;
@@ -3141,6 +3404,15 @@ function syncTopBar(){
   var nav = $("nav"), hud = $("hud"), hudBar = document.querySelector("#hud .bar");
   if (!nav || !hud || !hudBar) return;
 
+  // Tablets and phones: the bar is docked by CSS, the floor just starts below it
+  if (FLOOR.cols < 3) {
+    tb.style.left = tb.style.width = tb.style.top = "";
+    nav.style.width = hudBar.style.width = "";
+    floor.style.paddingTop = tb.offsetHeight + "px";
+    return;
+  }
+  floor.style.paddingTop = "";
+
   var vbO = ovVB();
   var scale = innerWidth / vbO[2];
   var roomLeft = (30 - vbO[0]) * scale;
@@ -3151,8 +3423,13 @@ function syncTopBar(){
   // Ensure nav takes natural content width
   nav.style.width = "max-content";
   var navW = nav.offsetWidth;
+
+  // Never let the bar be narrower than its contents or wider than the screen
+  var barW = Math.min(innerWidth - 24, Math.max(totalWidth, navW * 2 + 10));
+  roomLeft -= (barW - totalWidth) / 2;
+  totalWidth = barW;
   if (navW > 0) {
-    hudBar.style.width = navW + "px";
+    hudBar.style.width = Math.min(navW, barW - navW - 10) + "px";
   }
 
   var barH = Math.max(nav.offsetHeight, hudBar.offsetHeight, 38);
@@ -3168,6 +3445,7 @@ function enter(){
   show("create", false);
   show("welcome", false);
   $("hq").style.display = "none";
+  floor.style.display = "block";
   svg.style.display = "block";
   $("top-bar").style.display = "flex";
   $("hud").style.display = "flex";
@@ -3180,7 +3458,7 @@ function enter(){
 }
 
 function hud(){
-  $("mt").textContent = "DISCOVERY MISSION: " + n + "/6 XP CHIPS";
+  $("mt").innerHTML = '<span class="mt-long">DISCOVERY </span>MISSION: ' + n + '/6 <span class="mt-long">XP </span>CHIPS';
   $("xpb").style.width = (n / 6 * 100) + "%";
   $("xpt").textContent = xp + " XP · " + P.name;
   syncTopBar();
@@ -3209,7 +3487,7 @@ function openEmp(i, el){
   if (sel) sel.classList.remove("sel");
   sel = el;
   if (el) el.classList.add("sel");
-  goVB(fitZ(z, true));
+  focusZone(z);
 
   var m = $("modal");
   m.innerHTML = '<div class="card mp" role="dialog" aria-label="Meet the player" style="--zc:'+z.c+'">'+
@@ -3320,7 +3598,7 @@ function stopActiveGame() {
 
 function openLounge() {
   var z = zoneOf('lounge');
-  goVB(fitZ(z, true));
+  focusZone(z);
   stopActiveGame();
 
   var m = $("modal");
@@ -3365,6 +3643,8 @@ function openLounge() {
 /* --- Mini-Game 1: Neon Table Tennis --- */
 function startTTGame() {
   stopActiveGame();
+  // Portrait phones get a taller table so the paddle has more room to travel
+  var W = 460, H = (innerWidth <= 600 && innerHeight > innerWidth) ? 340 : 260;
   var m = $("modal");
   m.innerHTML = '<div class="card arcade-modal" role="dialog" aria-label="Neon Table Tennis">' +
     '<div class="arcade-game-container">' +
@@ -3378,7 +3658,7 @@ function startTTGame() {
         '<span style="color:#f97316">YOU: <span id="tt-you-score">0</span></span>' +
       '</div>' +
       '<div class="arcade-canvas-wrap">' +
-        '<canvas id="tt-canvas" width="460" height="260"></canvas>' +
+        '<canvas id="tt-canvas" width="' + W + '" height="' + H + '" style="aspect-ratio:' + W + ' / ' + H + '"></canvas>' +
       '</div>' +
       '<div class="game-controls-hint">Move right paddle with mouse / touch or ↑ ↓ / W S keys</div>' +
     '</div>' +
@@ -3389,213 +3669,310 @@ function startTTGame() {
   var canvas = $("tt-canvas");
   if (!canvas) return;
   var ctx = canvas.getContext("2d");
-  var W = 460, H = 260;
+
+  // All speeds are table pixels per second, so every screen refresh rate plays the same
+  var SERVE_SPEED = 215, RALLY_SPEED = 285, SPEED_PER_HIT = 7, MAX_SPEED = 400;
+  var SPEED_EASE = 0.6;      // Seconds for the ball to settle into a new speed
+  var MAX_STEP = 1 / 120;    // Longest physics step
+  var MAX_ANGLE = Math.PI / 6;
+  var COUNT_TIME = 0.6;      // Length of each 3-2-1 beat
+  var POINT_PAUSE = 1.2;     // Breather between points
+  var TRAIL_TIME = 0.1;
+  var RIPPLE_TIME = 0.28;
 
   // Bot on LEFT (x = 18), User Player on RIGHT (x = W - 18 - player.w)
-  var bot = { y: 105, h: 54, w: 9, score: 0 };
-  var player = { y: 105, h: 54, w: 9, score: 0 };
+  var PADDLE_X = 18, PADDLE_W = 9, PADDLE_H = 54, EDGE = 4;
+  var bot = { y: (H - PADDLE_H) / 2, h: PADDLE_H, w: PADDLE_W, score: 0, aimY: (H - PADDLE_H) / 2, flash: 0 };
+  var player = { y: (H - PADDLE_H) / 2, target: (H - PADDLE_H) / 2, h: PADDLE_H, w: PADDLE_W, score: 0, flash: 0 };
+  var ball = { x: W / 2, y: H / 2, dx: 1, dy: 0, speed: SERVE_SPEED, r: 5, trail: [] };
 
-  // Responsive, active initial speed with purely gradual progression (+0.18 per rally hit)
-  var baseSpeed = 5.0;
-  var ballSpeed = baseSpeed;
-  var maxSpeed = 7.4;
-  var ball = { x: W / 2, y: H / 2, vx: 5.0, vy: 0, r: 5, trail: [] };
-  var gameOver = false, winner = null;
-  var keys = {};
+  var phase = "serve", serveDir = 1, serveTimer = 0, serveLabel = null, serveColor = "#ffffff";
+  var targetSpeed = RALLY_SPEED, rally = 0, clock = 0;
+  var winner = null, ripples = [], keys = {};
+  var last = 0, canvasW = 0, scale = 1;
 
-  function resetBall(dir) {
-    ballSpeed = baseSpeed;
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function clampPaddle(y) { return clamp(y, EDGE, H - PADDLE_H - EDGE); }
+  // Share of each step that closes the gap, for smoothing that ignores frame rate
+  function ease(rate, h) { return 1 - Math.exp(-rate * h); }
+
+  function setStatus(text) {
+    var el = $("tt-status");
+    if (el && el.textContent !== text) el.textContent = text;
+  }
+
+  function prepareServe(dir, label, color) {
+    phase = "serve";
+    serveDir = dir;
+    serveLabel = label;
+    serveColor = color || "#ffffff";
+    serveTimer = label ? POINT_PAUSE : COUNT_TIME * 3;
     ball.x = W / 2;
     ball.y = H / 2;
-    var d = dir || (Math.random() < 0.5 ? 1 : -1);
-    // Controlled serve angle (±18° max) keeping horizontal motion crisp and consistent
-    var angle = (Math.random() * 0.2 - 0.1) * Math.PI;
-    ball.vx = d * ballSpeed * Math.cos(angle);
-    ball.vy = ballSpeed * Math.sin(angle);
+    ball.speed = SERVE_SPEED;
     ball.trail = [];
+    rally = 0;
+    targetSpeed = RALLY_SPEED;
+    if (!label) setStatus("FIRST TO 3 WINS");
   }
 
-  function onMouseMove(e) {
+  function launchBall() {
+    phase = "play";
+    // Controlled serve angle (±15° max) so the first return is always readable
+    var angle = (Math.random() * 2 - 1) * Math.PI / 12;
+    ball.dx = serveDir * Math.cos(angle);
+    ball.dy = Math.sin(angle);
+    if (serveLabel) setStatus("FIRST TO 3 WINS");
+    if (serveDir < 0) aimBot(0.2);
+    beep(360);
+  }
+
+  // Where the ball will cross the bot's paddle, following wall bounces
+  function predictBotY() {
+    var lo = EDGE + ball.r, span = H - EDGE - ball.r - lo;
+    var y = ball.y + ball.dy / Math.abs(ball.dx) * (ball.x - (PADDLE_X + PADDLE_W + ball.r)) - lo;
+    y = ((y % (2 * span)) + 2 * span) % (2 * span);
+    return lo + (y > span ? 2 * span - y : y);
+  }
+
+  // The bot misjudges more as the rally speeds up and when returns come off the paddle's edge,
+  // so long rallies and angled shots are how the player wins points
+  function aimBot(shotDifficulty) {
+    var pace = (targetSpeed - RALLY_SPEED) / (MAX_SPEED - RALLY_SPEED);
+    var spread = 16 + 34 * pace + 26 * shotDifficulty;
+    bot.aimY = clampPaddle(predictBotY() + (Math.random() * 2 - 1) * spread - bot.h / 2);
+  }
+
+  // The ball turns around where it is; snapping it to the paddle face would read as a speed spike
+  function hitBall(p, dir, tone, color) {
+    var offset = clamp((ball.y - (p.y + p.h / 2)) / (p.h / 2), -1, 1);
+    var angle = offset * MAX_ANGLE;
+    ball.dx = dir * Math.cos(angle);
+    ball.dy = Math.sin(angle);
+    rally++;
+    // Only the target moves here; the ball eases toward it so no hit causes a visible jump
+    targetSpeed = Math.min(MAX_SPEED, RALLY_SPEED + rally * SPEED_PER_HIT);
+    p.flash = 1;
+    if (!RM) ripples.push({ x: ball.x, y: ball.y, age: 0, c: color });
+    if (rally >= 2) setStatus("RALLY " + rally);
+    beep(tone);
+    return offset;
+  }
+
+  function pointTo(scorer) {
+    scorer.score++;
+    var youScored = scorer === player;
+    $(youScored ? "tt-you-score" : "tt-bot-score").textContent = scorer.score;
+    beep(youScored ? 740 : 300);
+    if (scorer.score >= 3) {
+      phase = "over";
+      winner = youScored ? "Player" : "Studio Bot";
+      setStatus(youScored ? "YOU WON MATCH!" : "BOT WINS MATCH");
+      if (youScored) beep(920);
+      return;
+    }
+    // Next serve goes to whoever just lost the point
+    setStatus(youScored ? "NICE SHOT!" : "GET READY");
+    prepareServe(youScored ? -1 : 1, youScored ? "YOU SCORED" : "BOT SCORED", youScored ? "#f97316" : "#38bdf8");
+  }
+
+  function onPointerMove(e) {
     var rect = canvas.getBoundingClientRect();
-    var scaleY = H / rect.height;
-    var clientY = (e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0));
-    var my = (clientY - rect.top) * scaleY;
+    if (!rect.height) return;
+    var my = (e.clientY - rect.top) * H / rect.height;
     // Moves the USER player paddle on the RIGHT
-    player.y = Math.max(4, Math.min(H - player.h - 4, my - player.h / 2));
+    player.target = clampPaddle(my - player.h / 2);
   }
 
-  function onKeyDown(e) { keys[e.key] = true; }
+  function onKeyDown(e) {
+    keys[e.key] = true;
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
+  }
   function onKeyUp(e) { keys[e.key] = false; }
 
-  canvas.addEventListener("mousemove", onMouseMove);
-  canvas.addEventListener("touchmove", onMouseMove, { passive: true });
+  // Listening on window keeps the paddle under control if the mouse drifts off the table
+  window.addEventListener("pointermove", onPointerMove);
+  canvas.addEventListener("pointerdown", onPointerMove);
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("keyup", onKeyUp);
 
   gameCleanup = function() {
-    canvas.removeEventListener("mousemove", onMouseMove);
-    canvas.removeEventListener("touchmove", onMouseMove);
+    window.removeEventListener("pointermove", onPointerMove);
     window.removeEventListener("keydown", onKeyDown);
     window.removeEventListener("keyup", onKeyUp);
   };
 
   canvas.addEventListener("click", function() {
-    if (gameOver) {
-      player.score = 0; bot.score = 0; gameOver = false; winner = null;
+    if (phase === "over") {
+      player.score = 0; bot.score = 0; winner = null;
       $("tt-you-score").textContent = "0";
       $("tt-bot-score").textContent = "0";
-      $("tt-status").textContent = "FIRST TO 3 WINS";
-      resetBall(1);
+      prepareServe(1, null);
     }
   });
 
-  function loop() {
-    if (!gameOver) {
-      // User controls right paddle with keys
-      if (keys["ArrowUp"] || keys["w"] || keys["W"]) player.y = Math.max(4, player.y - 5.5);
-      if (keys["ArrowDown"] || keys["s"] || keys["S"]) player.y = Math.min(H - player.h - 4, player.y + 5.5);
+  function update(h) {
+    clock += h;
 
-      // Bot controls left paddle with smooth tracking AI
-      var targetY = ball.y - bot.h / 2;
-      var botSpeed = Math.min(5.0, ballSpeed * 0.74);
-      if (ball.vx < 0) {
-        if (bot.y < targetY - 3) bot.y += Math.min(botSpeed, targetY - bot.y);
-        else if (bot.y > targetY + 3) bot.y -= Math.min(botSpeed, bot.y - targetY);
-      } else {
-        var cy = H / 2 - bot.h / 2;
-        bot.y += (cy - bot.y) * 0.05;
-      }
-      bot.y = Math.max(4, Math.min(H - bot.h - 4, bot.y));
+    // User controls right paddle with keys
+    if (keys["ArrowUp"] || keys["w"] || keys["W"]) player.target = clampPaddle(player.target - 360 * h);
+    if (keys["ArrowDown"] || keys["s"] || keys["S"]) player.target = clampPaddle(player.target + 360 * h);
+    player.y += (player.target - player.y) * ease(35, h);
 
-      ball.x += ball.vx;
-      ball.y += ball.vy;
-
-      ball.trail.push({ x: ball.x, y: ball.y });
-      if (ball.trail.length > 6) ball.trail.shift();
-
-      // Top and bottom table cushion bounce
-      if (ball.y - ball.r <= 4) {
-        ball.y = 4 + ball.r;
-        ball.vy = Math.abs(ball.vy);
-        beep(240);
-      } else if (ball.y + ball.r >= H - 4) {
-        ball.y = H - 4 - ball.r;
-        ball.vy = -Math.abs(ball.vy);
-        beep(240);
-      }
-
-      // Left Paddle Collision (BOT)
-      var botLeft = 18, botRight = 18 + bot.w;
-      if (ball.vx < 0 && ball.x - ball.r <= botRight && ball.x + ball.r >= botLeft && ball.y >= bot.y - 4 && ball.y <= bot.y + bot.h + 4) {
-        ball.x = botRight + ball.r;
-        // Speed increases purely gradually per rally (+0.18)
-        ballSpeed = Math.min(maxSpeed, ballSpeed + 0.18);
-        var hitOffset = (ball.y - (bot.y + bot.h / 2)) / (bot.h / 2);
-        hitOffset = Math.max(-1, Math.min(1, hitOffset));
-        var bounceAngle = hitOffset * (Math.PI / 6.5); // Controlled angle deflection (max ±27°)
-        ball.vx = ballSpeed * Math.cos(bounceAngle);
-        ball.vy = ballSpeed * Math.sin(bounceAngle);
-        beep(420);
-      }
-
-      // Right Paddle Collision (USER PLAYER)
-      var playerLeft = W - 18 - player.w, playerRight = W - 18;
-      if (ball.vx > 0 && ball.x + ball.r >= playerLeft && ball.x - ball.r <= playerRight && ball.y >= player.y - 4 && ball.y <= player.y + player.h + 4) {
-        ball.x = playerLeft - ball.r;
-        // Speed increases purely gradually per rally (+0.18)
-        ballSpeed = Math.min(maxSpeed, ballSpeed + 0.18);
-        var hitOffset2 = (ball.y - (player.y + player.h / 2)) / (player.h / 2);
-        hitOffset2 = Math.max(-1, Math.min(1, hitOffset2));
-        var bounceAngle2 = hitOffset2 * (Math.PI / 6.5); // Controlled angle deflection (max ±27°)
-        ball.vx = -ballSpeed * Math.cos(bounceAngle2);
-        ball.vy = ballSpeed * Math.sin(bounceAngle2);
-        beep(480);
-      }
-
-      // Scoring
-      if (ball.x < -10) {
-        // Ball passed Bot -> User Player scores!
-        player.score++;
-        $("tt-you-score").textContent = player.score;
-        beep(740);
-        if (player.score >= 3) {
-          gameOver = true; winner = 'Player';
-          $("tt-status").textContent = "YOU WON MATCH!";
-          beep(920);
-        } else {
-          resetBall(-1); // Serve towards player
-        }
-      } else if (ball.x > W + 10) {
-        // Ball passed User Player -> Bot scores!
-        bot.score++;
-        $("tt-bot-score").textContent = bot.score;
-        beep(300);
-        if (bot.score >= 3) {
-          gameOver = true; winner = 'Studio Bot';
-          $("tt-status").textContent = "BOT WINS MATCH";
-        } else {
-          resetBall(1); // Serve towards bot
-        }
-      }
+    player.flash = Math.max(0, player.flash - h * 4);
+    bot.flash = Math.max(0, bot.flash - h * 4);
+    for (var i = ripples.length - 1; i >= 0; i--) {
+      ripples[i].age += h;
+      if (ripples[i].age > RIPPLE_TIME) ripples.splice(i, 1);
     }
+
+    if (phase === "over") return;
+
+    // Bot controls left paddle: waits a beat, glides to its read of the ball, drifts home otherwise
+    var pace = (targetSpeed - RALLY_SPEED) / (MAX_SPEED - RALLY_SPEED);
+    var incoming = phase === "play" && ball.dx < 0;
+    var botGoal = incoming && ball.x < W * 0.75 ? bot.aimY : incoming ? bot.y : (H - bot.h) / 2;
+    var botMax = (230 + 90 * pace) * h;
+    bot.y = clampPaddle(bot.y + clamp((botGoal - bot.y) * ease(incoming ? 10 : 3, h), -botMax, botMax));
+
+    if (phase === "serve") {
+      serveTimer -= h;
+      if (serveTimer <= 0) launchBall();
+      return;
+    }
+
+    ball.speed += (targetSpeed - ball.speed) * ease(1 / SPEED_EASE, h);
+    ball.x += ball.dx * ball.speed * h;
+    ball.y += ball.dy * ball.speed * h;
+
+    // Top and bottom table cushion bounce
+    if (ball.y - ball.r <= EDGE) {
+      ball.y = EDGE + ball.r;
+      ball.dy = Math.abs(ball.dy);
+      beep(240);
+    } else if (ball.y + ball.r >= H - EDGE) {
+      ball.y = H - EDGE - ball.r;
+      ball.dy = -Math.abs(ball.dy);
+      beep(240);
+    }
+
+    // Left Paddle Collision (BOT)
+    var botFace = PADDLE_X + bot.w;
+    if (ball.dx < 0 && ball.x - ball.r <= botFace && ball.x + ball.r >= PADDLE_X &&
+        Math.abs(ball.y - (bot.y + bot.h / 2)) <= bot.h / 2 + ball.r) {
+      hitBall(bot, 1, 420, "#38bdf8");
+    }
+
+    // Right Paddle Collision (USER PLAYER)
+    var playerFace = W - PADDLE_X - player.w;
+    if (ball.dx > 0 && ball.x + ball.r >= playerFace && ball.x - ball.r <= W - PADDLE_X &&
+        Math.abs(ball.y - (player.y + player.h / 2)) <= player.h / 2 + ball.r) {
+      aimBot(Math.abs(hitBall(player, -1, 480, "#f97316")));
+    }
+
+    // Scoring
+    if (ball.x < -10) pointTo(player);
+    else if (ball.x > W + 10) pointTo(bot);
+  }
+
+  // Keep the drawing sharp at the canvas's real on-screen size
+  function fitCanvas() {
+    var cssW = canvas.clientWidth;
+    if (!cssW || cssW === canvasW) return;
+    canvasW = cssW;
+    var s = cssW / W * Math.min(window.devicePixelRatio || 1, 2.5);
+    canvas.width = Math.round(W * s);
+    canvas.height = Math.round(H * s);
+    scale = canvas.width / W;
+  }
+
+  function drawPaddle(x, p, color) {
+    ctx.shadowColor = color;
+    ctx.shadowBlur = (14 + 20 * p.flash) * scale;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x, p.y, p.w, p.h, 4);
+    ctx.fill();
+    if (p.flash > 0) {
+      ctx.fillStyle = "rgba(255,255,255," + (p.flash * 0.7) + ")";
+      ctx.fill();
+    }
+  }
+
+  function draw() {
+    fitCanvas();
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
     ctx.fillStyle = "#0c1527";
     ctx.fillRect(0, 0, W, H);
 
     ctx.strokeStyle = "#1d4ed8";
     ctx.lineWidth = 3;
-    ctx.strokeRect(4, 4, W - 8, H - 8);
+    ctx.strokeRect(EDGE, EDGE, W - EDGE * 2, H - EDGE * 2);
 
     ctx.strokeStyle = "rgba(255,255,255,0.04)";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(4, H / 2); ctx.lineTo(W - 4, H / 2);
+    ctx.moveTo(EDGE, H / 2); ctx.lineTo(W - EDGE, H / 2);
     ctx.stroke();
 
     ctx.strokeStyle = "rgba(255,255,255,0.35)";
     ctx.lineWidth = 2;
     ctx.setLineDash([6, 6]);
     ctx.beginPath();
-    ctx.moveTo(W / 2, 4); ctx.lineTo(W / 2, H - 4);
+    ctx.moveTo(W / 2, EDGE); ctx.lineTo(W / 2, H - EDGE);
     ctx.stroke();
     ctx.setLineDash([]);
 
+    // Hit ripples
+    for (var r = 0; r < ripples.length; r++) {
+      var rp = ripples[r], grow = rp.age / RIPPLE_TIME;
+      ctx.globalAlpha = (1 - grow) * 0.7;
+      ctx.strokeStyle = rp.c;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(rp.x, rp.y, ball.r + grow * 20, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
     // Ball trail
     for (var i = 0; i < ball.trail.length; i++) {
-      var tr = ball.trail[i];
-      var op = (i + 1) / ball.trail.length * 0.4;
-      ctx.fillStyle = "rgba(56, 189, 248, " + op + ")";
+      var tr = ball.trail[i], fade = 1 - (clock - tr.t) / TRAIL_TIME;
+      ctx.fillStyle = "rgba(56, 189, 248, " + (fade * 0.4) + ")";
       ctx.beginPath();
-      ctx.arc(tr.x, tr.y, ball.r * (0.6 + 0.4 * i / ball.trail.length), 0, Math.PI * 2);
+      ctx.arc(tr.x, tr.y, ball.r * (0.6 + 0.4 * fade), 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Ball
+    // Ball (breathes gently while waiting to be served)
+    var waiting = phase === "serve";
     ctx.shadowColor = "#38bdf8";
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = 12 * scale;
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+    ctx.arc(ball.x, ball.y, ball.r * (waiting && !RM ? 1 + 0.18 * Math.sin(clock * 7) : 1), 0, Math.PI * 2);
     ctx.fill();
 
-    // Left Paddle (BOT - Cyan)
-    ctx.shadowColor = "#38bdf8";
-    ctx.shadowBlur = 14;
-    ctx.fillStyle = "#38bdf8";
-    ctx.beginPath();
-    ctx.roundRect(18, bot.y, bot.w, bot.h, 4);
-    ctx.fill();
-
-    // Right Paddle (USER PLAYER - Orange)
-    ctx.shadowColor = "#f97316";
-    ctx.shadowBlur = 14;
-    ctx.fillStyle = "#f97316";
-    ctx.beginPath();
-    ctx.roundRect(W - 18 - player.w, player.y, player.w, player.h, 4);
-    ctx.fill();
+    // Left Paddle (BOT - Cyan), Right Paddle (USER PLAYER - Orange)
+    drawPaddle(PADDLE_X, bot, "#38bdf8");
+    drawPaddle(W - PADDLE_X - player.w, player, "#f97316");
     ctx.shadowBlur = 0;
 
-    if (gameOver) {
+    if (waiting) {
+      ctx.textAlign = "center";
+      if (serveLabel) {
+        ctx.font = "bold 20px 'Space Grotesk', sans-serif";
+        ctx.fillStyle = serveColor;
+        ctx.fillText(serveLabel, W / 2, H / 2 - 34);
+      } else {
+        ctx.font = "bold 34px 'Space Grotesk', sans-serif";
+        ctx.fillStyle = "#facc15";
+        ctx.fillText(Math.max(1, Math.ceil(serveTimer / COUNT_TIME)), W / 2, H / 2 - 28);
+      }
+    }
+
+    if (phase === "over") {
       ctx.fillStyle = "rgba(8, 12, 22, 0.82)";
       ctx.fillRect(0, 0, W, H);
       ctx.font = "bold 22px 'Space Grotesk', sans-serif";
@@ -3604,14 +3981,26 @@ function startTTGame() {
       ctx.fillText(winner === 'Player' ? "🏆 YOU WON!" : "BOT WINS", W / 2, H / 2 - 12);
       ctx.font = "13px 'Space Grotesk', sans-serif";
       ctx.fillStyle = "#cbd5e1";
-      ctx.fillText("Click anywhere on table to play again", W / 2, H / 2 + 18);
+      ctx.fillText("Tap or click the table to play again", W / 2, H / 2 + 18);
     }
+  }
 
+  function loop(now) {
+    var dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+    last = now;
+
+    var steps = Math.max(1, Math.ceil(dt / MAX_STEP)), h = dt / steps;
+    for (var s = 0; s < steps; s++) update(h);
+
+    if (phase === "play") ball.trail.push({ x: ball.x, y: ball.y, t: clock });
+    while (ball.trail.length && clock - ball.trail[0].t > TRAIL_TIME) ball.trail.shift();
+
+    draw();
     activeGameLoop = requestAnimationFrame(loop);
   }
 
-  resetBall(1);
-  loop();
+  prepareServe(1, null);
+  activeGameLoop = requestAnimationFrame(loop);
 }
 
 function startBlasterGame() {
@@ -3987,7 +4376,10 @@ $("start").onclick = function(){
   step(1);
 };
 $("exp").onclick = openCareers;
-$("nOv").onclick = close;
+$("nOv").onclick = function(){
+  close();
+  if (FLOOR.cols < 3) floor.scrollTo({top: 0, behavior: RM ? "auto" : "smooth"});
+};
 $("nTeam").onclick = team;
 $("nJobs").onclick = openCareers;
 $("modal").addEventListener("click", function(e){
@@ -4010,7 +4402,14 @@ document.addEventListener("keydown", function(e){
 });
 
 addEventListener("resize", function(){
-  if (state === "office" && !sel) {
+  var cols = floorCols();
+  if (cols !== FLOOR.cols) {
+    layoutFloor(cols);
+    rebuildFloor();
+    cancelAnimationFrame(tw);
+    vb = ovVB();
+    setVB(vb);
+  } else if (state === "office" && !sel) {
     vb = ovVB();
     setVB(vb);
   }
@@ -4292,9 +4691,11 @@ function initChipAnimation() {
   requestAnimationFrame(tick);
 }
 
+layoutFloor(floorCols());
 hq();
 buildGame();
 initChipAnimation();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncTopBar);
 var loc = location.search + location.hash;
 if (loc.indexOf('office') !== -1) enter();
 if (loc.indexOf('create2') !== -1) { state = "create"; show("welcome", false); show("create", true); step(2); }

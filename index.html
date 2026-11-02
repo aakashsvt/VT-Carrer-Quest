@@ -438,17 +438,20 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
   border: 1px solid var(--border-strong);
   border-radius: 16px;
   padding: 32px;
-  max-width: min(720px, 94vw);
+  max-width: min(720px, calc(100vw - 32px));
   width: 100%;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  box-sizing: border-box;
 }
 #create h2 {
   font-size: clamp(20px, 3vw, 26px);
   margin: 0;
+  text-align: center;
+  line-height: 1.25;
 }
 input[type=text] {
   font: 600 20px 'Space Grotesk', sans-serif;
@@ -458,7 +461,9 @@ input[type=text] {
   border: 1px solid var(--border-strong);
   border-radius: 10px;
   padding: 14px 20px;
-  width: min(360px, 90vw);
+  width: 100%;
+  max-width: 360px;
+  box-sizing: border-box;
   transition: all 0.2s;
 }
 input[type=text]:focus {
@@ -543,25 +548,49 @@ input[type=text].input-invalid {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 10px;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .sw {
   width: 44px;
   height: 44px;
+  max-width: calc((100% - 50px) / 6);
+  aspect-ratio: 1 / 1;
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.15);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 @media (max-width: 600px) {
   #create {
-    padding: 22px;
+    padding: 16px 12px;
   }
   .step-card {
-    padding: 18px 14px;
+    padding: 22px 14px;
+    max-width: 100%;
+  }
+  input[type=text] {
+    font-size: 17px;
+    padding: 12px 14px;
+    width: 100%;
+    max-width: 100%;
+  }
+  .row {
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+  .sw {
+    width: 38px;
+    height: 38px;
+    max-width: calc((100% - 40px) / 6);
+    flex-shrink: 1;
   }
   .avs {
     grid-template-columns: repeat(2, 1fr);
@@ -569,6 +598,20 @@ input[type=text].input-invalid {
   }
   .av svg {
     height: 110px;
+  }
+}
+@media (max-width: 360px) {
+  .step-card {
+    padding: 20px 10px;
+  }
+  .row {
+    gap: 5px;
+  }
+  .sw {
+    width: 32px;
+    height: 32px;
+    max-width: calc((100% - 25px) / 6);
+    border-radius: 8px;
   }
 }
 .sw:hover {
@@ -584,16 +627,23 @@ input[type=text].input-invalid {
 
 /* Studio ID Pass Card */
 .id {
-  width: min(380px, 90vw);
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
   border-radius: 14px;
-  padding: 20px;
+  padding: 18px;
   text-align: left;
   display: flex;
-  gap: 16px;
+  gap: 14px;
   align-items: center;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
+  overflow: hidden;
+}
+.id > div {
+  min-width: 0;
+  flex: 1;
   overflow: hidden;
 }
 .id::before {

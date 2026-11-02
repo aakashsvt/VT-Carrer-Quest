@@ -1951,7 +1951,7 @@ input[type=text]:focus {
     <button class="btn" id="nOv">Overview</button>
     <button class="btn" id="nTeam"><span class="lbl-long">Meet the team</span><span class="lbl-short">Team</span></button>
     <button class="btn" id="nJobs">Careers</button>
-    <button class="btn" id="nSnd" aria-pressed="false">Sound: off</button>
+    <button class="btn" id="nSnd" aria-pressed="true">Sound: on</button>
   </div>
   <div id="hud">
     <div class="bar">
@@ -2042,7 +2042,7 @@ var MSG=["FIRST DISCOVERY UNLOCKED!","NICE FIND!","LEVEL-UP ENERGY!","HALFWAY TH
 
 (function(){
 var $ = function(i){ return document.getElementById(i); }, RM = matchMedia("(prefers-reduced-motion:reduce)").matches;
-var P = {name: "Player", av: 0, col: 1, id: "VQ-" + (1000 + Math.floor(Math.random() * 9000))}, state = "welcome", got = {}, n = 0, shownN = 0, shownXp = 0, rewardChip = null, xpCount = 0, snd = false, actx;
+var P = {name: "Player", av: 0, col: 1, id: "VQ-" + (1000 + Math.floor(Math.random() * 9000))}, state = "welcome", got = {}, n = 0, shownN = 0, shownXp = 0, rewardChip = null, xpCount = 0, snd = true, actx;
 
 function esc(s){ return String(s).replace(/[&<>"]/g, function(m){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]; }); }
 function mix(h, a){
@@ -2104,7 +2104,7 @@ function initBGM() {
           var bGain = actx.createGain();
           bOsc.type = "sine";
           bOsc.frequency.setValueAtTime(chord.bass, nextNoteTime);
-          bGain.gain.setValueAtTime(0.045, nextNoteTime);
+          bGain.gain.setValueAtTime(0.07, nextNoteTime);
           bGain.gain.exponentialRampToValueAtTime(0.001, nextNoteTime + beatDuration * 7.5);
           bOsc.connect(bGain);
           bGain.connect(filter);
@@ -2117,7 +2117,7 @@ function initBGM() {
             pOsc.type = i % 2 === 0 ? "triangle" : "sine";
             pOsc.frequency.setValueAtTime(freq * (1 + (i - 2) * 0.0015), nextNoteTime);
             pGain.gain.setValueAtTime(0.001, nextNoteTime);
-            pGain.gain.linearRampToValueAtTime(0.012, nextNoteTime + 0.9);
+            pGain.gain.linearRampToValueAtTime(0.022, nextNoteTime + 0.9);
             pGain.gain.linearRampToValueAtTime(0.008, nextNoteTime + beatDuration * 6);
             pGain.gain.exponentialRampToValueAtTime(0.0005, nextNoteTime + beatDuration * 8);
             pOsc.connect(pGain);
@@ -2133,7 +2133,7 @@ function initBGM() {
           var mGain = actx.createGain();
           mOsc.type = "sine";
           mOsc.frequency.setValueAtTime(mFreq, nextNoteTime);
-          mGain.gain.setValueAtTime(0.018, nextNoteTime);
+          mGain.gain.setValueAtTime(0.035, nextNoteTime);
           mGain.gain.exponentialRampToValueAtTime(0.0005, nextNoteTime + 0.6);
           mOsc.connect(mGain);
           mGain.connect(delay);
@@ -2160,7 +2160,7 @@ function updateBGMState() {
       if (bgmGain) {
         bgmGain.gain.cancelScheduledValues(actx.currentTime);
         bgmGain.gain.setValueAtTime(bgmGain.gain.value, actx.currentTime);
-        bgmGain.gain.linearRampToValueAtTime(0.12, actx.currentTime + 0.6);
+        bgmGain.gain.linearRampToValueAtTime(0.28, actx.currentTime + 0.6);
       }
     } catch(e){}
   } else {
@@ -2179,7 +2179,7 @@ function beep(f){
     var o = actx.createOscillator(), g = actx.createGain();
     o.type = 'sine';
     o.frequency.setValueAtTime(f, actx.currentTime);
-    g.gain.setValueAtTime(0.04, actx.currentTime);
+    g.gain.setValueAtTime(0.08, actx.currentTime);
     g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.18);
     o.connect(g);
     g.connect(actx.destination);
@@ -3022,12 +3022,6 @@ function room(z) {
            // 4. Center-Right Background: Vertical Warm Oak Paneling
            R(156, 14, 134, 88, '#78350f', 0) +
            St("M170 14v88 M184 14v88 M198 14v88 M212 14v88 M226 14v88 M240 14v88 M254 14v88 M268 14v88 M282 14v88", "#451a03", 1.4) +
-           // Modern Angled Task Floor Lamp
-           St("M278 104L283 34", "#e2e8f0", 1.6) +
-           Ci(278, 104, 3.5, "#334155") +
-           '<polygon points="279,36 292,30 290,44" fill="#f8fafc" style="filter:drop-shadow(0 0 8px #fef08a)"/>' +
-           Ci(285, 38, 2.2, "#fde047") +
-
            // 5. Right Wall: Executive Interview Room Door (Click opens Careers Modal!)
            '<g class="hit" data-portal="1" tabindex="0" role="button" aria-label="Open Positions / Interview Room" style="cursor: pointer;">' +
              R(298, 18, 52, 198, '#0f172a', 6, ' stroke="#fbbf24" stroke-width="2" style="filter:drop-shadow(0 0 12px rgba(251,191,36,0.45))"') +
@@ -3036,9 +3030,9 @@ function room(z) {
              St("M304 142h40", "#334155", 1.5) +
              '<polygon points="304,26 326,26 314,208 304,208" fill="rgba(255,255,255,0.08)"/>' +
              R(308, 104, 3.5, 32, '#f8fafc', 1.7, ' style="filter:drop-shadow(0 0 2px #fff)"') +
-             R(296, 6, 56, 18, '#070b14', 4, ' stroke="#fbbf24" stroke-width="1.2" style="filter:drop-shadow(0 0 8px rgba(251,191,36,0.5))"') +
-             Tx(324, 18, "INTERVIEW ROOM", 5.6, "#fbbf24", 800) +
-           '</g>' +
+             R(296, 4, 56, 26, '#070b14', 4, ' stroke="#fbbf24" stroke-width="1.5" style="filter:drop-shadow(0 0 10px rgba(251,191,36,0.55))"') +
+              Tx(324, 15, "INTERVIEW", 8.5, "#fbbf24", 900) +
+              Tx(324, 25, "ROOM", 8.5, "#fbbf24", 900) +           '</g>' +
 
            // 6. MIDGROUND FURNITURE: Pedestal Side Table & Modular Waiting Sofa
            // Round Pedestal Side Table between Armchair & Sofa (with books)
@@ -5177,6 +5171,20 @@ $("nJobs").onclick = openCareers;
 $("modal").addEventListener("click", function(e){
   if (e.target === this || !e.target.closest(".card")) close();
 });
+
+// Auto-start sound on initial user gesture if enabled by default
+function resumeAudioOnGesture() {
+  if (snd) {
+    updateBGMState();
+  }
+  ['click', 'keydown', 'touchstart', 'pointerdown'].forEach(function(evt) {
+    document.removeEventListener(evt, resumeAudioOnGesture);
+  });
+}
+['click', 'keydown', 'touchstart', 'pointerdown'].forEach(function(evt) {
+  document.addEventListener(evt, resumeAudioOnGesture, { passive: true });
+});
+
 $("nSnd").onclick = function(){
   snd = !snd;
   this.textContent = "Sound: " + (snd ? "on" : "off");

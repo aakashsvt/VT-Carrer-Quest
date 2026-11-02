@@ -4131,7 +4131,7 @@ function initChipAnimation() {
           // Dynamic Firefly Randomly Floating Animation (Gentle Speed & Tight Hover Radius)
           var b = getChipBounds(c);
           var seed = idx * 1.731 + 0.5;
-          var sec = effNow * 0.00045; // Reduced speed by >55% for smooth, calm floating
+          var sec = effNow * 0.000495; // Sped up by 10% from 0.00045 for optimal organic float
 
           // Multi-frequency organic wandering (tight radius orbit centered at spawn point)
           var wx = 0.46 * Math.sin(sec * 0.55 + seed * 1.618) +
